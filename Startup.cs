@@ -3,11 +3,14 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RockTransactions.Data;
+using RockTransactions.Models;
+using RockTransactions.Services;
 using RockTransactions.Utilities;
 using System;
 using System.Collections.Generic;
@@ -29,10 +32,16 @@ namespace RockTransactions
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(
-                    DataHelper.GetConnectionString(Configuration)));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                options.UseNpgsql(DataHelper.GetConnectionString(Configuration)));
+
+            services.AddIdentity<FPUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultUI().AddDefaultTokenProviders();
+
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+            services.AddTransient<IEmailSender, EmailService>();
+
+            services.AddScoped<IFPFileService, FPFileService>();
+
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
