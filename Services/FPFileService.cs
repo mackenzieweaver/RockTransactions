@@ -69,8 +69,16 @@ namespace RockTransactions.Services
 
         public async Task<byte[]> GetDefaultAvatarFileBytesAsync()
         {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\assets\img", _defaultSettings.Avatar);
-            return await File.ReadAllBytesAsync(path);
+            try
+            {
+                var path = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot/assets/img", _defaultSettings.Avatar);
+                return await File.ReadAllBytesAsync(path);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+                return null;
+            }
         }
     }
 }
