@@ -44,11 +44,18 @@ namespace RockTransactions.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
+            [StringLength(50)]
+            [Display(Name = "First Name")]
+            public string FirstName { get; set; }
+
+            [StringLength(50)]
+            [Display(Name = "Last Name")]
+            public string LastName { get; set; }
+
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
 
-            [Required]
             [Display(Name = "Avatar")]
             [NotMapped]
             [DataType(DataType.Upload)]
@@ -66,6 +73,8 @@ namespace RockTransactions.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
                 PhoneNumber = phoneNumber
             };
         }
@@ -95,7 +104,19 @@ namespace RockTransactions.Areas.Identity.Pages.Account.Manage
                 await LoadAsync(user);
                 return Page();
             }
-
+            // First Name
+            if (Input.FirstName != null)
+            {
+                user.FirstName = Input.FirstName;
+                await _context.SaveChangesAsync();
+            }
+            // Last Name
+            if (Input.LastName != null)
+            {
+                user.LastName = Input.LastName;
+                await _context.SaveChangesAsync();
+            }
+            // Phone Number
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             if (Input.PhoneNumber != phoneNumber)
             {
@@ -106,20 +127,13 @@ namespace RockTransactions.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
-            string existingFile = null;
-            if (user.FileData != null)
+            // Avatar
+            if (Input.Avatar != null)
             {
-                existingFile = _fileService.ConvertByteArrayToFile(user.FileData, user.FileName.Split('.')[1]);
-            }
-            var bytes = await _fileService.ConvertFileToByteArrayAsync(Input.Avatar);
-            var inputFile = _fileService.ConvertByteArrayToFile(bytes, Input.Avatar.FileName.Split('.')[1]);
-            if (inputFile != existingFile)
-            {
-                user.FileData = bytes;
+                user.FileData = await _fileService.ConvertFileToByteArrayAsync(Input.Avatar);
                 user.FileName = Input.Avatar.FileName;
                 await _context.SaveChangesAsync();
             }
-
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
             return RedirectToPage();
