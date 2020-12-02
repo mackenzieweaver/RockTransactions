@@ -106,10 +106,13 @@ namespace RockTransactions.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
-
+            string existingFile = null;
+            if (user.FileData != null)
+            {
+                existingFile = _fileService.ConvertByteArrayToFile(user.FileData, user.FileName.Split('.')[1]);
+            }
             var bytes = await _fileService.ConvertFileToByteArrayAsync(Input.Avatar);
             var inputFile = _fileService.ConvertByteArrayToFile(bytes, Input.Avatar.FileName.Split('.')[1]);
-            var existingFile = _fileService.ConvertByteArrayToFile(user.FileData, user.FileName.Split('.')[1]);
             if (inputFile != existingFile)
             {
                 user.FileData = bytes;
