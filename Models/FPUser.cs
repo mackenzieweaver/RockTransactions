@@ -28,5 +28,11 @@ namespace RockTransactions.Models
 
         public byte[] FileData { get; set; }
         public string FileName { get; set; }
+
+        public int HouseHoldId { get; set; }
+        public HouseHold HouseHold { get; set; }
+
+        public virtual ICollection<BankAccount> BankAccounts { get; set; } = new HashSet<BankAccount>();
+        public virtual ICollection<Transaction> Transactions { get; set; } = new HashSet<Transaction>();
     }
 }
