@@ -1,9 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Npgsql;
 using RockTransactions.Data;
+using RockTransactions.Models;
+using RockTransactions.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,6 +55,13 @@ namespace RockTransactions.Utilities
                 //The service will run your migrations
                 var dbContextSvc = svcProvider.GetRequiredService<ApplicationDbContext>();
                 await dbContextSvc.Database.MigrateAsync();
+
+                var services = svcScope.ServiceProvider;
+                var context = services.GetRequiredService<ApplicationDbContext>();
+                var userManager = services.GetRequiredService<UserManager<FPUser>>();
+                var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+                var fileService = services.GetRequiredService<IFPFileService>();
+                await ContextSeed.SeedDataBaseAsync(context, userManager, roleManager, fileService);
             }
             catch (Exception ex)
             {

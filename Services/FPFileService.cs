@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
+using RockTransactions.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,6 +11,12 @@ namespace RockTransactions.Services
 {
     public class FPFileService : IFPFileService
     {
+        private readonly DefaultSettings _defaultSettings;
+        public FPFileService(IOptions<DefaultSettings> defaultSettings)
+        {
+            _defaultSettings = defaultSettings.Value;
+        }
+
         private readonly string[] suffixes = { "Bytes", "KB", "MB", "GB", "TB", "PB" };
 
         public async Task<byte[]> ConvertFileToByteArrayAsync(IFormFile file)
@@ -52,6 +60,17 @@ namespace RockTransactions.Services
             string result = name.Substring(0, len);
             result = $"{result}...";
             return result;
+        }
+
+        public string GetDefaultAvatarFileName()
+        {
+            return _defaultSettings.Avatar;
+        }
+
+        public async Task<byte[]> GetDefaultAvatarFileBytesAsync()
+        {
+            var path = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\assets\img", _defaultSettings.Avatar);
+            return await File.ReadAllBytesAsync(path);
         }
     }
 }

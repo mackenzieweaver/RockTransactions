@@ -40,6 +40,7 @@ namespace RockTransactions
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
             services.AddTransient<IEmailSender, EmailService>();
 
+            services.Configure<DefaultSettings>(Configuration.GetSection("DefaultSettings"));
             services.AddScoped<IFPFileService, FPFileService>();
 
             services.AddControllersWithViews();

@@ -17,5 +17,9 @@ namespace RockTransactions.Services
         public string FormatFileSize(long bytes);
 
         public string ShortenFileName(string name, int length);
+
+        public string GetDefaultAvatarFileName();
+
+        public Task<byte[]> GetDefaultAvatarFileBytesAsync();
     }
 }
