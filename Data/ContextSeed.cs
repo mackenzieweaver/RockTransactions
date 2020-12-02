@@ -116,7 +116,7 @@ namespace RockTransactions.Data
             }
             #endregion
 
-            #region Member
+            #region New
             user = new FPUser
             {
                 UserName = "dr@mailinator.com",

@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using RockTransactions.Data.Enums;
 using RockTransactions.Extensions;
 using RockTransactions.Models;
 using RockTransactions.Services;
@@ -61,7 +62,6 @@ namespace RockTransactions.Areas.Identity.Pages.Account
             [Display(Name = "Last Name")]
             public string LastName { get; set; }
 
-            [Required]
             [Display(Name = "Avatar")]
             [NotMapped]
             [DataType(DataType.Upload)]
@@ -98,16 +98,29 @@ namespace RockTransactions.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
+                byte[] fileData;
+                string fileName;
+                if (Input.Avatar != null)
+                {
+                    fileData = await _fileService.ConvertFileToByteArrayAsync(Input.Avatar);
+                    fileName = Input.Avatar.FileName;
+                }
+                else
+                {
+                    fileData = await _fileService.GetDefaultAvatarFileBytesAsync();
+                    fileName = _fileService.GetDefaultAvatarFileName();
+                }
                 var user = new FPUser 
                 { 
                     FirstName = Input.FirstName, 
                     LastName = Input.LastName, 
-                    FileName = Input.Avatar.FileName,
-                    FileData = await _fileService.ConvertFileToByteArrayAsync(Input.Avatar),
+                    FileName = fileName,
+                    FileData = fileData,
                     UserName = Input.Email, 
                     Email = Input.Email 
                 };
                 var result = await _userManager.CreateAsync(user, Input.Password);
+                await _userManager.AddToRoleAsync(user, Roles.New.ToString());
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
