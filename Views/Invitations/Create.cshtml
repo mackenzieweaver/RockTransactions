@@ -15,8 +15,8 @@
                 <select asp-for="HouseHoldId" class ="form-control" asp-items="ViewBag.HouseHoldId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="Created" class="control-label"></label>
-                <input asp-for="Created" class="form-control" />
+                <label asp-for="Created" class="control-label" hidden></label>
+                <input type="hidden" asp-for="Created" class="form-control" value="@DateTime.Now"/>
                 <span asp-validation-for="Created" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -24,11 +24,11 @@
                 <input asp-for="Expires" class="form-control" />
                 <span asp-validation-for="Expires" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
+            @*<div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="Accepted" /> @Html.DisplayNameFor(model => model.Accepted)
                 </label>
-            </div>
+            </div>*@
             <div class="form-group">
                 <label asp-for="EmailTo" class="control-label"></label>
                 <input asp-for="EmailTo" class="form-control" />
@@ -41,12 +41,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="Body" class="control-label"></label>
-                <input asp-for="Body" class="form-control" />
+                <textarea asp-for="Body" class="form-control"></textarea>
                 <span asp-validation-for="Body" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Code" class="control-label"></label>
-                <input asp-for="Code" class="form-control" />
+                <label asp-for="Code" class="control-label" hidden></label>
+                <input type="hidden" asp-for="Code" class="form-control" value="@Guid.NewGuid()"/>
                 <span asp-validation-for="Code" class="text-danger"></span>
             </div>
             <div class="form-group">

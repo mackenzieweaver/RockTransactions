@@ -48,7 +48,7 @@ namespace RockTransactions.Controllers
         // GET: CategoryItems/Create
         public IActionResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Id");
+            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name");
             return View();
         }
 
