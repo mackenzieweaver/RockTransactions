@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RockTransactions.Data;
+using RockTransactions.Data.Enums;
 using RockTransactions.Models;
 
 namespace RockTransactions.Controllers
@@ -13,10 +15,14 @@ namespace RockTransactions.Controllers
     public class HouseHoldsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<FPUser> _userManager;
+        private readonly SignInManager<FPUser> _signInManager;
 
-        public HouseHoldsController(ApplicationDbContext context)
+        public HouseHoldsController(ApplicationDbContext context, UserManager<FPUser> userManager, SignInManager<FPUser> signInManager)
         {
             _context = context;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         // GET: HouseHolds
@@ -58,8 +64,22 @@ namespace RockTransactions.Controllers
         {
             if (ModelState.IsValid)
             {
+                // save new household
                 _context.Add(houseHold);
                 await _context.SaveChangesAsync();
+                // assign user to household
+                var user = await _userManager.GetUserAsync(User);
+                user.HouseHoldId = houseHold.Id;
+                await _context.SaveChangesAsync();
+                // make user head of household
+                await _userManager.AddToRoleAsync(user, Roles.Head.ToString());
+                if(User.IsInRole(Roles.New.ToString()))
+                {   // remove from new if they are one
+                    await _userManager.RemoveFromRoleAsync(user, Roles.New.ToString());
+                }
+                // sign out / sign in
+                await _signInManager.SignOutAsync();
+                await _signInManager.SignInAsync(user, isPersistent: false);
                 return RedirectToAction(nameof(Index));
             }
             return View(houseHold);
@@ -139,6 +159,8 @@ namespace RockTransactions.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var user = await _userManager.GetUserAsync(User);
+            user.HouseHoldId = null;
             var houseHold = await _context.HouseHold.FindAsync(id);
             _context.HouseHold.Remove(houseHold);
             await _context.SaveChangesAsync();

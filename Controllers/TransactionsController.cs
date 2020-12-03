@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,10 +14,12 @@ namespace RockTransactions.Controllers
     public class TransactionsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<FPUser> _userManager;
 
-        public TransactionsController(ApplicationDbContext context)
+        public TransactionsController(ApplicationDbContext context, UserManager<FPUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Transactions
@@ -50,9 +53,9 @@ namespace RockTransactions.Controllers
         // GET: Transactions/Create
         public IActionResult Create()
         {
-            ViewData["BankAccountId"] = new SelectList(_context.BankAccount, "Id", "Id");
-            ViewData["CategoryItemId"] = new SelectList(_context.CategoryItem, "Id", "Id");
-            ViewData["FPUserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["BankAccountId"] = new SelectList(_context.BankAccount, "Id", "Name");
+            ViewData["CategoryItemId"] = new SelectList(_context.CategoryItem, "Id", "Name");
+            ViewData["FPUserId"] = new SelectList(_context.Users, "Id", "FullName");
             return View();
         }
 
@@ -63,6 +66,7 @@ namespace RockTransactions.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,CategoryItemId,BankAccountId,FPUserId,Created,Type,Memo,Amount,IsDeleted")] Transaction transaction)
         {
+            transaction.FPUserId = _userManager.GetUserId(User);
             if (ModelState.IsValid)
             {
                 _context.Add(transaction);

@@ -1,37 +1,32 @@
 ﻿@model RockTransactions.Models.Transaction
+@using RockTransactions.Data.Enums
 
 @{
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
-
+<h1 class="mt-3">Create</h1>
 <h4>Transaction</h4>
-<hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="CategoryItemId" class="control-label"></label>
-                <select asp-for="CategoryItemId" class ="form-control" asp-items="ViewBag.CategoryItemId"></select>
+                <select asp-for="CategoryItemId" class="form-control" asp-items="ViewBag.CategoryItemId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="BankAccountId" class="control-label"></label>
-                <select asp-for="BankAccountId" class ="form-control" asp-items="ViewBag.BankAccountId"></select>
+                <select asp-for="BankAccountId" class="form-control" asp-items="ViewBag.BankAccountId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="FPUserId" class="control-label"></label>
-                <select asp-for="FPUserId" class ="form-control" asp-items="ViewBag.FPUserId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Created" class="control-label"></label>
-                <input asp-for="Created" class="form-control" />
+                <label asp-for="Created" class="control-label" hidden></label>
+                <input type="hidden" asp-for="Created" class="form-control" value="@DateTime.Now" />
                 <span asp-validation-for="Created" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Type" class="control-label"></label>
-                <input asp-for="Type" class="form-control" />
+                <select asp-items="Html.GetEnumSelectList<TransactionType>()" class="form-control"></select>
                 <span asp-validation-for="Type" class="text-danger"></span>
             </div>
             <div class="form-group">

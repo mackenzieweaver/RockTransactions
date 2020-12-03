@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RockTransactions.Data;
+using RockTransactions.Data.Enums;
 using RockTransactions.Models;
 
 namespace RockTransactions.Controllers
@@ -13,10 +15,12 @@ namespace RockTransactions.Controllers
     public class BankAccountsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<FPUser> _userManager;
 
-        public BankAccountsController(ApplicationDbContext context)
+        public BankAccountsController(ApplicationDbContext context, UserManager<FPUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: BankAccounts
@@ -46,9 +50,10 @@ namespace RockTransactions.Controllers
         }
 
         // GET: BankAccounts/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["HouseHoldId"] = new SelectList(_context.Set<HouseHold>(), "Id", "Name");
+            var user = await _userManager.GetUserAsync(User);
+            ViewData["HouseHoldId"] = user.HouseHoldId;
             return View();
         }
 
@@ -59,13 +64,14 @@ namespace RockTransactions.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,HouseHoldId,FPUserId,Name,Type,StartingBalance,CurrentBalance")] BankAccount bankAccount)
         {
+            bankAccount.FPUserId = _userManager.GetUserId(User);
             if (ModelState.IsValid)
             {
                 _context.Add(bankAccount);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["HouseHoldId"] = new SelectList(_context.Set<HouseHold>(), "Id", "Name", bankAccount.HouseHoldId);
+            ViewData["HouseHoldId"] = new SelectList(_context.HouseHold, "Id", "Name", bankAccount.HouseHoldId);
             return View(bankAccount);
         }
 
@@ -82,7 +88,7 @@ namespace RockTransactions.Controllers
             {
                 return NotFound();
             }
-            ViewData["HouseHoldId"] = new SelectList(_context.Set<HouseHold>(), "Id", "Name", bankAccount.HouseHoldId);
+            ViewData["HouseHoldId"] = new SelectList(_context.HouseHold, "Id", "Name", bankAccount.HouseHoldId);
             return View(bankAccount);
         }
 
@@ -118,7 +124,7 @@ namespace RockTransactions.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["HouseHoldId"] = new SelectList(_context.Set<HouseHold>(), "Id", "Name", bankAccount.HouseHoldId);
+            ViewData["HouseHoldId"] = new SelectList(_context.HouseHold, "Id", "Name", bankAccount.HouseHoldId);
             return View(bankAccount);
         }
 

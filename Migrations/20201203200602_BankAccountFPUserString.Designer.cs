@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RockTransactions.Data;
@@ -9,9 +10,10 @@ using RockTransactions.Data;
 namespace RockTransactions.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201203200602_BankAccountFPUserString")]
+    partial class BankAccountFPUserString
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -157,12 +159,10 @@ namespace RockTransactions.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("ContentType")
-                        .IsRequired()
                         .HasColumnType("character varying(40)")
                         .HasMaxLength(40);
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("character varying(40)")
                         .HasMaxLength(40);
 
@@ -170,7 +170,6 @@ namespace RockTransactions.Migrations
                         .HasColumnType("bytea");
 
                     b.Property<string>("FileName")
-                        .IsRequired()
                         .HasColumnType("character varying(40)")
                         .HasMaxLength(40);
 
@@ -195,7 +194,6 @@ namespace RockTransactions.Migrations
                         .HasColumnType("decimal(6,2)");
 
                     b.Property<string>("FPUserId")
-                        .IsRequired()
                         .HasColumnType("character varying(40)")
                         .HasMaxLength(40);
 
@@ -203,7 +201,6 @@ namespace RockTransactions.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("character varying(40)")
                         .HasMaxLength(40);
 
@@ -230,7 +227,6 @@ namespace RockTransactions.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("character varying(40)")
                         .HasMaxLength(40);
 
@@ -238,7 +234,6 @@ namespace RockTransactions.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("character varying(40)")
                         .HasMaxLength(40);
 
@@ -263,12 +258,10 @@ namespace RockTransactions.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("character varying(40)")
                         .HasMaxLength(40);
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("character varying(40)")
                         .HasMaxLength(40);
 
@@ -378,7 +371,6 @@ namespace RockTransactions.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Greeting")
-                        .IsRequired()
                         .HasColumnType("character varying(40)")
                         .HasMaxLength(40);
 
@@ -403,7 +395,6 @@ namespace RockTransactions.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("Body")
-                        .IsRequired()
                         .HasColumnType("character varying(120)")
                         .HasMaxLength(120);
 
@@ -414,7 +405,6 @@ namespace RockTransactions.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("EmailTo")
-                        .IsRequired()
                         .HasColumnType("character varying(40)")
                         .HasMaxLength(40);
 
@@ -425,7 +415,6 @@ namespace RockTransactions.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Subject")
-                        .IsRequired()
                         .HasColumnType("character varying(40)")
                         .HasMaxLength(40);
 
@@ -444,7 +433,6 @@ namespace RockTransactions.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Body")
-                        .IsRequired()
                         .HasColumnType("character varying(40)")
                         .HasMaxLength(40);
 
@@ -458,7 +446,6 @@ namespace RockTransactions.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("Subject")
-                        .IsRequired()
                         .HasColumnType("character varying(40)")
                         .HasMaxLength(40);
 
@@ -489,7 +476,6 @@ namespace RockTransactions.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("FPUserId")
-                        .IsRequired()
                         .HasColumnType("character varying(40)")
                         .HasMaxLength(40);
 
@@ -497,7 +483,6 @@ namespace RockTransactions.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("Memo")
-                        .IsRequired()
                         .HasColumnType("character varying(40)")
                         .HasMaxLength(40);
 
@@ -579,9 +564,7 @@ namespace RockTransactions.Migrations
                 {
                     b.HasOne("RockTransactions.Models.FPUser", "FPUser")
                         .WithMany("BankAccounts")
-                        .HasForeignKey("FPUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FPUserId");
 
                     b.HasOne("RockTransactions.Models.HouseHold", "HouseHold")
                         .WithMany("BankAccounts")
@@ -647,9 +630,7 @@ namespace RockTransactions.Migrations
 
                     b.HasOne("RockTransactions.Models.FPUser", "FPUser")
                         .WithMany("Transactions")
-                        .HasForeignKey("FPUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FPUserId");
                 });
 #pragma warning restore 612, 618
         }

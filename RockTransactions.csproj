@@ -11,6 +11,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20201203154339_ModelsAndControllersWithViews.cs" />
     <Compile Remove="Migrations\20201203154339_ModelsAndControllersWithViews.Designer.cs" />
+    <Compile Remove="Migrations\20201203203811_BankAccount.cs" />
+    <Compile Remove="Migrations\20201203203811_BankAccount.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

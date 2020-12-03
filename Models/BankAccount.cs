@@ -15,12 +15,14 @@ namespace RockTransactions.Models
         public HouseHold HouseHold { get; set; }
 
         [StringLength(40, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
-        public int FPUserId { get; set; }
+        public string FPUserId { get; set; }
         public FPUser FPUser { get; set; }
 
+        [Required]
         [StringLength(40, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
         public string Name { get; set; }
 
+        [EnumDataType(typeof(AccountType))]
         public AccountType Type { get; set; }
 
         [DataType(DataType.Currency)]

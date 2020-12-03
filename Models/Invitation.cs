@@ -17,12 +17,15 @@ namespace RockTransactions.Models
 
         public bool Accepted { get; set; }
 
+        [Required]
         [StringLength(40, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
         public string EmailTo { get; set; }
 
+        [Required]
         [StringLength(40, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
         public string Subject { get; set; }
 
+        [Required]
         [StringLength(120, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
         public string Body { get; set; }
 
