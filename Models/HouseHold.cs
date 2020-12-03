@@ -19,11 +19,11 @@ namespace RockTransactions.Models
 
         public DateTime Established { get; set; }
 
-        public virtual ICollection<Attachment> Attachments { get; set; } = new HashSet<Attachment>();
-        public virtual ICollection<Invitation> Invitations { get; set; } = new HashSet<Invitation>();
-        public virtual ICollection<Notification> Notifications { get; set; } = new HashSet<Notification>();
-        public virtual ICollection<Category> Categories { get; set; } = new HashSet<Category>();
-        public virtual ICollection<BankAccount> BankAccounts { get; set; } = new HashSet<BankAccount>();
-        public virtual ICollection<FPUser> FPUsers { get; set; } = new HashSet<FPUser>();
+        public ICollection<Attachment> Attachments { get; set; } = new HashSet<Attachment>();
+        public ICollection<Invitation> Invitations { get; set; } = new HashSet<Invitation>();
+        public ICollection<Notification> Notifications { get; set; } = new HashSet<Notification>();
+        public ICollection<Category> Categories { get; set; } = new HashSet<Category>();
+        public ICollection<BankAccount> BankAccounts { get; set; } = new HashSet<BankAccount>();
+        public ICollection<FPUser> FPUsers { get; set; } = new HashSet<FPUser>();
     }
 }

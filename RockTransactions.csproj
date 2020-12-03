@@ -9,6 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20201203154339_ModelsAndControllersWithViews.cs" />
+    <Compile Remove="Migrations\20201203154339_ModelsAndControllersWithViews.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="Views\Shared\_OldLayout.cshtml" />
   </ItemGroup>
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RockTransactions.Data.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -18,18 +19,20 @@ namespace RockTransactions.Models
         public int BankAccountId { get; set; }
         public BankAccount BankAccount { get; set; }
 
-        [StringLength(450, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
+        [StringLength(40, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
         public string FPUserId { get; set; }
         public FPUser FPUser { get; set; }
 
         public DateTime Created { get; set; }
-        public int Type { get; set; }
+
+        public TransactionType Type { get; set; }
+
         [StringLength(40, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
         public string Memo { get; set; }
 
         [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(6,2)")]
-        public Decimal Amount { get; set; }
+        public decimal Amount { get; set; }
 
         public bool IsDeleted { get; set; }
     }

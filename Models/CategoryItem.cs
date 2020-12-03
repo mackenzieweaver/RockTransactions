@@ -20,11 +20,11 @@ namespace RockTransactions.Models
 
         [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(6,2)")]
-        public Decimal TargetAmount { get; set; }
+        public decimal TargetAmount { get; set; }
         [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(6,2)")]
-        public Decimal ActualAmount { get; set; }
+        public decimal ActualAmount { get; set; }
 
-        public virtual ICollection<Transaction> Transactions { get; set; } = new HashSet<Transaction>();
+        public ICollection<Transaction> Transactions { get; set; } = new HashSet<Transaction>();
     }
 }
