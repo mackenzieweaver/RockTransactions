@@ -66,7 +66,7 @@ namespace RockTransactions.Controllers
             {
                 _context.Add(invitation);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Dashboard", "HouseHolds");
             }
             ViewData["HouseHoldId"] = new SelectList(_context.HouseHold, "Id", "Name", invitation.HouseHoldId);
             return View(invitation);
