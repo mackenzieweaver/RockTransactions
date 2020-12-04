@@ -4,26 +4,30 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to the lobby</h1>
-    @if (Model.Role == Roles.Admin.ToString())
-    {
-        <span class="h6">You are an <b>@Model.Role</b></span>
-    }
-    else if (Model.Role == Roles.Head.ToString())
-    {
-        <span class="h6">You are the <b>@Model.Role</b></span>
-    }
-    else if (Model.Role == Roles.Member.ToString())
-    {
-        <span class="h6">You are a <b>@Model.Role</b></span>
-    }
-    else if (Model.Role == Roles.New.ToString())
-    {
-        <span class="h6">You are a <b>@Model.Role</b> user</span>
-    }
-    @if (Model.HouseHold != null)
-    {
-        <span class="h6">of the <b>@Model.HouseHold</b> household</span>
-    }
+<div class="row">
+    <div class="col-md mt-3">
+        <div class="text-center">
+            <h1 class="display-4">Welcome to the lobby</h1>
+            @if (Model.Role == Roles.Admin.ToString())
+            {
+                <span class="h6">You are an <b>@Model.Role</b></span>
+            }
+            else if (Model.Role == Roles.Head.ToString())
+            {
+                <span class="h6">You are the <b>@Model.Role</b></span>
+            }
+            else if (Model.Role == Roles.Member.ToString())
+            {
+                <span class="h6">You are a <b>@Model.Role</b></span>
+            }
+            else if (Model.Role == Roles.New.ToString())
+            {
+                <span class="h6">You are a <b>@Model.Role</b> user</span>
+            }
+            @if (Model.HouseHold != null)
+            {
+                <span class="h6">of the <b>@Model.HouseHold</b> household</span>
+            }
+        </div>
+    </div>
 </div>

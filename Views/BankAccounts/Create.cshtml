@@ -4,45 +4,49 @@
     ViewData["Title"] = "Create";
 }
 
-<h1 class="mt-3">Create</h1>
-<h4>BankAccount</h4>
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="HouseHoldId" class="control-label" hidden></label>
-                <input type="hidden" asp-for="HouseHoldId" class="form-control" value="@ViewData["HouseHoldId"]" />
+    <div class="col-md mt-3">
+        <h1>Create</h1>
+        <h4>BankAccount</h4>
+        <div class="row">
+            <div class="col-md-4">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="HouseHoldId" class="control-label" hidden></label>
+                        <input type="hidden" asp-for="HouseHoldId" class="form-control" value="@ViewData["HouseHoldId"]" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Type" class="control-label"></label>
+                        <select asp-items="Html.GetEnumSelectList<AccountType>()" class="form-control"></select>
+                        <span asp-validation-for="Type" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="StartingBalance" class="control-label"></label>
+                        <input asp-for="StartingBalance" class="form-control" />
+                        <span asp-validation-for="StartingBalance" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CurrentBalance" class="control-label"></label>
+                        <input asp-for="CurrentBalance" class="form-control" />
+                        <span asp-validation-for="CurrentBalance" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Type" class="control-label"></label>
-                <select asp-items="Html.GetEnumSelectList<AccountType>()" class="form-control"></select>
-                <span asp-validation-for="Type" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StartingBalance" class="control-label"></label>
-                <input asp-for="StartingBalance" class="form-control" />
-                <span asp-validation-for="StartingBalance" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CurrentBalance" class="control-label"></label>
-                <input asp-for="CurrentBalance" class="form-control" />
-                <span asp-validation-for="CurrentBalance" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+        </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
