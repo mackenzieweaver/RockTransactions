@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using RockTransactions.Data;
 using RockTransactions.Data.Enums;
 using RockTransactions.Models;
+using RockTransactions.Models.ViewModels;
 
 namespace RockTransactions.Controllers
 {
@@ -112,9 +113,19 @@ namespace RockTransactions.Controllers
                 // sign out / sign in
                 await _signInManager.SignOutAsync();
                 await _signInManager.SignInAsync(user, isPersistent: false);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Dashboard));
             }
             return View(houseHold);
+        }
+
+        public async Task<IActionResult> Dashboard()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var model = new HhDashVM
+            {
+                Occupants = await _context.Users.Where(u => u.HouseHoldId == user.HouseHoldId).ToListAsync()
+            };
+            return View(model);
         }
 
         // GET: HouseHolds/Edit/5

@@ -40,6 +40,10 @@ namespace RockTransactions.Controllers
                 Role = (await _userManager.GetRolesAsync(user))[0],
                 HouseHold = houseHoldName
             };
+            if(user.HouseHoldId != null)
+            {
+                return RedirectToAction("Dashboard", "HouseHolds");
+            }
             return View(model);
         }
 
