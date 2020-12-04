@@ -31,6 +31,40 @@ namespace RockTransactions.Controllers
             return View(await _context.HouseHold.ToListAsync());
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Join(int id)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            user.HouseHoldId = id;
+            var roles = await _userManager.GetRolesAsync(user);
+            await _userManager.RemoveFromRolesAsync(user, roles);
+            await _userManager.AddToRoleAsync(user, Roles.Member.ToString());
+            await _context.SaveChangesAsync();
+
+            // sign out / sign in
+            await _signInManager.SignOutAsync();
+            await _signInManager.SignInAsync(user, isPersistent: false);
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Leave()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            user.HouseHoldId = null;
+            var roles = await _userManager.GetRolesAsync(user);
+            await _userManager.RemoveFromRolesAsync(user, roles);
+            await _userManager.AddToRoleAsync(user, Roles.New.ToString());
+            await _context.SaveChangesAsync();
+
+            // sign out / sign in
+            await _signInManager.SignOutAsync();
+            await _signInManager.SignInAsync(user, isPersistent: false);
+            return RedirectToAction("Index", "Home");
+        }
+
         // GET: HouseHolds/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -64,19 +98,17 @@ namespace RockTransactions.Controllers
         {
             if (ModelState.IsValid)
             {
-                // save new household
                 _context.Add(houseHold);
                 await _context.SaveChangesAsync();
-                // assign user to household
+
                 var user = await _userManager.GetUserAsync(User);
                 user.HouseHoldId = houseHold.Id;
+
+                var roles = await _userManager.GetRolesAsync(user);
+                await _userManager.RemoveFromRolesAsync(user, roles);
+                await _userManager.AddToRoleAsync(user, Roles.Head.ToString());                
                 await _context.SaveChangesAsync();
-                // make user head of household
-                await _userManager.AddToRoleAsync(user, Roles.Head.ToString());
-                if(User.IsInRole(Roles.New.ToString()))
-                {   // remove from new if they are one
-                    await _userManager.RemoveFromRoleAsync(user, Roles.New.ToString());
-                }
+
                 // sign out / sign in
                 await _signInManager.SignOutAsync();
                 await _signInManager.SignInAsync(user, isPersistent: false);

@@ -26,7 +26,7 @@ namespace RockTransactions.Controllers
         // GET: BankAccounts
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.BankAccount.Include(b => b.HouseHold);
+            var applicationDbContext = _context.BankAccount.Include(b => b.HouseHold).Include(u => u.FPUser);
             return View(await applicationDbContext.ToListAsync());
         }
 

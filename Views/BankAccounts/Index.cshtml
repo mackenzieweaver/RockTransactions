@@ -16,7 +16,7 @@
                 @Html.DisplayNameFor(model => model.HouseHold)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FPUserId)
+                User
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
@@ -40,7 +40,7 @@
                 @Html.DisplayFor(modelItem => item.HouseHold.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FPUserId)
+                @Html.DisplayFor(modelItem => item.FPUser.FullName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
