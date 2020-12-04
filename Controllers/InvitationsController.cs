@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,10 +16,12 @@ namespace RockTransactions.Controllers
     public class InvitationsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IEmailSender _emailService;
 
-        public InvitationsController(ApplicationDbContext context)
+        public InvitationsController(ApplicationDbContext context, IEmailSender emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
 
         // GET: Invitations
@@ -64,6 +68,7 @@ namespace RockTransactions.Controllers
         {
             if (ModelState.IsValid)
             {
+                await _emailService.SendEmailAsync(invitation.EmailTo, invitation.Subject, invitation.Body);
                 _context.Add(invitation);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Dashboard", "HouseHolds");
