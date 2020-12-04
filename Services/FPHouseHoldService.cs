@@ -1,0 +1,44 @@
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using RockTransactions.Data;
+using RockTransactions.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace RockTransactions.Services
+{
+    public class FPHouseHoldService : IFPHouseHoldService
+    {
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<FPUser> _userManager;
+
+        public FPHouseHoldService(ApplicationDbContext context, UserManager<FPUser> userManager)
+        {
+            _context = context;
+            _userManager = userManager;
+        }
+
+        public async Task<List<FPUser>> ListHouseHoldMembersAsync(FPUser user)
+        {
+            var houseHold = await _context.HouseHold.Include(hh => hh.FPUsers).FirstOrDefaultAsync(hh => hh.Id == user.HouseHoldId);
+            var members = new List<FPUser>();
+            foreach (var member in houseHold.FPUsers)
+            {
+                var role = (await _userManager.GetRolesAsync(member))[0];
+                if (role == "Member")
+                {
+                    members.Add(member);
+                }
+            }
+            return members;
+        }
+
+        public async Task<string> GetRoleAsync(FPUser user)
+        {
+            var roles = await _userManager.GetRolesAsync(user);
+            return roles[0];
+        }
+    }
+}

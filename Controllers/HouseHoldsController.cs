@@ -10,6 +10,7 @@ using RockTransactions.Data;
 using RockTransactions.Data.Enums;
 using RockTransactions.Models;
 using RockTransactions.Models.ViewModels;
+using RockTransactions.Services;
 
 namespace RockTransactions.Controllers
 {
@@ -18,12 +19,14 @@ namespace RockTransactions.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<FPUser> _userManager;
         private readonly SignInManager<FPUser> _signInManager;
+        private readonly IFPHouseHoldService _houseHoldService;
 
-        public HouseHoldsController(ApplicationDbContext context, UserManager<FPUser> userManager, SignInManager<FPUser> signInManager)
+        public HouseHoldsController(ApplicationDbContext context, UserManager<FPUser> userManager, SignInManager<FPUser> signInManager, IFPHouseHoldService houseHoldService)
         {
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
+            _houseHoldService = houseHoldService;
         }
 
         // GET: HouseHolds
@@ -54,6 +57,17 @@ namespace RockTransactions.Controllers
         public async Task<IActionResult> Leave()
         {
             var user = await _userManager.GetUserAsync(User);
+            if (User.IsInRole("Head"))
+            {
+                var members = await _houseHoldService.ListHouseHoldMembersAsync(user);
+                if(members.Count > 0)
+                {
+                    TempData["Script"] = "CantLeave()";
+                    return RedirectToAction("Dashboard");
+                }
+                var houseHold = await _context.HouseHold.FirstOrDefaultAsync(hh => hh.Id == user.HouseHoldId);
+                _context.HouseHold.Remove(houseHold);
+            }
             user.HouseHoldId = null;
             var roles = await _userManager.GetRolesAsync(user);
             await _userManager.RemoveFromRolesAsync(user, roles);

@@ -43,6 +43,8 @@ namespace RockTransactions
             services.Configure<DefaultSettings>(Configuration.GetSection("DefaultSettings"));
             services.AddScoped<IFPFileService, FPFileService>();
 
+            services.AddScoped<IFPHouseHoldService, FPHouseHoldService>();
+
             services.AddControllersWithViews();
             services.AddRazorPages();
         }

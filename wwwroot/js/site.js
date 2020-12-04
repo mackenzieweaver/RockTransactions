@@ -1,4 +1,9 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿$(document).on('click', '#hhDashInviteSubmit', function InviteAlert(e) {
+    e.preventDefault();
+    swal("Good news!", "Your invitation has been sent.", "success")
+        .then(() => $('#dashInviteForm').submit());
+});
 
-// Write your JavaScript code.
+function CantLeave() {
+    swal("Bad news!", "You can't leave while the house still has members.", "error");
+}
