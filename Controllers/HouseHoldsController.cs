@@ -47,8 +47,7 @@ namespace RockTransactions.Controllers
             await _context.SaveChangesAsync();
 
             // sign out / sign in
-            await _signInManager.SignOutAsync();
-            await _signInManager.SignInAsync(user, isPersistent: false);
+            await _signInManager.RefreshSignInAsync(user);
             return RedirectToAction("Index", "Home");
         }
 
@@ -57,7 +56,7 @@ namespace RockTransactions.Controllers
         public async Task<IActionResult> Leave()
         {
             var user = await _userManager.GetUserAsync(User);
-            if (User.IsInRole("Head"))
+            if (User.IsInRole(Roles.Head.ToString()))
             {
                 var members = await _houseHoldService.ListHouseHoldMembersAsync(user.HouseHoldId);
                 if(members.Count > 0)
@@ -75,8 +74,7 @@ namespace RockTransactions.Controllers
             await _context.SaveChangesAsync();
 
             // sign out / sign in
-            await _signInManager.SignOutAsync();
-            await _signInManager.SignInAsync(user, isPersistent: false);
+            await _signInManager.RefreshSignInAsync(user);
             return RedirectToAction("Index", "Home");
         }
 

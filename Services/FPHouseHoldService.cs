@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RockTransactions.Data;
+using RockTransactions.Data.Enums;
 using RockTransactions.Models;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,7 @@ namespace RockTransactions.Services
             foreach (var member in houseHold.FPUsers)
             {
                 var role = (await _userManager.GetRolesAsync(member))[0];
-                if (role == "Member")
+                if (role == Roles.Member.ToString())
                 {
                     members.Add(member);
                 }

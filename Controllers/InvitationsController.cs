@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -17,11 +18,13 @@ namespace RockTransactions.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IEmailSender _emailService;
+        private readonly SignInManager<FPUser> _signInManager;
 
-        public InvitationsController(ApplicationDbContext context, IEmailSender emailService)
+        public InvitationsController(ApplicationDbContext context, IEmailSender emailService, SignInManager<FPUser> signInManager)
         {
             _context = context;
             _emailService = emailService;
+            _signInManager = signInManager;
         }
 
         // GET: Invitations
@@ -104,12 +107,21 @@ namespace RockTransactions.Controllers
                 return NotFound();
             }
 
+            // update record
             invitation.Accepted = true;
             await _context.SaveChangesAsync();
-            return RedirectToAction("SpecialRegistration", new { code = invitation.Code });
+
+            // decide which registration to use
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null)
+            {
+                await _signInManager.SignOutAsync();
+                return RedirectToPage("/Account/Register", new { area = "Identity" });
+            }
+            return RedirectToAction("InvitedRegistration", new { code = invitation.Code });
         }
 
-        public async Task<IActionResult> SpecialRegistration(string code)
+        public async Task<IActionResult> InvitedRegistration(string code)
         {
             return View();
         }
