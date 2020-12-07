@@ -96,8 +96,8 @@ namespace RockTransactions.Controllers
                 var declineUrl = Url.Action("Decline", "Invitations", new { code = invitation.Code }, protocol: Request.Scheme);
                 string houseHoldName = (await _context.HouseHold.FirstOrDefaultAsync(hh => hh.Id == invitation.HouseHoldId)).Name;
                 var emailBody = 
-                    $"<h3>You are invited to join the <em>{houseHoldName}</em> household.</h3><br/>" +
-                    $"{invitation.Body} <br/>" +
+                    $"<h3>You are invited to join the <em>{houseHoldName}</em> household.</h3>" +
+                    $"<h6>{invitation.Body}</h6><br/>" +
                     $"<a href='{HtmlEncoder.Default.Encode(acceptUrl)}'>Accept</a>" +
                     $" Or " +
                     $"<a href='{HtmlEncoder.Default.Encode(declineUrl)}'> Deny</a>.";

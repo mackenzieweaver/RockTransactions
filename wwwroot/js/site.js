@@ -1,4 +1,8 @@
-﻿function CanInvite() {
+﻿$(document).ready(function () {
+    $('.table').DataTable();
+});
+
+function CanInvite() {
     swal("Good news!", "Your invitation has been sent.", "success");
 }
 

@@ -9,7 +9,7 @@
 }
 <div class="row">
     <div class="col-md">
-        <div class="row justify-content-between mt-3">
+        <div class="row justify-content-between mt-3 mb-3">
             <div class="col-md">
                 <h1>Household dashboard</h1>
             </div>
@@ -32,33 +32,29 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-4">
-                <div class="row">
-                    <div class="col-md widget p-3">
-                        <h3>Occupants of household</h3>
-                        <table class="table table-responsive-md">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Email</td>
-                                    <td>Role</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var occupant in Model.Occupants)
-                                {
-                                    <tr>
-                                        <td>@occupant.FullName</td>
-                                        <td>@occupant.Email</td>
-                                        <td>
-                                            @await HouseHoldService.GetRoleAsync(occupant)
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            <div class="col-md-4 widget p-3 ml-md-3">
+                <h3>Occupants of household</h3>
+                <table class="table table-responsive-sm">
+                    <thead>
+                        <tr>
+                            <td>Name</td>
+                            <td>Email</td>
+                            <td>Role</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var occupant in Model.Occupants)
+                        {
+                            <tr>
+                                <td>@occupant.FullName</td>
+                                <td>@occupant.Email</td>
+                                <td>
+                                    @await HouseHoldService.GetRoleAsync(occupant)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
