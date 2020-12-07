@@ -17,6 +17,7 @@ using RockTransactions.Services;
 
 namespace RockTransactions.Controllers
 {
+    [Authorize]
     public class InvitationsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -91,9 +92,15 @@ namespace RockTransactions.Controllers
                 await _context.SaveChangesAsync();
 
                 // construct email
-                var callbackUrl = Url.Action("Accept", "Invitations", new { email = invitation.EmailTo, code = invitation.Code }, protocol: Request.Scheme);
+                var acceptUrl = Url.Action("Accept", "Invitations", new { email = invitation.EmailTo, code = invitation.Code }, protocol: Request.Scheme);
+                var declineUrl = Url.Action("Decline", "Invitations", new { code = invitation.Code }, protocol: Request.Scheme);
                 string houseHoldName = (await _context.HouseHold.FirstOrDefaultAsync(hh => hh.Id == invitation.HouseHoldId)).Name;
-                var emailBody = $"{invitation.Body} <br/><p><h3>Your invited to join the {houseHoldName} household.</h3><br/><a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Click here to accept</a>.";
+                var emailBody = 
+                    $"<h3>You are invited to join the <em>{houseHoldName}</em> household.</h3><br/>" +
+                    $"{invitation.Body} <br/>" +
+                    $"<a href='{HtmlEncoder.Default.Encode(acceptUrl)}'>Accept</a>" +
+                    $" Or " +
+                    $"<a href='{HtmlEncoder.Default.Encode(declineUrl)}'> Deny</a>.";
 
                 // send email
                 await _emailService.SendEmailAsync(invitation.EmailTo, invitation.Subject, emailBody);
@@ -106,6 +113,7 @@ namespace RockTransactions.Controllers
             return View(invitation);
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Accept(string email, string code)
         {
             // ensure signed out
@@ -138,6 +146,7 @@ namespace RockTransactions.Controllers
             return RedirectToAction("Dashboard", "HouseHolds");
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Accept(string email, string code, string firstName, string lastName, IFormFile avatar, string password)
         {
@@ -168,9 +177,27 @@ namespace RockTransactions.Controllers
             invitation.Accepted = true;
             var result = await _userManager.CreateAsync(user, password);
             await _userManager.AddToRoleAsync(user, Roles.Member.ToString());
-            await _signInManager.SignInAsync(user, isPersistent: false);
+            await _signInManager.SignInAsync(user, false);
             await _context.SaveChangesAsync();
             return RedirectToAction("Dashboard", "HouseHolds");
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> Decline(string code)
+        {
+            // ensure signed out
+            await _signInManager.SignOutAsync();
+
+            var invitation = await _context.Invitation.FirstOrDefaultAsync(i => i.Code.ToString() == code);
+            if (invitation == null || invitation.Accepted == true || DateTime.Now > invitation.Expires)
+            {
+                return NotFound();
+            }
+            invitation.Accepted = true;
+            await _context.SaveChangesAsync();
+
+            TempData["HouseHoldName"] = (await _context.HouseHold.FirstOrDefaultAsync(hh => hh.Id == invitation.HouseHoldId)).Name;
+            return View();
         }
 
         // GET: Invitations/Edit/5

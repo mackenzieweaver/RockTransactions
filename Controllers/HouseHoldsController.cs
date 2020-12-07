@@ -11,9 +11,11 @@ using RockTransactions.Data.Enums;
 using RockTransactions.Models;
 using RockTransactions.Models.ViewModels;
 using RockTransactions.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RockTransactions.Controllers
 {
+    [Authorize]
     public class HouseHoldsController : Controller
     {
         private readonly ApplicationDbContext _context;

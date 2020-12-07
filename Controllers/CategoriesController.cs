@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RockTransactions.Data;
 using RockTransactions.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RockTransactions.Controllers
 {
+    [Authorize]
     public class CategoriesController : Controller
     {
         private readonly ApplicationDbContext _context;

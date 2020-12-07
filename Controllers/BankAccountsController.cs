@@ -9,9 +9,11 @@ using Microsoft.EntityFrameworkCore;
 using RockTransactions.Data;
 using RockTransactions.Data.Enums;
 using RockTransactions.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RockTransactions.Controllers
 {
+    [Authorize]
     public class BankAccountsController : Controller
     {
         private readonly ApplicationDbContext _context;
