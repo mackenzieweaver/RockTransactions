@@ -59,7 +59,7 @@ namespace RockTransactions.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (User.IsInRole("Head"))
             {
-                var members = await _houseHoldService.ListHouseHoldMembersAsync(user);
+                var members = await _houseHoldService.ListHouseHoldMembersAsync(user.HouseHoldId);
                 if(members.Count > 0)
                 {
                     TempData["Script"] = "CantLeave()";

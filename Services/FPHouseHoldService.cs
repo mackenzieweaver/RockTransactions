@@ -20,9 +20,9 @@ namespace RockTransactions.Services
             _userManager = userManager;
         }
 
-        public async Task<List<FPUser>> ListHouseHoldMembersAsync(FPUser user)
+        public async Task<List<FPUser>> ListHouseHoldMembersAsync(int? houseHoldId)
         {
-            var houseHold = await _context.HouseHold.Include(hh => hh.FPUsers).FirstOrDefaultAsync(hh => hh.Id == user.HouseHoldId);
+            var houseHold = await _context.HouseHold.Include(hh => hh.FPUsers).FirstOrDefaultAsync(hh => hh.Id == houseHoldId);
             var members = new List<FPUser>();
             foreach (var member in houseHold.FPUsers)
             {

@@ -58,23 +58,60 @@ namespace RockTransactions.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Admin,Head")]
         // POST: Invitations/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin,Head")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,HouseHoldId,Created,Expires,Accepted,EmailTo,Subject,Body,Code")] Invitation invitation)
         {
             if (ModelState.IsValid)
             {
-                await _emailService.SendEmailAsync(invitation.EmailTo, invitation.Subject, invitation.Body);
+                // prevent inviting user already in household
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == invitation.EmailTo);
+                if(user != null && user.HouseHoldId != null)
+                {
+                    TempData["Script"] = "CantInvite()";
+                    return RedirectToAction("Dashboard", "HouseHolds");
+                }
+
+                // create invitation record
                 _context.Add(invitation);
                 await _context.SaveChangesAsync();
+
+                // construct email
+                var callbackUrl = Url.Action("Accept", "Invitations", new { email = invitation.EmailTo, code = invitation.Code }, protocol: Request.Scheme);
+                string houseHoldName = (await _context.HouseHold.FirstOrDefaultAsync(hh => hh.Id == invitation.HouseHoldId)).Name;
+                var emailBody = $"{invitation.Body} <br/><p><h3>Your invited to join the {houseHoldName} household.</h3><br/><a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Click here to accept</a>.";
+                
+                // send email
+                await _emailService.SendEmailAsync(invitation.EmailTo, invitation.Subject, emailBody);
+
+                // sweet alert
+                TempData["Script"] = "CanInvite()";
                 return RedirectToAction("Dashboard", "HouseHolds");
             }
             ViewData["HouseHoldId"] = new SelectList(_context.HouseHold, "Id", "Name", invitation.HouseHoldId);
             return View(invitation);
+        }
+
+        public async Task<IActionResult> Accept(string email, string code)
+        {
+            var invitation = await _context.Invitation.FirstOrDefaultAsync(i => i.Code.ToString() == code);
+            if (invitation == null || invitation.Accepted == true || DateTime.Now > invitation.Expires)
+            {
+                return NotFound();
+            }
+
+            invitation.Accepted = true;
+            await _context.SaveChangesAsync();
+            return RedirectToAction("SpecialRegistration", new { code = invitation.Code });
+        }
+
+        public async Task<IActionResult> SpecialRegistration(string code)
+        {
+            return View();
         }
 
         // GET: Invitations/Edit/5
