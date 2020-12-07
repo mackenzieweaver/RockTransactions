@@ -4,13 +4,16 @@ using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RockTransactions.Data;
+using RockTransactions.Data.Enums;
 using RockTransactions.Models;
+using RockTransactions.Services;
 
 namespace RockTransactions.Controllers
 {
@@ -19,12 +22,16 @@ namespace RockTransactions.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IEmailSender _emailService;
         private readonly SignInManager<FPUser> _signInManager;
+        private readonly UserManager<FPUser> _userManager;
+        private readonly IFPFileService _fileService;
 
-        public InvitationsController(ApplicationDbContext context, IEmailSender emailService, SignInManager<FPUser> signInManager)
+        public InvitationsController(ApplicationDbContext context, IEmailSender emailService, SignInManager<FPUser> signInManager, UserManager<FPUser> userManager, IFPFileService fileService)
         {
             _context = context;
             _emailService = emailService;
             _signInManager = signInManager;
+            _userManager = userManager;
+            _fileService = fileService;
         }
 
         // GET: Invitations
@@ -73,7 +80,7 @@ namespace RockTransactions.Controllers
             {
                 // prevent inviting user already in household
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == invitation.EmailTo);
-                if(user != null && user.HouseHoldId != null)
+                if (user != null && user.HouseHoldId != null)
                 {
                     TempData["Script"] = "CantInvite()";
                     return RedirectToAction("Dashboard", "HouseHolds");
@@ -87,7 +94,7 @@ namespace RockTransactions.Controllers
                 var callbackUrl = Url.Action("Accept", "Invitations", new { email = invitation.EmailTo, code = invitation.Code }, protocol: Request.Scheme);
                 string houseHoldName = (await _context.HouseHold.FirstOrDefaultAsync(hh => hh.Id == invitation.HouseHoldId)).Name;
                 var emailBody = $"{invitation.Body} <br/><p><h3>Your invited to join the {houseHoldName} household.</h3><br/><a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Click here to accept</a>.";
-                
+
                 // send email
                 await _emailService.SendEmailAsync(invitation.EmailTo, invitation.Subject, emailBody);
 
@@ -101,29 +108,69 @@ namespace RockTransactions.Controllers
 
         public async Task<IActionResult> Accept(string email, string code)
         {
+            // ensure signed out
+            await _signInManager.SignOutAsync();
+
+            // validate invitation
             var invitation = await _context.Invitation.FirstOrDefaultAsync(i => i.Code.ToString() == code);
             if (invitation == null || invitation.Accepted == true || DateTime.Now > invitation.Expires)
             {
                 return NotFound();
             }
 
-            // update record
-            invitation.Accepted = true;
-            await _context.SaveChangesAsync();
-
-            // decide which registration to use
+            // doesn't have an account
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
             if (user == null)
             {
-                await _signInManager.SignOutAsync();
-                return RedirectToPage("/Account/Register", new { area = "Identity" });
+                TempData["Email"] = email;
+                TempData["Code"] = code;
+                return View();
             }
-            return RedirectToAction("InvitedRegistration", new { code = invitation.Code });
+
+            // does have an account
+            invitation.Accepted = true;
+            user.HouseHoldId = invitation.HouseHoldId;
+            var roles = await _userManager.GetRolesAsync(user);
+            await _userManager.RemoveFromRolesAsync(user, roles);
+            await _userManager.AddToRoleAsync(user, Roles.Member.ToString());
+            await _signInManager.SignInAsync(user, false);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Dashboard", "HouseHolds");
         }
 
-        public async Task<IActionResult> InvitedRegistration(string code)
+        [HttpPost]
+        public async Task<IActionResult> Accept(string email, string code, string firstName, string lastName, IFormFile avatar, string password)
         {
-            return View();
+            var invitation = await _context.Invitation.FirstOrDefaultAsync(i => i.Code.ToString() == code);
+            byte[] fileData;
+            string fileName;
+            if (avatar != null)
+            {
+                fileData = await _fileService.ConvertFileToByteArrayAsync(avatar);
+                fileName = avatar.FileName;
+            }
+            else
+            {
+                fileData = await _fileService.GetDefaultAvatarFileBytesAsync();
+                fileName = _fileService.GetDefaultAvatarFileName();
+            }
+            var user = new FPUser
+            {
+                FirstName = firstName,
+                LastName = lastName,
+                FileName = fileName,
+                FileData = fileData,
+                UserName = email,
+                Email = email,
+                HouseHoldId = invitation.HouseHoldId,
+                EmailConfirmed = true
+            };
+            invitation.Accepted = true;
+            var result = await _userManager.CreateAsync(user, password);
+            await _userManager.AddToRoleAsync(user, Roles.Member.ToString());
+            await _signInManager.SignInAsync(user, isPersistent: false);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Dashboard", "HouseHolds");
         }
 
         // GET: Invitations/Edit/5
