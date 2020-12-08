@@ -59,6 +59,7 @@
                             <td>Member</td>
                             <td>Type</td>
                             <td>Account</td>
+                            <td>Date</td>
                             <td>Amount</td>
                             <td></td>
                         </tr>
@@ -70,6 +71,7 @@
                             <td>@transaction.FPUser.FullName</td>
                             <td>@transaction.Type.ToString()</td>
                             <td>@transaction.BankAccount.Name</td>
+                            <td>@transaction.Created</td>
                             <td>@transaction.Amount</td>
                             <td>
                                 <a asp-controller="Transactions" asp-action="Details" asp-route-id="@transaction.Id">Details</a>

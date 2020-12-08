@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RockTransactions.Data;
 using RockTransactions.Models;
+using RockTransactions.Data.Enums;
 
 namespace RockTransactions.Controllers
 {
@@ -69,9 +70,19 @@ namespace RockTransactions.Controllers
         public async Task<IActionResult> Create([Bind("Id,CategoryItemId,BankAccountId,FPUserId,Created,Type,Memo,Amount,IsDeleted")] Transaction transaction)
         {
             transaction.FPUserId = _userManager.GetUserId(User);
+            var bankAccount = await _context.BankAccount.FirstOrDefaultAsync(ba => ba.Id == transaction.BankAccountId);
             if (ModelState.IsValid)
             {
+                if(transaction.Type == TransactionType.Deposit)
+                {
+                    bankAccount.CurrentBalance += transaction.Amount;
+                }
+                else if(transaction.Type == TransactionType.Withdrawal)
+                {
+                    bankAccount.CurrentBalance -= transaction.Amount;
+                }
                 _context.Add(transaction);
+                _context.Update(bankAccount);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Dashboard", "HouseHolds");
             }
