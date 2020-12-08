@@ -98,6 +98,8 @@ namespace RockTransactions.Controllers
                 var emailBody = 
                     $"<h3>You are invited to join the <em>{houseHoldName}</em> household.</h3>" +
                     $"<h6>{invitation.Body}</h6><br/>" +
+                    $"<p>if you have an account you can copy and paste this code when you click to 'join'</p>" +
+                    $"<b>{invitation.Code.ToString().ToUpper()}</p>" +
                     $"<a href='{HtmlEncoder.Default.Encode(acceptUrl)}'>Accept</a>" +
                     $" Or " +
                     $"<a href='{HtmlEncoder.Default.Encode(declineUrl)}'> Deny</a>.";
@@ -116,11 +118,8 @@ namespace RockTransactions.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Accept(string email, string code)
         {
-            // ensure signed out
-            await _signInManager.SignOutAsync();
-
             // validate invitation
-            var invitation = await _context.Invitation.FirstOrDefaultAsync(i => i.Code.ToString() == code);
+            var invitation = await _context.Invitation.FirstOrDefaultAsync(i => i.Code.ToString() == code.ToLower());
             if (invitation == null || invitation.Accepted == true || DateTime.Now > invitation.Expires)
             {
                 return NotFound();

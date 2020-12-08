@@ -10,7 +10,7 @@
                 <h3 class="modal-title" id="exampleModalLabel">Accept invitation</h3>
             </div>
             <div class="modal-body">
-                <form asp-controller="Invitations" asp-action="Accept" enctype="multipart/form-data">
+                <form asp-controller="Invitations" asp-action="Accept" enctype="multipart/form-data" method="get">
                     <div class="form-group">
                         <input type="hidden" name="email" class="form-control" value="@user.Email" />
                     </div>

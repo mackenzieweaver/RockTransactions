@@ -67,6 +67,7 @@ namespace RockTransactions.Controllers
         public async Task<IActionResult> Create([Bind("Id,HouseHoldId,FPUserId,Name,Type,StartingBalance,CurrentBalance")] BankAccount bankAccount)
         {
             bankAccount.FPUserId = _userManager.GetUserId(User);
+            bankAccount.CurrentBalance = bankAccount.StartingBalance;
             if (ModelState.IsValid)
             {
                 _context.Add(bankAccount);

@@ -31,7 +31,7 @@ namespace RockTransactions.Models
 
         [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(6,2)")]
-        public decimal CurrentBalance { get; set; }
+        public decimal? CurrentBalance { get; set; }
 
         public ICollection<Transaction> Transactions { get; set; } = new HashSet<Transaction>();
     }
