@@ -8,8 +8,14 @@
 			@Import	Mixins
 	===============================
 */
+
+.newhouseholdlink:hover {
+    cursor: pointer;
+}
+
 html {
-  min-height: 100%; }
+    min-height: 100%;
+}
 
 body {
   color: #888ea8;

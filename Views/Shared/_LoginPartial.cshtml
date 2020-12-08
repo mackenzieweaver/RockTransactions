@@ -2,9 +2,11 @@
 @inject SignInManager<FPUser> SignInManager
 @inject UserManager<FPUser> UserManager
 @inject RockTransactions.Services.IFPFileService FileService
+@inject RockTransactions.Services.IFPHouseHoldService HouseHoldService
 
 @{
     var user = await UserManager.GetUserAsync(User);
+    var greeting = await HouseHoldService.GetGreetingAsync(user);
     string avatar = FileService.ConvertByteArrayToFile(user.FileData, user.FileName.Split('.')[1]);
 }
 
@@ -18,7 +20,7 @@
             </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @user.FullName!</a>
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@greeting @user.FullName!</a>
         </li>
         <li class="nav-item">
             <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">

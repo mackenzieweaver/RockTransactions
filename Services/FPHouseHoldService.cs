@@ -51,5 +51,15 @@ namespace RockTransactions.Services
             }
             return transactions.SelectMany(t => t).ToList();
         }
+
+        public async Task<string> GetGreetingAsync(FPUser user)
+        {
+            var houseHold = await _context.HouseHold.FirstOrDefaultAsync(hh => hh.Id == user.HouseHoldId);
+            if(houseHold == null)
+            {
+                return "Hello";
+            }
+            return houseHold.Greeting;
+        }
     }
 }

@@ -86,7 +86,7 @@
                         {
                             @* Lobby *@
                             <li class="menu single-menu">
-                                <a href="#dashboard" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle autodroprown"  style="border:none !important;">
+                                <a href="#dashboard" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle autodroprown" style="border:none !important;">
                                     <div class="">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-coffee"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
                                         <span>Lobby</span>
@@ -94,11 +94,13 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
                                 </a>
                                 <ul class="collapse submenu list-unstyled" id="dashboard" data-parent="#topAccordion">
-                                    <li class="active">
+                                    <li>
                                         <a asp-controller="Home" asp-action="Index"> Home </a>
                                     </li>
                                     <li>
-                                        <a asp-controller="Home" asp-action="Privacy"> Privacy </a>
+                                        <a class="newhouseholdlink" data-toggle="modal" data-target="#householdModal">
+                                            New Household
+                                        </a>
                                     </li>
                                 </ul>
                             </li>
@@ -260,6 +262,7 @@
             </div>
             <!--  END TOPBAR  -->
         }
+
         <!--  BEGIN CONTENT PART  -->
         <div id="content" class="main-content">
             <div class="layout-px-spacing">
@@ -301,6 +304,7 @@
             }
         </div>
     </div>
+    @await Html.PartialAsync("_HouseholdModalPartial")
     <!--  END CONTENT PART  -->
     @*</div>*@
     <!-- END MAIN CONTAINER -->

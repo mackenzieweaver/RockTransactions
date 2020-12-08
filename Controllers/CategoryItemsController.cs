@@ -151,7 +151,7 @@ namespace RockTransactions.Controllers
             var categoryItem = await _context.CategoryItem.FindAsync(id);
             _context.CategoryItem.Remove(categoryItem);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Dashboard", "HouseHolds");
         }
 
         private bool CategoryItemExists(int id)

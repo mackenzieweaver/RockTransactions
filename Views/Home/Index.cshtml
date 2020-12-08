@@ -1,7 +1,7 @@
 ﻿@using RockTransactions.Data.Enums
 @model RockTransactions.Models.ViewModels.LobbyVM
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Lobby";
 }
 
 <div class="row">
@@ -10,24 +10,36 @@
             <h1 class="display-4">Welcome to the lobby</h1>
             @if (Model.Role == Roles.Admin.ToString())
             {
-                <span class="h6">You are an <b>@Model.Role</b></span>
+                <span class="h3">You are an <b>@Model.Role</b></span>
             }
             else if (Model.Role == Roles.Head.ToString())
             {
-                <span class="h6">You are the <b>@Model.Role</b></span>
+                <span class="h3">You are the <b>@Model.Role</b></span>
             }
             else if (Model.Role == Roles.Member.ToString())
             {
-                <span class="h6">You are a <b>@Model.Role</b></span>
+                <span class="h3">You are a <b>@Model.Role</b></span>
             }
             else if (Model.Role == Roles.New.ToString())
             {
-                <span class="h6">You are a <b>@Model.Role</b> user</span>
+                <span class="h3">You are a <b>@Model.Role</b> user</span>
             }
             @if (Model.HouseHold != null)
             {
-                <span class="h6">of the <b>@Model.HouseHold</b> household</span>
+                <span class="h3">of the <b>@Model.HouseHold</b> household</span>
             }
+
+            <p class="h6 text-black-50 mt-3">
+                Congratulations on making it this far. <br />
+                Now
+                <a class="newhouseholdlink" data-toggle="modal" data-target="#householdModal" style="text-decoration: underline;">create a household</a>
+                or
+                <a class="newhouseholdlink" data-toggle="modal" data-target="#invitationCodeModal" style="text-decoration: underline;">join one</a>!
+            </p>
         </div>
     </div>
 </div>
+
+
+@await Html.PartialAsync("_HouseholdModalPartial")
+@await Html.PartialAsync("_InvitationCodePartial")

@@ -11,5 +11,6 @@ namespace RockTransactions.Services
         public Task<List<FPUser>> ListHouseHoldMembersAsync(int? houseHoldId);
         public Task<string> GetRoleAsync (FPUser user);
         public List<Transaction> ListTransactions(HouseHold houseHold);
+        public Task<string> GetGreetingAsync(FPUser user);
     }
 }
