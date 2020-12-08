@@ -50,6 +50,14 @@
                 </button>
             </div>
         </div>
+        <div class="row mt-md-3">
+            <div class="col-md widget p-3 ml-md-3 mr-md-3">
+                <canvas id="breakdownPieChart"></canvas>
+            </div>
+            <div class="col-md widget p-3 mr-md-3">
+                <canvas id="itemsBarChart"></canvas>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md widget p-3 m-md-3">
                 <h3>Recent Transactions</h3>
@@ -146,5 +154,7 @@
 @section scripts {
     <script>
         @Html.Raw(script)
+        MakePieChart();
+        MakeBarChart();
     </script>
 }
