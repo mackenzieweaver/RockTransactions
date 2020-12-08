@@ -1,4 +1,9 @@
 ﻿@using RockTransactions.Data.Enums
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<FPUser> UserManager
+@{
+    var user = await UserManager.GetUserAsync(User);
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,11 +49,11 @@
                 </div>
 
                 <ul class="navbar-item flex-row mr-md-auto">
-                    <li class="nav-item align-self-center search-animated">                        
+                    <li class="nav-item align-self-center search-animated">
                     </li>
                 </ul>
 
-                <ul class="navbar-item flex-row nav-dropdowns flex-fill ml-4">
+                <ul class="navbar-item flex-row nav-dropdowns mr-3">
                     <partial name="_LoginPartial" />
                 </ul>
             </header>
@@ -76,50 +81,62 @@
                         </li>
                     </ul>
 
-                    <ul class="list-unstyled menu-categories" id="topAccordion">
-                        <li class="menu single-menu">
-                            <a href="#dashboard" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle autodroprown">
-                                <div class="">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-coffee"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
-                                    <span>Lobby</span>
-                                </div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </a>
-                            <ul class="collapse submenu list-unstyled" id="dashboard" data-parent="#topAccordion">
-                                <li class="active">
-                                    <a asp-controller="Home" asp-action="Index"> Home </a>
-                                </li>
-                                <li>
-                                    <a asp-controller="Home" asp-action="Privacy"> Privacy </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="menu single-menu">
-                            <a href="#dashboard" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle autodroprown">
-                                <div class="">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                                    <span>HouseHold</span>
-                                </div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                            </a>
-                            <ul class="collapse submenu list-unstyled" id="dashboard" data-parent="#topAccordion">
-                                <li class="active">
-                                    <a asp-controller="HouseHolds" asp-action="Index"> All </a>
-                                </li>
-                                @if (!User.IsInRole(Roles.New.ToString()))
-                                {
+                    <ul class="list-unstyled menu-categories justify-content-between" id="topAccordion">
+                        @if (User.IsInRole(nameof(Roles.Admin)) || User.IsInRole(nameof(Roles.New)))
+                        {
+                            @* Lobby *@
+                            <li class="menu single-menu">
+                                <a href="#dashboard" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle autodroprown"  style="border:none !important;">
+                                    <div class="">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-coffee"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
+                                        <span>Lobby</span>
+                                    </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                </a>
+                                <ul class="collapse submenu list-unstyled" id="dashboard" data-parent="#topAccordion">
+                                    <li class="active">
+                                        <a asp-controller="Home" asp-action="Index"> Home </a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="Home" asp-action="Privacy"> Privacy </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        @if (User.IsInRole(nameof(Roles.Admin)) || User.IsInRole(nameof(Roles.Head)) || User.IsInRole(nameof(Roles.Member)))
+                        {
+                            @* Households *@
+                            <li class="menu single-menu">
+                                <a href="#dashboard" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle autodroprown" style="border:none !important;">
+                                    <div class="">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                                        <span>HouseHold</span>
+                                    </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                </a>
+                                <ul class="collapse submenu list-unstyled" id="dashboard" data-parent="#topAccordion">
+                                    @if (User.IsInRole(nameof(Roles.Admin)))
+                                    {
+                                        <li class="active">
+                                            <a asp-controller="HouseHolds" asp-action="Index"> All </a>
+                                        </li>
+                                    }
                                     <li>
                                         <a asp-controller="HouseHolds" asp-action="Dashboard"> Dashboard</a>
                                     </li>
-                                }
-                                <li>
-                                    <a asp-controller="HouseHolds" asp-action="Create"> Create</a>
-                                </li>
-                            </ul>
-                        </li>
+                                    @if (User.IsInRole(nameof(Roles.Admin)) || User.IsInRole(nameof(Roles.New)))
+                                    {
+                                        <li>
+                                            <a asp-controller="HouseHolds" asp-action="Create"> Create</a>
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                        }
 
-                        @if (!User.IsInRole(Roles.New.ToString()))
+                        @if (User.IsInRole(nameof(Roles.Admin)))
                         {
+                            @* BankAccounts *@
                             <li class="menu single-menu">
                                 <a href="#dashboard" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle autodroprown">
                                     <div class="">
@@ -137,7 +154,7 @@
                                     </li>
                                 </ul>
                             </li>
-
+                            @* Categories *@
                             <li class="menu single-menu">
                                 <a href="#dashboard" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle autodroprown">
                                     <div class="">
@@ -155,7 +172,7 @@
                                     </li>
                                 </ul>
                             </li>
-
+                            @* CategoryItems *@
                             <li class="menu single-menu">
                                 <a href="#dashboard" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle autodroprown">
                                     <div class="">
@@ -173,7 +190,7 @@
                                     </li>
                                 </ul>
                             </li>
-
+                            @* Transactions *@
                             <li class="menu single-menu">
                                 <a href="#dashboard" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle autodroprown">
                                     <div class="">
@@ -191,44 +208,44 @@
                                     </li>
                                 </ul>
                             </li>
-                            @if (User.IsInRole("Admin") || User.IsInRole("Head"))
-                            {
-                                <li class="menu single-menu">
-                                    <a href="#dashboard" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle autodroprown">
-                                        <div class="">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
-                                            <span>Invitations</span>
-                                        </div>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                                    </a>
-                                    <ul class="collapse submenu list-unstyled" id="dashboard" data-parent="#topAccordion">
-                                        <li class="active">
-                                            <a asp-controller="Invitations" asp-action="Index"> All </a>
-                                        </li>
-                                        <li>
-                                            <a asp-controller="Invitations" asp-action="Create"> Create</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            }
+                            @* Invitations *@
                             <li class="menu single-menu">
                                 <a href="#dashboard" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle autodroprown">
                                     <div class="">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                                        <span>Notifications</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+                                        <span>Invitations</span>
                                     </div>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
                                 </a>
                                 <ul class="collapse submenu list-unstyled" id="dashboard" data-parent="#topAccordion">
                                     <li class="active">
-                                        <a asp-controller="Notifications" asp-action="Index"> All </a>
+                                        <a asp-controller="Invitations" asp-action="Index"> All </a>
                                     </li>
                                     <li>
-                                        <a asp-controller="Notifications" asp-action="Create"> Create</a>
+                                        <a asp-controller="Invitations" asp-action="Create"> Create</a>
                                     </li>
                                 </ul>
                             </li>
                         }
+
+                        @* Notifications *@
+                        <li class="menu single-menu">
+                            <a href="#dashboard" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle autodroprown">
+                                <div class="">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                                    <span>Notifications</span>
+                                </div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </a>
+                            <ul class="collapse submenu list-unstyled" id="dashboard" data-parent="#topAccordion">
+                                <li class="active">
+                                    <a asp-controller="Notifications" asp-action="Index"> All </a>
+                                </li>
+                                <li>
+                                    <a asp-controller="Notifications" asp-action="Create"> Create</a>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                 </nav>
             </div>
