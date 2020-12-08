@@ -71,6 +71,7 @@ namespace RockTransactions.Controllers
         {
             transaction.FPUserId = _userManager.GetUserId(User);
             var bankAccount = await _context.BankAccount.FirstOrDefaultAsync(ba => ba.Id == transaction.BankAccountId);
+            var categoryItem = await _context.CategoryItem.FirstOrDefaultAsync(ci => ci.Id == transaction.CategoryItemId);
             if (ModelState.IsValid)
             {
                 if(transaction.Type == TransactionType.Deposit)
@@ -80,9 +81,11 @@ namespace RockTransactions.Controllers
                 else if(transaction.Type == TransactionType.Withdrawal)
                 {
                     bankAccount.CurrentBalance -= transaction.Amount;
+                    categoryItem.ActualAmount += transaction.Amount;
                 }
                 _context.Add(transaction);
                 _context.Update(bankAccount);
+                _context.Update(categoryItem);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Dashboard", "HouseHolds");
             }

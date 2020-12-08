@@ -57,10 +57,10 @@
                     <thead>
                         <tr>
                             <td>Member</td>
-                            <td>Type</td>
                             <td>Account</td>
-                            <td>Date</td>
+                            <td>Type</td>
                             <td>Amount</td>
+                            <td>Date</td>
                             <td></td>
                         </tr>
                     </thead>
@@ -69,10 +69,10 @@
                         {
                         <tr>
                             <td>@transaction.FPUser.FullName</td>
-                            <td>@transaction.Type.ToString()</td>
                             <td>@transaction.BankAccount.Name</td>
-                            <td>@transaction.Created</td>
+                            <td>@transaction.Type.ToString()</td>
                             <td>@transaction.Amount</td>
+                            <td>@transaction.Created</td>
                             <td>
                                 <a asp-controller="Transactions" asp-action="Details" asp-route-id="@transaction.Id">Details</a>
                             </td>
