@@ -157,7 +157,7 @@ namespace RockTransactions.Controllers
             var bankAccount = await _context.BankAccount.FindAsync(id);
             _context.BankAccount.Remove(bankAccount);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Dashboard", "HouseHolds");
         }
 
         private bool BankAccountExists(int id)

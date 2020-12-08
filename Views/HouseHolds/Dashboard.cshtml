@@ -51,7 +51,27 @@
             </div>
         </div>
         <div class="row mt-md-3">
-            <div class="col-md widget p-3 ml-md-3 mr-md-3">
+            <div class="col-md-2 widget p-3 mr-md-3 ml-md-3 mr-md-3">
+                <h3>Bank Accounts</h3>
+                <table class="table table-responsive-sm">
+                    <thead>
+                        <tr>
+                            <td>Name</td>
+                            <td>Balance</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var account in Model.Accounts)
+                        {
+                            <tr>
+                                <td>@account.Name</td>
+                                <td>@account.CurrentBalance</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md widget p-3 mr-md-3">
                 <canvas id="breakdownPieChart"></canvas>
             </div>
             <div class="col-md widget p-3 mr-md-3">
@@ -59,39 +79,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md widget p-3 m-md-3">
-                <h3>Recent Transactions</h3>
-                <table class="table table-responsive-sm datatable">
-                    <thead>
-                        <tr>
-                            <td>Member</td>
-                            <td>Account</td>
-                            <td>Type</td>
-                            <td>Amount</td>
-                            <td>Date</td>
-                            <td></td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var transaction in Model.Transactions)
-                        {
-                        <tr>
-                            <td>@transaction.FPUser.FullName</td>
-                            <td>@transaction.BankAccount.Name</td>
-                            <td>@transaction.Type.ToString()</td>
-                            <td>@transaction.Amount</td>
-                            <td>@transaction.Created</td>
-                            <td>
-                                <a asp-controller="Transactions" asp-action="Details" asp-route-id="@transaction.Id">Details</a>
-                            </td>
-                        </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4 widget p-3 ml-md-3 mr-md-3">
+            <div class="col-md-4 widget p-3 m-md-3">
                 <h3>Occupants of household</h3>
                 <table class="table table-responsive-sm datatable">
                     <thead>
@@ -115,26 +103,32 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-md widget p-3 mr-md-3">
-                <h3>Bank Accounts</h3>
+            <div class="col-md widget p-3 m-md-3">
+                <h3>Recent Transactions</h3>
                 <table class="table table-responsive-sm datatable">
                     <thead>
                         <tr>
-                            <td>Name</td>
+                            <td>Member</td>
+                            <td>Account</td>
                             <td>Type</td>
-                            <td>Balance</td>
+                            <td>Amount</td>
+                            <td>Date</td>
                             <td></td>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var account in Model.Accounts)
+                        @foreach (var transaction in Model.Transactions)
                         {
                             <tr>
-                                <td>@account.Name</td>
-                                <td>@account.Type</td>
-                                <td>@account.CurrentBalance</td>
+                                <td>@transaction.FPUser.FullName</td>
+                                <td>@transaction.BankAccount.Name</td>
+                                <td>@transaction.Type.ToString()</td>
+                                <td>@transaction.Amount</td>
+                                <td>@transaction.Created</td>
                                 <td>
-                                    <a asp-controller="BankAccounts" asp-action="Details" asp-route-id="@account.Id">Details</a>
+                                    <a asp-controller="Transactions" asp-action="Edit" asp-route-id="@transaction.Id">Edit</a>
+                                    <a asp-controller="Transactions" asp-action="Details" asp-route-id="@transaction.Id">Details</a>
+                                    <a asp-controller="Transactions" asp-action="Delete" asp-route-id="@transaction.Id">Delete</a>
                                 </td>
                             </tr>
                         }

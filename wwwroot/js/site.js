@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-    $('.table').DataTable();
+    $('.datatable').DataTable();
 });
 
 function CanInvite() {

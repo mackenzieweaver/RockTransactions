@@ -32,6 +32,16 @@ namespace RockTransactions.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        // GET: Transactions
+        public async Task<IActionResult> Transactions(int id)
+        {
+            var bankAccount = await _context.BankAccount
+                .Include(ba => ba.Transactions).ThenInclude(t => t.CategoryItem)
+                .Include(ba => ba.Transactions).ThenInclude(t => t.FPUser)
+                .FirstOrDefaultAsync(ba => ba.Id == id);
+            return View("Index", bankAccount.Transactions);
+        }
+
         // GET: Transactions/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -144,7 +154,7 @@ namespace RockTransactions.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Dashboard", "HouseHolds");
             }
             ViewData["BankAccountId"] = new SelectList(_context.BankAccount, "Id", "Id", transaction.BankAccountId);
             ViewData["CategoryItemId"] = new SelectList(_context.CategoryItem, "Id", "Id", transaction.CategoryItemId);
@@ -181,7 +191,7 @@ namespace RockTransactions.Controllers
             var transaction = await _context.Transaction.FindAsync(id);
             _context.Transaction.Remove(transaction);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Dashboard", "HouseHolds");
         }
 
         private bool TransactionExists(int id)

@@ -124,6 +124,15 @@
                                     <li>
                                         <a asp-controller="HouseHolds" asp-action="Dashboard"> Dashboard</a>
                                     </li>
+                                    <li>
+                                        <a asp-controller="BankAccounts" asp-action="Index">Manage Accounts</a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="Categories" asp-action="Index">Manage Categories</a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="CategoryItems" asp-action="Index">Manage Items</a>
+                                    </li>
                                     @if (User.IsInRole(nameof(Roles.Admin)) || User.IsInRole(nameof(Roles.New)))
                                     {
                                         <li>
