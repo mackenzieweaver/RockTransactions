@@ -135,10 +135,19 @@ namespace RockTransactions.Controllers
         public async Task<IActionResult> Dashboard()
         {
             var user = await _userManager.GetUserAsync(User);
+            var houseHold = await _context.HouseHold
+                .Include(hh => hh.BankAccounts).ThenInclude(ba => ba.Transactions).ThenInclude(t => t.BankAccount)
+                .Include(hh => hh.BankAccounts).ThenInclude(ba => ba.Transactions).ThenInclude(t => t.FPUser)
+                .FirstOrDefaultAsync(hh => hh.Id == user.HouseHoldId);
             var model = new HhDashVM
             {
-                Occupants = await _context.Users.Where(u => u.HouseHoldId == user.HouseHoldId).ToListAsync()
+                Occupants = await _context.Users.Where(u => u.HouseHoldId == user.HouseHoldId).ToListAsync(),
+                Accounts = houseHold.BankAccounts,
+                Transactions = _houseHoldService.ListTransactions(houseHold)
             };
+            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name");
+            ViewData["BankAccountId"] = new SelectList(_context.BankAccount, "Id", "Name");
+            ViewData["CategoryItemId"] = new SelectList(_context.CategoryItem, "Id", "Name");
             return View(model);
         }
 

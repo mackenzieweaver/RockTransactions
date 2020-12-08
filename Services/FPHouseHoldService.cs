@@ -41,5 +41,15 @@ namespace RockTransactions.Services
             var roles = await _userManager.GetRolesAsync(user);
             return roles[0];
         }
+
+        public List<Transaction> ListTransactions(HouseHold houseHold)
+        {
+            var transactions = new List<ICollection<Transaction>>();
+            foreach(var bankAccount in houseHold.BankAccounts)
+            {
+                transactions.Add(bankAccount.Transactions);
+            }
+            return transactions.SelectMany(t => t).ToList();
+        }
     }
 }
