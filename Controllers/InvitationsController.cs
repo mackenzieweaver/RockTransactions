@@ -97,12 +97,12 @@ namespace RockTransactions.Controllers
                 string houseHoldName = (await _context.HouseHold.FirstOrDefaultAsync(hh => hh.Id == invitation.HouseHoldId)).Name;
                 var emailBody = 
                     $"<h3>You are invited to join the <em>{houseHoldName}</em> household.</h3>" +
-                    $"<h6>{invitation.Body}</h6><br/>" +
-                    $"<p>if you have an account you can copy and paste this code when you click to 'join'</p>" +
-                    $"<b>{invitation.Code.ToString().ToUpper()}</p>" +
-                    $"<a href='{HtmlEncoder.Default.Encode(acceptUrl)}'>Accept</a>" +
-                    $" Or " +
-                    $"<a href='{HtmlEncoder.Default.Encode(declineUrl)}'> Deny</a>.";
+                    $"<p>{invitation.Body}</p>" +
+                    $"<p>If you already have an account you can copy and paste this code when you click to 'join'</p>" +
+                    $"<b>{invitation.Code.ToString().ToUpper()}</b></p><br />" +
+                    $"<p>Or click <a href='{HtmlEncoder.Default.Encode(acceptUrl)}'>Accept</a>" +
+                    $" or " +
+                    $"<a href='{HtmlEncoder.Default.Encode(declineUrl)}'> Deny</a>.</p>";
 
                 // send email
                 await _emailService.SendEmailAsync(invitation.EmailTo, invitation.Subject, emailBody);
