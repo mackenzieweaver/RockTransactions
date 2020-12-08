@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RockTransactions.Data;
 using RockTransactions.Models.Charts;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace RockTransactions.Controllers
 {
+    [Authorize]
     public class ChartsController : Controller
     {
         private readonly ApplicationDbContext _context;
