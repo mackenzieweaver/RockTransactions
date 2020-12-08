@@ -154,7 +154,7 @@
 @section scripts {
     <script>
         @Html.Raw(script)
-        MakePieChart();
-        MakeBarChart();
+        BudgetBreakdownChart('@Url.Action("BudgetBreakdownJsonData", "Charts")');
+        CategoryItemsChart('@Url.Action("CategoryItemsJsonData", "Charts")');
     </script>
 }
