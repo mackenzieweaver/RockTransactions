@@ -23,15 +23,15 @@
                             </button>
                         }
                         <button class="btn btn-outline-secondary" data-toggle="modal" data-target="#accountModal">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> 
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                             Account
                         </button>
                         <button class="btn btn-outline-secondary" data-toggle="modal" data-target="#categoryModal">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> 
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                             Category
                         </button>
                         <button class="btn btn-outline-secondary" data-toggle="modal" data-target="#itemModal">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> 
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                             Item
                         </button>
                     </div>
@@ -54,7 +54,7 @@
             </div>
         </div>
         <div class="row mt-md-3">
-            <div class="col-md-2 widget p-3 mr-md-3 ml-md-3 mr-md-3">
+            <div class="col-auto widget p-3 mr-md-3 ml-md-3">
                 <h3>Bank Accounts</h3>
                 <table class="table table-responsive-sm">
                     <thead>
@@ -82,7 +82,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-4 widget p-3 m-md-3">
+            <div class="col-md-auto widget p-3 ml-md-3 mt-md-3">
                 <h3>Occupants of household</h3>
                 <table class="table table-responsive-sm">
                     <thead>
@@ -153,5 +153,8 @@
         @Html.Raw(script)
         BudgetBreakdownChart('@Url.Action("BudgetBreakdownJsonData", "Charts")');
         CategoryItemsChart('@Url.Action("CategoryItemsJsonData", "Charts")');
+        //$(window).on('resize', function () {
+        //    location.reload();
+        //});
     </script>
 }

@@ -174,7 +174,9 @@ namespace RockTransactions.Controllers
                 EmailConfirmed = true
             };
             invitation.Accepted = true;
-            var result = await _userManager.CreateAsync(user, password);
+            // where the magic happens
+            await _userManager.CreateAsync(user, password);
+
             await _userManager.AddToRoleAsync(user, Roles.Member.ToString());
             await _signInManager.SignInAsync(user, false);
             await _context.SaveChangesAsync();
