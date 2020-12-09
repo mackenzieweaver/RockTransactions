@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RockTransactions.Data;
+using RockTransactions.Models;
 using RockTransactions.Models.Charts;
 using System;
 using System.Collections.Generic;
@@ -14,39 +16,26 @@ namespace RockTransactions.Controllers
     public class ChartsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<FPUser> _userManager;
 
-        public ChartsController(ApplicationDbContext context)
+        public ChartsController(ApplicationDbContext context, UserManager<FPUser> userManager)
         {
             _context = context;
-        }
-        public JsonResult CategoryItemsJsonData()
-        {
-            var list = new List<CategoryItemsBarChartData>();
-            var items = _context.CategoryItem.ToList();
-            foreach(var item in items)
-            {
-                list.Add(
-                new CategoryItemsBarChartData
-                {
-                    Name = item.Name,
-                    Goal = item.TargetAmount,
-                    Reality = item.ActualAmount
-                });
-            }
-            return Json(list);
+            _userManager = userManager;
         }
 
-        public async Task<JsonResult> BudgetBreakdownJsonData()
+        public async Task<JsonResult> Categories()
         {
             var list = new List<BudgetBreakDownPieChartData>();
-            var categories = await _context.Category
-                .Include(c => c.CategoryItems)
-                .ToListAsync();
+            var user = await _userManager.GetUserAsync(User);
+            var houseHold = await _context.HouseHold
+                .Include(hh => hh.Categories).ThenInclude(c => c.CategoryItems)
+                .FirstOrDefaultAsync(hh => hh.Id == user.HouseHoldId);
 
-            foreach (var category in categories)
+            foreach (var category in houseHold.Categories)
             {
                 decimal total = 0;
-                foreach(var item in category.CategoryItems)
+                foreach (var item in category.CategoryItems)
                 {
                     total += item.ActualAmount;
                 }
@@ -58,6 +47,30 @@ namespace RockTransactions.Controllers
                     Total = total
                 });
             }
+            return Json(list);
+        }
+
+        public async Task<JsonResult> Items()
+        {
+            var list = new List<CategoryItemsBarChartData>();
+            var user = await _userManager.GetUserAsync(User);
+            var houseHold = await _context.HouseHold
+                .Include(hh => hh.Categories).ThenInclude(c => c.CategoryItems)
+                .FirstOrDefaultAsync(hh => hh.Id == user.HouseHoldId);
+
+            foreach(var category in houseHold.Categories)
+            {
+                foreach (var item in category.CategoryItems)
+                {
+                    list.Add(
+                    new CategoryItemsBarChartData
+                    {
+                        Name = item.Name,
+                        Goal = item.TargetAmount,
+                        Reality = item.ActualAmount
+                    });
+                }
+            }            
             return Json(list);
         }
     }
