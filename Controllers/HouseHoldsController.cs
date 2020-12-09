@@ -160,7 +160,7 @@ namespace RockTransactions.Controllers
             var bankAccounts = _context.BankAccount.Where(ba => ba.HouseHoldId == houseHold.Id).ToList();
 
             ViewData["CategoryId"] = new SelectList(categories, "Id", "Name");
-            ViewData["BankAccountId"] = new SelectList(, "Id", "Name");
+            ViewData["BankAccountId"] = new SelectList(bankAccounts, "Id", "Name");
             ViewData["CategoryItemId"] = new SelectList(items, "Id", "Name");
             return View(model);
         }
