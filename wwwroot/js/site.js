@@ -25,14 +25,37 @@ function CantLeave() {
     swal("Sorry!", "You can't leave while the house still has members.", "error");
 }
 
+function getRandomColor() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
+function hexToRgb(hex) {
+    var bigint = parseInt(hex, 16);
+    var r = (bigint >> 16) & 255;
+    var g = (bigint >> 8) & 255;
+    var b = bigint & 255;
+    
+    return r + "," + g + "," + b;
+}
+
 function BudgetBreakdownChart(Url) {
     let names = [];
     let totals = [];
+    let backgroundColors = [];
+    let borderColors = [];
     $.post(Url).then(function (res) {
-        console.log(res);
         for (let i = 0; i < res.length; i++) {
             names.push(res[i].name);
             totals.push(res[i].total);
+            let hexColor = getRandomColor();
+            let rgbColor = hexToRgb(hexColor);
+            backgroundColors.push(`rgba(${rgbColor},0.2)`);
+            borderColors.push(`rgba(${rgbColor},1)`);
         }
     }).then(() => {
         // For a pie chart
@@ -42,18 +65,8 @@ function BudgetBreakdownChart(Url) {
             data: {
                 datasets: [{
                     data: totals,
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                    ],
+                    backgroundColor: backgroundColors,
+                    borderColor: borderColors,
                     borderWidth: 1
                 }],
                 labels: names
@@ -67,7 +80,6 @@ function CategoryItemsChart(Url) {
     let goal = [];
     let reality = [];
     $.post(Url).then(function (res) {
-        console.log(res);
         for (let i = 0; i < res.length; i++) {
             labels.push(res[i].name);
             goal.push(res[i].goal);
