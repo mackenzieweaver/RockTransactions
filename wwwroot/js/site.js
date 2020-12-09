@@ -62,7 +62,7 @@ function BudgetBreakdownChart(Url) {
             totals.push(res[i].total);
 
             let color = window.localStorage.getItem(res[i].name);
-            backgroundColors.push(`rgba(${color},0.2)`);
+            backgroundColors.push(`rgba(${color},0.85)`);
             borderColors.push(`rgba(${color},1)`);
         }
     }).then(() => {
@@ -103,7 +103,7 @@ function CategoryItemsChart(Url) {
             bar1Border.push(`rgba(${color},1)`);
             bar1Background.push(`rgba(${color},0.1)`);
             bar2Border.push(`rgba(${color},1)`);
-            bar2Background.push(`rgba(${color},0.5)`);
+            bar2Background.push(`rgba(${color},0.85)`);
         }
     }).then(() => {
         var ctx = document.getElementById('itemsBarChart').getContext('2d');

@@ -151,6 +151,7 @@ namespace RockTransactions.Controllers
             {
                 try
                 {
+                    transaction.FPUserId = _userManager.GetUserId(User);
                     _context.Update(transaction);
                     await _context.SaveChangesAsync();
                 }
