@@ -23,10 +23,22 @@ namespace RockTransactions.Services
         public async Task NotifyOverdraft(string userId, BankAccount bankAccount)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            var houseHold = await _context.HouseHold.FirstOrDefaultAsync(hh => hh.Id == user.HouseHoldId);
             var transaction = bankAccount.Transactions.Last();
             string subject = "Overdraft Alert";
             string body= $"Your <b>{bankAccount.Name}</b> account has been overdrafted. Your current balance is <b>{bankAccount.CurrentBalance}</b>. The cause was paying <b>{transaction.Amount}</b> for <b>{transaction.CategoryItem.Name}</b> on <b>{transaction.Created}</b>.";
             await _emailService.SendEmailAsync(user.Email, subject, body);
+
+            Notification notification = new Notification
+            {
+                HouseHoldId = houseHold.Id,
+                Created = DateTime.Now,
+                Subject = subject,
+                Body = body,
+                IsRead = false
+            };
+            await _context.AddAsync(notification);
+            await _context.SaveChangesAsync();
         }
     }
 }

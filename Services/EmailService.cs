@@ -17,6 +17,7 @@ namespace RockTransactions.Services
         {
             _mailSettings = mailSettings.Value;
         }
+
         public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
             var msg = new MimeMessage();
