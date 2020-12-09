@@ -9,5 +9,6 @@ namespace RockTransactions.Services
     public interface IFPNotificationService
     {
         public Task NotifyOverdraft(string userId, BankAccount bankAccount);
+        public Task<List<Notification>> GetNotificationsAsync(string userId);
     }
 }

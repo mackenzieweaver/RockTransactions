@@ -40,5 +40,11 @@ namespace RockTransactions.Services
             await _context.AddAsync(notification);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<Notification>> GetNotificationsAsync(string userId)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            return await _context.Notification.Where(n => n.HouseHoldId == user.HouseHoldId && n.IsRead == false).ToListAsync();
+        }
     }
 }

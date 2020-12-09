@@ -9,6 +9,13 @@
 	===============================
 */
 
+#notificationBell:hover .submenu {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-85%) !important;
+    transition-delay: 0s, 0s, 0.3s;
+}
+
 .newhouseholdlink:hover {
     cursor: pointer;
 }
