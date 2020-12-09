@@ -1,16 +1,13 @@
 ﻿$(document).ready(function () {
     $('.datatable').DataTable();
-
     var table = $('#recentTransactions').DataTable({
         dom: 'Bfrtip',
         buttons: [
             'copy', 'excel', 'pdf'
         ]
     });
-
     table.buttons().container()
         .appendTo($('.col-sm-6:eq(0)', table.table().container()));
-
 });
 
 function CanInvite() {
