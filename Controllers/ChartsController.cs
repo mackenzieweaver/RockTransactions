@@ -65,6 +65,7 @@ namespace RockTransactions.Controllers
                     list.Add(
                     new CategoryItemsBarChartData
                     {
+                        Category = category.Name,
                         Name = item.Name,
                         Goal = item.TargetAmount,
                         Reality = item.ActualAmount

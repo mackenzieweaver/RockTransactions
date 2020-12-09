@@ -43,6 +43,14 @@ function hexToRgb(hex) {
     return r + "," + g + "," + b;
 }
 
+function NewColor(category) {   
+    if (window.localStorage.getItem(category) == null) {
+        let hex = getRandomColor();
+        let rgb = hexToRgb(hex);
+        window.localStorage.setItem(category, rgb);
+    }
+}
+
 function BudgetBreakdownChart(Url) {
     let names = [];
     let totals = [];
@@ -52,10 +60,10 @@ function BudgetBreakdownChart(Url) {
         for (let i = 0; i < res.length; i++) {
             names.push(res[i].name);
             totals.push(res[i].total);
-            let hexColor = getRandomColor();
-            let rgbColor = hexToRgb(hexColor);
-            backgroundColors.push(`rgba(${rgbColor},0.2)`);
-            borderColors.push(`rgba(${rgbColor},1)`);
+
+            let color = window.localStorage.getItem(res[i].name);
+            backgroundColors.push(`rgba(${color},0.2)`);
+            borderColors.push(`rgba(${color},1)`);
         }
     }).then(() => {
         // For a pie chart
@@ -91,18 +99,12 @@ function CategoryItemsChart(Url) {
             goal.push(res[i].goal);
             reality.push(res[i].reality);
 
-            let hexColor = getRandomColor();
-            let rgbColor = hexToRgb(hexColor);
-
-            bar1Border.push(`rgba(${rgbColor},1)`);
-            bar1Background.push(`rgba(${rgbColor},0.1)`);
-            bar2Border.push(`rgba(${rgbColor},1)`);
-            bar2Background.push(`rgba(${rgbColor},0.5)`);            
+            let color = window.localStorage.getItem(res[i].category);
+            bar1Border.push(`rgba(${color},1)`);
+            bar1Background.push(`rgba(${color},0.1)`);
+            bar2Border.push(`rgba(${color},1)`);
+            bar2Background.push(`rgba(${color},0.5)`);
         }
-        console.log(bar1Background);
-        console.log(bar1Border);
-        console.log(bar2Background);
-        console.log(bar2Border);
     }).then(() => {
         var ctx = document.getElementById('itemsBarChart').getContext('2d');
         var myChart = new Chart(ctx, {

@@ -95,11 +95,11 @@ namespace RockTransactions.Controllers
                 {
                     bankAccount.CurrentBalance -= transaction.Amount;
                     categoryItem.ActualAmount += transaction.Amount;
+                    _context.Update(categoryItem);
                 }
 
                 _context.Add(transaction);
                 _context.Update(bankAccount);
-                _context.Update(categoryItem);
                 await _context.SaveChangesAsync();
 
                 if(bankAccount.CurrentBalance < 0)

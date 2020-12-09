@@ -9,7 +9,9 @@
                 <form asp-controller="Transactions" asp-action="Create">
                     <div class="form-group">
                         <label for="CategoryItemId" class="control-label">Item</label>
-                        <select name="CategoryItemId" class="form-control" asp-items="ViewBag.CategoryItemId"></select>
+                        <select name="CategoryItemId" class="form-control" asp-items="ViewBag.CategoryItemId">
+                            <option value="" selected>-- Select --</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="BankAccountId" class="control-label">BankAccount</label>
