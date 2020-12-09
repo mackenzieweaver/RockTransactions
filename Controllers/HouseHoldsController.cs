@@ -145,9 +145,23 @@ namespace RockTransactions.Controllers
                 Accounts = houseHold.BankAccounts,
                 Transactions = _houseHoldService.ListTransactions(houseHold)
             };
-            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name");
-            ViewData["BankAccountId"] = new SelectList(_context.BankAccount, "Id", "Name");
-            ViewData["CategoryItemId"] = new SelectList(_context.CategoryItem, "Id", "Name");
+
+            var categories = _context.Category
+                .Include(c => c.CategoryItems)
+                .Where(c => c.HouseHoldId == houseHold.Id).ToList();
+            var items = new List<CategoryItem>();
+            foreach(var category in categories)
+            {
+                foreach(var item in category.CategoryItems)
+                {
+                    items.Add(item);
+                }
+            }
+            var bankAccounts = _context.BankAccount.Where(ba => ba.HouseHoldId == houseHold.Id).ToList();
+
+            ViewData["CategoryId"] = new SelectList(categories, "Id", "Name");
+            ViewData["BankAccountId"] = new SelectList(, "Id", "Name");
+            ViewData["CategoryItemId"] = new SelectList(items, "Id", "Name");
             return View(model);
         }
 
