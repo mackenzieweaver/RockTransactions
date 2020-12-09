@@ -38,8 +38,7 @@ function hexToRgb(hex) {
     var bigint = parseInt(hex, 16);
     var r = (bigint >> 16) & 255;
     var g = (bigint >> 8) & 255;
-    var b = bigint & 255;
-    
+    var b = bigint & 255;    
     return r + "," + g + "," + b;
 }
 
@@ -79,12 +78,30 @@ function CategoryItemsChart(Url) {
     let labels = [];
     let goal = [];
     let reality = [];
+
+    let bar1Border = [];
+    let bar1Background = [];
+    let bar2Border = [];
+    let bar2Background = [];
+
     $.post(Url).then(function (res) {
         for (let i = 0; i < res.length; i++) {
             labels.push(res[i].name);
             goal.push(res[i].goal);
             reality.push(res[i].reality);
+
+            let hexColor = getRandomColor();
+            let rgbColor = hexToRgb(hexColor);
+
+            bar1Border.push(`rgba(${rgbColor},1)`);
+            bar1Background.push(`rgba(${rgbColor},0.1)`);
+            bar2Border.push(`rgba(${rgbColor},1)`);
+            bar2Background.push(`rgba(${rgbColor},0.5)`);            
         }
+        console.log(bar1Background);
+        console.log(bar1Border);
+        console.log(bar2Background);
+        console.log(bar2Border);
     }).then(() => {
         var ctx = document.getElementById('itemsBarChart').getContext('2d');
         var myChart = new Chart(ctx, {
@@ -94,43 +111,15 @@ function CategoryItemsChart(Url) {
                 datasets: [{
                     label: 'budget',
                     data: goal,
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.1)',
-                        'rgba(54, 162, 235, 0.1)',
-                        'rgba(255, 206, 86, 0.1)',
-                        'rgba(75, 192, 192, 0.1)',
-                        'rgba(153, 102, 255, 0.1)',
-                        'rgba(255, 159, 64, 0.1)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
+                    backgroundColor: bar1Background,
+                    borderColor: bar1Border,
                     borderWidth: 1
                 },
                 {
                     label: 'spent',
                     data: reality,
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.5)',
-                        'rgba(54, 162, 235, 0.5)',
-                        'rgba(255, 206, 86, 0.5)',
-                        'rgba(75, 192, 192, 0.5)',
-                        'rgba(153, 102, 255, 0.5)',
-                        'rgba(255, 159, 64, 0.5)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
+                    backgroundColor: bar2Background,
+                    borderColor: bar2Border,
                     borderWidth: 1
                 }]
             },
