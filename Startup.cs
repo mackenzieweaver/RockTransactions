@@ -44,6 +44,7 @@ namespace RockTransactions
             services.AddScoped<IFPFileService, FPFileService>();
 
             services.AddScoped<IFPHouseHoldService, FPHouseHoldService>();
+            services.AddScoped<IFPNotificationService, FPNotificationService>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();

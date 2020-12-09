@@ -25,6 +25,10 @@ function CantLeave() {
     swal("Sorry!", "You can't leave while the house still has members.", "error");
 }
 
+function Overdraft() {
+    swal("Overdraft!", "Details have been sent to your email.", "error");
+}
+
 function getRandomColor() {
     var letters = '0123456789ABCDEF'.split('');
     var color = '';

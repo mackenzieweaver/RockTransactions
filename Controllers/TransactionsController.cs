@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using RockTransactions.Data;
 using RockTransactions.Models;
 using RockTransactions.Data.Enums;
+using RockTransactions.Services;
 
 namespace RockTransactions.Controllers
 {
@@ -18,11 +19,13 @@ namespace RockTransactions.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<FPUser> _userManager;
+        private readonly IFPNotificationService _notificationService;
 
-        public TransactionsController(ApplicationDbContext context, UserManager<FPUser> userManager)
+        public TransactionsController(ApplicationDbContext context, UserManager<FPUser> userManager, IFPNotificationService notificationService)
         {
             _context = context;
             _userManager = userManager;
+            _notificationService = notificationService;
         }
 
         // GET: Transactions
@@ -80,7 +83,7 @@ namespace RockTransactions.Controllers
         public async Task<IActionResult> Create([Bind("Id,CategoryItemId,BankAccountId,FPUserId,Created,Type,Memo,Amount,IsDeleted")] Transaction transaction)
         {
             transaction.FPUserId = _userManager.GetUserId(User);
-            var bankAccount = await _context.BankAccount.FirstOrDefaultAsync(ba => ba.Id == transaction.BankAccountId);
+            var bankAccount = await _context.BankAccount.Include(ba => ba.Transactions).ThenInclude(t => t.CategoryItem).FirstOrDefaultAsync(ba => ba.Id == transaction.BankAccountId);
             var categoryItem = await _context.CategoryItem.FirstOrDefaultAsync(ci => ci.Id == transaction.CategoryItemId);
             if (ModelState.IsValid)
             {
@@ -93,10 +96,18 @@ namespace RockTransactions.Controllers
                     bankAccount.CurrentBalance -= transaction.Amount;
                     categoryItem.ActualAmount += transaction.Amount;
                 }
+
                 _context.Add(transaction);
                 _context.Update(bankAccount);
                 _context.Update(categoryItem);
                 await _context.SaveChangesAsync();
+
+                if(bankAccount.CurrentBalance < 0)
+                {
+                    await _notificationService.NotifyOverdraft(transaction.FPUserId, bankAccount);
+                    TempData["Script"] = "Overdraft()";
+                }
+
                 return RedirectToAction("Dashboard", "HouseHolds");
             }
             ViewData["BankAccountId"] = new SelectList(_context.BankAccount, "Id", "Id", transaction.BankAccountId);
