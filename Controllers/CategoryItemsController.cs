@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using RockTransactions.Data;
 using RockTransactions.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace RockTransactions.Controllers
 {
@@ -15,17 +16,20 @@ namespace RockTransactions.Controllers
     public class CategoryItemsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<FPUser> _userManager;
 
-        public CategoryItemsController(ApplicationDbContext context)
+        public CategoryItemsController(ApplicationDbContext context, UserManager<FPUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: CategoryItems
         [Authorize(Roles = "Admin,Head,Member")]
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.CategoryItem.Include(c => c.Category);
+            var applicationDbContext = _context.CategoryItem
+                .Include(c => c.Category);
             return View(await applicationDbContext.ToListAsync());
         }
 

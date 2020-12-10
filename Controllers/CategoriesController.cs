@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using RockTransactions.Data;
 using RockTransactions.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace RockTransactions.Controllers
 {
@@ -15,17 +16,22 @@ namespace RockTransactions.Controllers
     public class CategoriesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<FPUser> _userManager;
 
-        public CategoriesController(ApplicationDbContext context)
+        public CategoriesController(ApplicationDbContext context, UserManager<FPUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Categories
         [Authorize(Roles = "Admin,Head,Member")]
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Category.Include(c => c.HouseHold);
+            var user = await _userManager.GetUserAsync(User);
+            var applicationDbContext = _context.Category
+                .Where(x => x.HouseHoldId == user.HouseHoldId)
+                .Include(c => c.HouseHold);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -38,8 +44,10 @@ namespace RockTransactions.Controllers
                 return NotFound();
             }
 
+            var user = await _userManager.GetUserAsync(User);
             var category = await _context.Category
                 .Include(c => c.HouseHold)
+                .Where(x => x.HouseHoldId == user.HouseHoldId)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (category == null)
             {
@@ -85,7 +93,10 @@ namespace RockTransactions.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Category.FindAsync(id);
+            var user = await _userManager.GetUserAsync(User);
+            var category = await _context.Category
+                .Where(x => x.HouseHoldId == user.HouseHoldId)
+                .FirstOrDefaultAsync(x => x.Id == id);
             if (category == null)
             {
                 return NotFound();
@@ -140,9 +151,11 @@ namespace RockTransactions.Controllers
                 return NotFound();
             }
 
+            var user = await _userManager.GetUserAsync(User);
             var category = await _context.Category
                 .Include(c => c.HouseHold)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .Where(x => x.HouseHoldId == user.HouseHoldId)
+                .FirstOrDefaultAsync(x => x.Id == id);
             if (category == null)
             {
                 return NotFound();
