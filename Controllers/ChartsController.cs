@@ -69,5 +69,31 @@ namespace RockTransactions.Controllers
             ));
             return Json(list);
         }
+
+        //[Authorize(Roles = "Admin,Head,Member")]
+        public async Task<JsonResult> History()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var houseHold = await _context.HouseHold
+                .Include(hh => hh.BankAccounts)
+                .ThenInclude(ba => ba.Histories)
+                .FirstOrDefaultAsync(hh => hh.Id == user.HouseHoldId);
+
+            var myChart = new Chart();
+            foreach (var account in houseHold.BankAccounts)
+            {
+                var line = new Line { BankName = account.Name };
+                foreach (var history in account.Histories.OrderBy(h => h.Date))
+                {
+                    if (!myChart.Dates.Contains(history.Date.ToString("MMM dd, yyyy")))
+                    {
+                        myChart.Dates.Add(history.Date.ToString("MMM dd, yyyy"));
+                    }
+                    line.Balances.Add(history.Balance);
+                }
+                myChart.Lines.Add(line);
+            }
+            return Json(myChart);
+        }
     }
 }

@@ -140,6 +140,7 @@ namespace RockTransactions.Controllers
             var user = await _userManager.GetUserAsync(User);
             var houseHold = await _context.HouseHold
                 .Include(hh => hh.BankAccounts).ThenInclude(ba => ba.Transactions).ThenInclude(t => t.BankAccount)
+                .Include(hh => hh.BankAccounts).ThenInclude(ba => ba.Transactions).ThenInclude(t => t.CategoryItem)
                 .Include(hh => hh.BankAccounts).ThenInclude(ba => ba.Transactions).ThenInclude(t => t.FPUser)
                 .FirstOrDefaultAsync(hh => hh.Id == user.HouseHoldId);
 

@@ -34,5 +34,6 @@ namespace RockTransactions.Models
         public decimal? CurrentBalance { get; set; }
 
         public ICollection<Transaction> Transactions { get; set; } = new HashSet<Transaction>();
+        public ICollection<History> Histories { get; set; } = new HashSet<History>();
     }
 }

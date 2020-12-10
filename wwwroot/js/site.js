@@ -154,3 +154,32 @@ function CategoryItemsChart(Url) {
         });
     })
 }
+
+$('#historyModal').on('shown.bs.modal', function (e) {
+    let dates = [];
+    let lines = [];
+    let jsondatasets = [];
+
+    $.post("/Charts/History").then(function (res) {
+        dates = res.dates;
+        lines = res.lines;
+        for (let i = 0; i < lines.length; i++) {
+            let obj = {
+                data: lines[i].balances,
+                label: lines[i].bankName,
+                borderColor: `#${getRandomColor()}`,
+                fill: false
+            }
+            console.log(obj);
+            jsondatasets.push(obj);
+        }
+    }).then(() => {
+        new Chart(document.getElementById("lineChart"), {
+        type: 'line',
+        data: {
+                labels: dates,
+                datasets: jsondatasets
+            }
+        });
+    })
+});

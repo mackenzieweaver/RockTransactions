@@ -109,6 +109,14 @@ namespace RockTransactions.Controllers
                     _context.Update(categoryItem);
                 }
 
+                History history = new History
+                {
+                    BankAccountId = transaction.BankAccountId,
+                    Balance = (decimal)bankAccount.CurrentBalance,
+                    Date = transaction.Created
+                };
+
+                _context.Add(history);
                 _context.Add(transaction);
                 _context.Update(bankAccount);
                 await _context.SaveChangesAsync();

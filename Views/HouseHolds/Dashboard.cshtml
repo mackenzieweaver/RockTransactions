@@ -6,6 +6,7 @@
     ViewData["Title"] = "Dashboard";
     var user = await UserManager.GetUserAsync(User);
     var script = TempData["Script"];
+    var accounts = Model.Accounts;
 }
 <div class="row">
     <div class="col-md">
@@ -57,7 +58,16 @@
         </div>
         <div class="row mt-md-3">
             <div class="col-md widget p-3 mr-md-3 ml-md-3">
-                <h3>Bank Accounts</h3>
+                <div class="row justify-content-between">
+                    <div class="col-md">
+                        <h4>Bank Accounts</h4>
+                    </div>
+                    <div class="col-md-auto">
+                        <button class="btn btn-sm btn-outline-info p-1" data-toggle="modal" data-target="#historyModal">
+                            History
+                        </button>
+                    </div>
+                </div>
                 <table class="table table-responsive-sm">
                     <thead>
                         <tr>
@@ -168,6 +178,7 @@
 @await Html.PartialAsync("_CategoryModalPartial", user)
 @await Html.PartialAsync("_ItemModalPartial")
 @await Html.PartialAsync("_TransactionModalPartial")
+@await Html.PartialAsync("_HistoryModalPartial", accounts)
 
 @section scripts {
     <script>
