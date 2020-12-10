@@ -132,18 +132,32 @@ namespace RockTransactions.Controllers
             return View(houseHold);
         }
 
-        public async Task<IActionResult> Dashboard()
+        public async Task<IActionResult> Dashboard(string year, string month)
         {
             var user = await _userManager.GetUserAsync(User);
             var houseHold = await _context.HouseHold
                 .Include(hh => hh.BankAccounts).ThenInclude(ba => ba.Transactions).ThenInclude(t => t.BankAccount)
                 .Include(hh => hh.BankAccounts).ThenInclude(ba => ba.Transactions).ThenInclude(t => t.FPUser)
                 .FirstOrDefaultAsync(hh => hh.Id == user.HouseHoldId);
+
+            var transactions = _houseHoldService.ListTransactions(houseHold);
+
+            if (year != null)
+            {   // DateTime.Parse needs a valid datetime format
+                var _year = DateTime.Parse($"Jan 1, {year}").Year;
+                transactions = transactions.Where(t => t.Created.Year == _year).ToList();
+            }
+            if (month != null)
+            {   // DateTime.Parse needs a valid datetime format
+                var _month = DateTime.Parse($"{month} 1, 2009").Month;
+                transactions = transactions.Where(t => t.Created.Month == _month).ToList();
+            }
+
             var model = new HhDashVM
             {
                 Occupants = await _context.Users.Where(u => u.HouseHoldId == user.HouseHoldId).ToListAsync(),
                 Accounts = houseHold.BankAccounts,
-                Transactions = _houseHoldService.ListTransactions(houseHold)
+                Transactions = transactions
             };
 
             var categories = _context.Category
@@ -159,9 +173,15 @@ namespace RockTransactions.Controllers
             }
             var bankAccounts = _context.BankAccount.Where(ba => ba.HouseHoldId == houseHold.Id).ToList();
 
+            var years = new List<string> { "2020", "2019", "2018", "2017" };
+            var months = new List<string> { "December", "November", "October" };
+            ViewData["Years"] = new SelectList(years, year ?? DateTime.Now.Year.ToString());
+            ViewData["Months"] = new SelectList(months, month ?? DateTime.Now.Month.ToString());
+
             ViewData["CategoryId"] = new SelectList(categories, "Id", "Name");
             ViewData["BankAccountId"] = new SelectList(bankAccounts, "Id", "Name");
             ViewData["CategoryItemId"] = new SelectList(items, "Id", "Name");
+
             return View(model);
         }
 

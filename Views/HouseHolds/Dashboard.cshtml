@@ -109,7 +109,23 @@
                 </table>
             </div>
             <div class="col-md-8 widget p-3 m-md-3">
-                <h3>Recent Transactions</h3>
+                <div class="row justify-content-between">
+                    <div class="col-md">
+                        <h3>Recent Transactions</h3>
+                    </div>
+                    <div class="col-md mr-3">
+                        <div class="row justify-content-end">
+                            <form asp-action="Dashboard" method="get">
+                                <label for="years" class="mr-1 mt-1">Year</label>
+                                <select id="years" name="year" class="form-control-sm mr-3" asp-items="ViewBag.Years"></select>
+                            </form>
+                            <form asp-action="Dashboard" method="get">
+                                <label for="months" class="mr-1 mt-1">Month</label>
+                                <select id="months" name="month" class="form-control-sm" asp-items="ViewBag.Months"></select>
+                            </form>
+                        </div>
+                    </div>
+                </div>
                 <table id="recentTransactions" class="table table-responsive-sm">
                     <thead>
                         <tr>
@@ -122,7 +138,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var transaction in Model.Transactions)
+                        @foreach (var transaction in Model.Transactions.OrderByDescending(t => t.Created))
                         {
                             <tr>
                                 <td>@transaction.FPUser.FullName</td>
