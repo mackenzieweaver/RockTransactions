@@ -53,7 +53,9 @@ namespace RockTransactions.Controllers
             {
                 return NotFound();
             }
-
+            notification.IsRead = true;
+            _context.Update(notification);
+            await _context.SaveChangesAsync();
             return View(notification);
         }
 
@@ -76,62 +78,6 @@ namespace RockTransactions.Controllers
             {
                 _context.Add(notification);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(notification);
-        }
-
-        // GET: Notifications/Edit/5
-        [Authorize(Roles = "Admin,Head")]
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _userManager.GetUserAsync(User);
-            var notification = await _context.Notification
-                .Where(x => x.HouseHoldId == user.HouseHoldId)
-                .FirstOrDefaultAsync(x => x.Id == id);
-            if (notification == null)
-            {
-                return NotFound();
-            }
-            return View(notification);
-        }
-
-        // POST: Notifications/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin,Head")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,HouseHoldId,Created,Subject,Body,IsRead")] Notification notification)
-        {
-            if (id != notification.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(notification);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!NotificationExists(notification.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
                 return RedirectToAction(nameof(Index));
             }
             return View(notification);
