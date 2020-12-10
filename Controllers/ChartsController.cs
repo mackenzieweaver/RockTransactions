@@ -54,26 +54,19 @@ namespace RockTransactions.Controllers
         [Authorize(Roles = "Admin,Head,Member")]
         public async Task<JsonResult> Items()
         {
-            var list = new List<CategoryItemsBarChartData>();
             var user = await _userManager.GetUserAsync(User);
-            var houseHold = await _context.HouseHold
-                .Include(hh => hh.Categories).ThenInclude(c => c.CategoryItems)
-                .FirstOrDefaultAsync(hh => hh.Id == user.HouseHoldId);
-
-            foreach(var category in houseHold.Categories)
-            {
-                foreach (var item in category.CategoryItems)
+            var houseHold = await _context.HouseHold.Include(hh => hh.Categories).ThenInclude(c => c.CategoryItems).FirstOrDefaultAsync(hh => hh.Id == user.HouseHoldId);
+            var items = houseHold.Categories.SelectMany(c => c.CategoryItems).ToList();
+            var list = new List<CategoryItemsBarChartData>();
+            items.ForEach(item => list.Add(
+                new CategoryItemsBarChartData
                 {
-                    list.Add(
-                    new CategoryItemsBarChartData
-                    {
-                        Category = category.Name,
-                        Name = item.Name,
-                        Goal = item.TargetAmount,
-                        Reality = item.ActualAmount
-                    });
+                    Category = item.Category.Name,
+                    Name = item.Name,
+                    Goal = item.TargetAmount,
+                    Reality = item.ActualAmount
                 }
-            }            
+            ));
             return Json(list);
         }
     }

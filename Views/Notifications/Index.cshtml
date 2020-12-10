@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<RockTransactions.Models.Notification>
+@using RockTransactions.Data.Enums
 
 @{
     ViewData["Title"] = "Index";
@@ -6,8 +7,11 @@
 
 <div class="row">
     <div class="col-md mt-3">
-        <h1>Index</h1>
-        <p><a asp-action="Create" class="btn btn-outline-primary">New Notification</a></p>
+        <h1>Notifications</h1>
+        @if (User.IsInRole(Roles.Admin.ToString()))
+        {
+            <p><a asp-action="Create" class="btn btn-outline-primary">New Notification</a></p>
+        }
         <table class="table">
             <thead>
                 <tr>

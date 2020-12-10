@@ -60,7 +60,7 @@ namespace RockTransactions.Controllers
         }
 
         // GET: Notifications/Create
-        [Authorize(Roles = "Admin,Head")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();

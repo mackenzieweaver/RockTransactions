@@ -121,9 +121,18 @@ namespace RockTransactions.Controllers
 
                 return RedirectToAction("Dashboard", "HouseHolds");
             }
-            ViewData["BankAccountId"] = new SelectList(_context.BankAccount, "Id", "Id", transaction.BankAccountId);
-            ViewData["CategoryItemId"] = new SelectList(_context.CategoryItem, "Id", "Id", transaction.CategoryItemId);
-            ViewData["FPUserId"] = new SelectList(_context.Users, "Id", "Id", transaction.FPUserId);
+
+            var user = await _userManager.GetUserAsync(User);
+            var houseHold = await _context.HouseHold
+                .Include(hh => hh.BankAccounts).ThenInclude(ba => ba.Transactions)
+                .Include(hh => hh.Categories)
+                .ThenInclude(c => c.CategoryItems)
+                .FirstOrDefaultAsync(hh => hh.Id == user.HouseHoldId);
+            var banks = houseHold.BankAccounts;
+            var items = houseHold.Categories.SelectMany(c => c.CategoryItems).ToList();
+
+            ViewData["BankAccountId"] = new SelectList(banks, "Id", "Name", transaction.BankAccountId);
+            ViewData["CategoryItemId"] = new SelectList(items, "Id", "Name", transaction.CategoryItemId);
             return View(transaction);
         }
 
