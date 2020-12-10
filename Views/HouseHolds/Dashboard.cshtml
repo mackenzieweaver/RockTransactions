@@ -115,14 +115,17 @@
                     </div>
                     <div class="col-md mr-3">
                         <div class="row justify-content-end">
+
                             <form asp-action="Dashboard" method="get">
                                 <label for="years" class="mr-1 mt-1">Year</label>
                                 <select id="years" name="year" class="form-control-sm mr-3" asp-items="ViewBag.Years"></select>
-                            </form>
-                            <form asp-action="Dashboard" method="get">
+
                                 <label for="months" class="mr-1 mt-1">Month</label>
-                                <select id="months" name="month" class="form-control-sm" asp-items="ViewBag.Months"></select>
+                                <select id="months" name="month" class="form-control-sm" asp-items="ViewBag.Months">
+                                    <option value=@null selected>-- All --</option>
+                                </select>
                             </form>
+
                         </div>
                     </div>
                 </div>
