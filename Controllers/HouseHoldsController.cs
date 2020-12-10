@@ -173,7 +173,14 @@ namespace RockTransactions.Controllers
             }
             var bankAccounts = _context.BankAccount.Where(ba => ba.HouseHoldId == houseHold.Id).ToList();
 
-            var years = new List<string> { "2020", "2019", "2018", "2017" };
+            int oldestYear = int.Parse(_context.Transaction.OrderBy(t => t.Created).First().Created.Year.ToString());
+            int currentYear = int.Parse(DateTime.Now.Year.ToString());
+            var years = new List<string>();
+            while(currentYear >= oldestYear)
+            {
+                years.Add(currentYear.ToString());
+                currentYear -= 1;
+            }
             var months = new List<string> { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
             ViewData["Years"] = new SelectList(years, year ?? DateTime.Now.Year.ToString());
             ViewData["Months"] = new SelectList(months, month ?? DateTime.Now.Month.ToString());
