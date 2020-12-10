@@ -28,9 +28,14 @@ namespace RockTransactions.Controllers
         [Authorize(Roles = "Admin,Head,Member")]
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.CategoryItem
-                .Include(c => c.Category);
-            return View(await applicationDbContext.ToListAsync());
+            var user = await _userManager.GetUserAsync(User);
+            var houseHold = await _context.HouseHold
+                .Include(hh => hh.Categories)
+                .ThenInclude(c => c.CategoryItems)
+                .FirstOrDefaultAsync(hh => hh.Id == user.HouseHoldId);
+
+            var items = houseHold.Categories.SelectMany(c => c.CategoryItems).ToList();
+            return View(items);
         }
 
         // GET: CategoryItems/Details/5
@@ -42,9 +47,13 @@ namespace RockTransactions.Controllers
                 return NotFound();
             }
 
-            var categoryItem = await _context.CategoryItem
-                .Include(c => c.Category)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var user = await _userManager.GetUserAsync(User);
+            var houseHold = await _context.HouseHold
+                .Include(hh => hh.Categories)
+                .ThenInclude(c => c.CategoryItems)
+                .FirstOrDefaultAsync(hh => hh.Id == user.HouseHoldId);
+
+            var categoryItem = houseHold.Categories.SelectMany(c => c.CategoryItems).FirstOrDefault(m => m.Id == id);
             if (categoryItem == null)
             {
                 return NotFound();
@@ -55,9 +64,14 @@ namespace RockTransactions.Controllers
 
         // GET: CategoryItems/Create
         [Authorize(Roles = "Admin,Head,Member")]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name");
+            var user = await _userManager.GetUserAsync(User);
+            var houseHold = await _context.HouseHold
+                .Include(hh => hh.Categories)
+                .ThenInclude(c => c.CategoryItems)
+                .FirstOrDefaultAsync(hh => hh.Id == user.HouseHoldId);
+            ViewData["CategoryId"] = new SelectList(houseHold.Categories, "Id", "Name");
             return View();
         }
 
@@ -75,7 +89,12 @@ namespace RockTransactions.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Dashboard", "HouseHolds");
             }
-            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Id", categoryItem.CategoryId);
+            var user = await _userManager.GetUserAsync(User);
+            var houseHold = await _context.HouseHold
+                .Include(hh => hh.Categories)
+                .ThenInclude(c => c.CategoryItems)
+                .FirstOrDefaultAsync(hh => hh.Id == user.HouseHoldId);
+            ViewData["CategoryId"] = new SelectList(houseHold.Categories, "Id", "Id", categoryItem.CategoryId);
             return View(categoryItem);
         }
 
@@ -88,12 +107,18 @@ namespace RockTransactions.Controllers
                 return NotFound();
             }
 
-            var categoryItem = await _context.CategoryItem.FindAsync(id);
+            var user = await _userManager.GetUserAsync(User);
+            var houseHold = await _context.HouseHold
+                .Include(hh => hh.Categories)
+                .ThenInclude(c => c.CategoryItems)
+                .FirstOrDefaultAsync(hh => hh.Id == user.HouseHoldId);
+
+            var categoryItem = houseHold.Categories.SelectMany(c => c.CategoryItems).FirstOrDefault(m => m.Id == id);
             if (categoryItem == null)
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Id", categoryItem.CategoryId);
+            ViewData["CategoryId"] = new SelectList(houseHold.Categories, "Id", "Name", categoryItem.CategoryId);
             return View(categoryItem);
         }
 
@@ -130,7 +155,12 @@ namespace RockTransactions.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Id", categoryItem.CategoryId);
+            var user = await _userManager.GetUserAsync(User);
+            var houseHold = await _context.HouseHold
+                .Include(hh => hh.Categories)
+                .ThenInclude(c => c.CategoryItems)
+                .FirstOrDefaultAsync(hh => hh.Id == user.HouseHoldId);
+            ViewData["CategoryId"] = new SelectList(houseHold.Categories, "Id", "Id", categoryItem.CategoryId);
             return View(categoryItem);
         }
 
@@ -143,9 +173,13 @@ namespace RockTransactions.Controllers
                 return NotFound();
             }
 
-            var categoryItem = await _context.CategoryItem
-                .Include(c => c.Category)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var user = await _userManager.GetUserAsync(User);
+            var houseHold = await _context.HouseHold
+                .Include(hh => hh.Categories)
+                .ThenInclude(c => c.CategoryItems)
+                .FirstOrDefaultAsync(hh => hh.Id == user.HouseHoldId);
+
+            var categoryItem = houseHold.Categories.SelectMany(c => c.CategoryItems).FirstOrDefault(m => m.Id == id);
             if (categoryItem == null)
             {
                 return NotFound();

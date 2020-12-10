@@ -36,12 +36,6 @@ namespace RockTransactions.Services
             return members;
         }
 
-        public async Task<string> GetRoleAsync(FPUser user)
-        {
-            var roles = await _userManager.GetRolesAsync(user);
-            return roles[0];
-        }
-
         public List<Transaction> ListTransactions(HouseHold houseHold)
         {
             var transactions = new List<ICollection<Transaction>>();
@@ -50,6 +44,12 @@ namespace RockTransactions.Services
                 transactions.Add(bankAccount.Transactions);
             }
             return transactions.SelectMany(t => t).ToList();
+        }
+
+        public async Task<string> GetRoleAsync(FPUser user)
+        {
+            var roles = await _userManager.GetRolesAsync(user);
+            return roles[0];
         }
 
         public async Task<string> GetGreetingAsync(FPUser user)
