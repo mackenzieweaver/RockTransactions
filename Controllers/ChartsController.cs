@@ -24,6 +24,7 @@ namespace RockTransactions.Controllers
             _userManager = userManager;
         }
 
+        [Authorize(Roles = "Admin,Head,Member")]
         public async Task<JsonResult> Categories()
         {
             var list = new List<BudgetBreakDownPieChartData>();
@@ -50,6 +51,7 @@ namespace RockTransactions.Controllers
             return Json(list);
         }
 
+        [Authorize(Roles = "Admin,Head,Member")]
         public async Task<JsonResult> Items()
         {
             var list = new List<CategoryItemsBarChartData>();

@@ -32,6 +32,7 @@ namespace RockTransactions.Controllers
         }
 
         // GET: HouseHolds
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.HouseHold.ToListAsync());
@@ -81,6 +82,7 @@ namespace RockTransactions.Controllers
         }
 
         // GET: HouseHolds/Details/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -132,6 +134,7 @@ namespace RockTransactions.Controllers
             return View(houseHold);
         }
 
+        [Authorize(Roles = "Admin,Head,Member")]
         public async Task<IActionResult> Dashboard(string year, string month)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -193,6 +196,7 @@ namespace RockTransactions.Controllers
         }
 
         // GET: HouseHolds/Edit/5
+        [Authorize(Roles = "Admin,Head")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -211,6 +215,7 @@ namespace RockTransactions.Controllers
         // POST: HouseHolds/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin,Head")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Greeting,Established")] HouseHold houseHold)
@@ -244,6 +249,7 @@ namespace RockTransactions.Controllers
         }
 
         // GET: HouseHolds/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -262,6 +268,7 @@ namespace RockTransactions.Controllers
         }
 
         // POST: HouseHolds/Delete/5
+        [Authorize(Roles = "Admin,Head")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

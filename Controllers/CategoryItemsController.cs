@@ -22,6 +22,7 @@ namespace RockTransactions.Controllers
         }
 
         // GET: CategoryItems
+        [Authorize(Roles = "Admin,Head,Member")]
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.CategoryItem.Include(c => c.Category);
@@ -29,6 +30,7 @@ namespace RockTransactions.Controllers
         }
 
         // GET: CategoryItems/Details/5
+        [Authorize(Roles = "Admin,Head,Member")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -48,6 +50,7 @@ namespace RockTransactions.Controllers
         }
 
         // GET: CategoryItems/Create
+        [Authorize(Roles = "Admin,Head,Member")]
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name");
@@ -59,6 +62,7 @@ namespace RockTransactions.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Head,Member")]
         public async Task<IActionResult> Create([Bind("Id,CategoryId,Name,Description,TargetAmount,ActualAmount")] CategoryItem categoryItem)
         {
             if (ModelState.IsValid)
@@ -72,6 +76,7 @@ namespace RockTransactions.Controllers
         }
 
         // GET: CategoryItems/Edit/5
+        [Authorize(Roles = "Admin,Head,Member")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -93,6 +98,7 @@ namespace RockTransactions.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Head,Member")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,CategoryId,Name,Description,TargetAmount,ActualAmount")] CategoryItem categoryItem)
         {
             if (id != categoryItem.Id)
@@ -125,6 +131,7 @@ namespace RockTransactions.Controllers
         }
 
         // GET: CategoryItems/Delete/5
+        [Authorize(Roles = "Admin,Head,Member")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -146,6 +153,7 @@ namespace RockTransactions.Controllers
         // POST: CategoryItems/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Head,Member")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var categoryItem = await _context.CategoryItem.FindAsync(id);

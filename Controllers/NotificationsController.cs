@@ -22,6 +22,7 @@ namespace RockTransactions.Controllers
         }
 
         // GET: Notifications
+        [Authorize(Roles = "Admin,Head")]
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Notification.Include(n => n.HouseHold);
@@ -29,6 +30,7 @@ namespace RockTransactions.Controllers
         }
 
         // GET: Notifications/Details/5
+        [Authorize(Roles = "Admin,Head")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -48,6 +50,7 @@ namespace RockTransactions.Controllers
         }
 
         // GET: Notifications/Create
+        [Authorize(Roles = "Admin,Head")]
         public IActionResult Create()
         {
             ViewData["HouseHoldId"] = new SelectList(_context.HouseHold, "Id", "Name");
@@ -59,6 +62,7 @@ namespace RockTransactions.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Head")]
         public async Task<IActionResult> Create([Bind("Id,HouseHoldId,Created,Subject,Body,IsRead")] Notification notification)
         {
             if (ModelState.IsValid)
@@ -72,6 +76,7 @@ namespace RockTransactions.Controllers
         }
 
         // GET: Notifications/Edit/5
+        [Authorize(Roles = "Admin,Head")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -93,6 +98,7 @@ namespace RockTransactions.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Head")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,HouseHoldId,Created,Subject,Body,IsRead")] Notification notification)
         {
             if (id != notification.Id)
@@ -125,6 +131,7 @@ namespace RockTransactions.Controllers
         }
 
         // GET: Notifications/Delete/5
+        [Authorize(Roles = "Admin,Head")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -146,6 +153,7 @@ namespace RockTransactions.Controllers
         // POST: Notifications/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Head")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var notification = await _context.Notification.FindAsync(id);

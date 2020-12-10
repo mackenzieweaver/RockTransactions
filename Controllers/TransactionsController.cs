@@ -29,6 +29,7 @@ namespace RockTransactions.Controllers
         }
 
         // GET: Transactions
+        [Authorize(Roles = "Admin,Head,Member")]
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Transaction.Include(t => t.BankAccount).Include(t => t.CategoryItem).Include(t => t.FPUser);
@@ -36,6 +37,7 @@ namespace RockTransactions.Controllers
         }
 
         // GET: Transactions
+        [Authorize(Roles = "Admin,Head,Member")]
         public async Task<IActionResult> Transactions(int id)
         {
             var bankAccount = await _context.BankAccount
@@ -46,6 +48,7 @@ namespace RockTransactions.Controllers
         }
 
         // GET: Transactions/Details/5
+        [Authorize(Roles = "Admin,Head,Member")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -67,6 +70,7 @@ namespace RockTransactions.Controllers
         }
 
         // GET: Transactions/Create
+        [Authorize(Roles = "Admin,Head,Member")]
         public IActionResult Create()
         {
             ViewData["BankAccountId"] = new SelectList(_context.BankAccount, "Id", "Name");
@@ -80,6 +84,7 @@ namespace RockTransactions.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Head,Member")]
         public async Task<IActionResult> Create([Bind("Id,CategoryItemId,BankAccountId,FPUserId,Created,Type,Memo,Amount,IsDeleted")] Transaction transaction)
         {
             transaction.FPUserId = _userManager.GetUserId(User);
@@ -117,6 +122,7 @@ namespace RockTransactions.Controllers
         }
 
         // GET: Transactions/Edit/5
+        [Authorize(Roles = "Admin,Head,Member")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -140,6 +146,7 @@ namespace RockTransactions.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Head,Member")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,CategoryItemId,BankAccountId,FPUserId,Created,Type,Memo,Amount,IsDeleted")] Transaction transaction)
         {
             if (id != transaction.Id)
@@ -175,6 +182,7 @@ namespace RockTransactions.Controllers
         }
 
         // GET: Transactions/Delete/5
+        [Authorize(Roles = "Admin,Head,Member")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -198,6 +206,7 @@ namespace RockTransactions.Controllers
         // POST: Transactions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Head,Member")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var transaction = await _context.Transaction.FindAsync(id);

@@ -25,6 +25,7 @@ namespace RockTransactions.Controllers
             _userManager = userManager;
         }
 
+        [Authorize(Roles = "Admin,Head,Member")]
         // GET: BankAccounts
         public async Task<IActionResult> Index()
         {
@@ -32,6 +33,7 @@ namespace RockTransactions.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        [Authorize(Roles = "Admin,Head,Member")]
         // GET: BankAccounts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -51,6 +53,7 @@ namespace RockTransactions.Controllers
             return View(bankAccount);
         }
 
+        [Authorize(Roles = "Admin,Head,Member")]
         // GET: BankAccounts/Create
         public async Task<IActionResult> Create()
         {
@@ -62,6 +65,7 @@ namespace RockTransactions.Controllers
         // POST: BankAccounts/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin,Head,Member")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,HouseHoldId,FPUserId,Name,Type,StartingBalance,CurrentBalance")] BankAccount bankAccount)
@@ -79,6 +83,7 @@ namespace RockTransactions.Controllers
         }
 
         // GET: BankAccounts/Edit/5
+        [Authorize(Roles = "Admin,Head,Member")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -98,6 +103,7 @@ namespace RockTransactions.Controllers
         // POST: BankAccounts/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin,Head,Member")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,HouseHoldId,FPUserId,Name,Type,StartingBalance,CurrentBalance")] BankAccount bankAccount)
@@ -132,6 +138,7 @@ namespace RockTransactions.Controllers
         }
 
         // GET: BankAccounts/Delete/5
+        [Authorize(Roles = "Admin,Head,Member")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -151,6 +158,7 @@ namespace RockTransactions.Controllers
         }
 
         // POST: BankAccounts/Delete/5
+        [Authorize(Roles = "Admin,Head,Member")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

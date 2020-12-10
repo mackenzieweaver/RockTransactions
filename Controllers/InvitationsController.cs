@@ -36,6 +36,7 @@ namespace RockTransactions.Controllers
         }
 
         // GET: Invitations
+        [Authorize(Roles = "Admin,Head")]
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Invitation.Include(i => i.HouseHold);
@@ -43,6 +44,7 @@ namespace RockTransactions.Controllers
         }
 
         // GET: Invitations/Details/5
+        [Authorize(Roles = "Admin,Head")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -202,6 +204,7 @@ namespace RockTransactions.Controllers
         }
 
         // GET: Invitations/Edit/5
+        [Authorize(Roles = "Admin,Head")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -223,6 +226,7 @@ namespace RockTransactions.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Head")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,HouseHoldId,Created,Expires,Accepted,EmailTo,Subject,Body,Code")] Invitation invitation)
         {
             if (id != invitation.Id)
@@ -255,6 +259,7 @@ namespace RockTransactions.Controllers
         }
 
         // GET: Invitations/Delete/5
+        [Authorize(Roles = "Admin,Head")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -274,6 +279,7 @@ namespace RockTransactions.Controllers
         }
 
         // POST: Invitations/Delete/5
+        [Authorize(Roles = "Admin,Head")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
