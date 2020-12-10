@@ -1,26 +1,28 @@
 ﻿@model RockTransactions.Models.BankAccount
 @using RockTransactions.Data.Enums
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<FPUser> UserManager
 @{
     ViewData["Title"] = "Edit";
+    var user = await UserManager.GetUserAsync(User);
 }
 
 <h1>Edit</h1>
 
 <h4>BankAccount</h4>
-<hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="HouseHoldId" class="control-label"></label>
-                <select asp-for="HouseHoldId" class="form-control" asp-items="ViewBag.HouseHoldId"></select>
+                <label asp-for="HouseHoldId" class="control-label" style="display:none;"></label>
+                <input type="hidden" asp-for="HouseHoldId" class="form-control" value="@user.HouseHoldId" />
                 <span asp-validation-for="HouseHoldId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="FPUserId" class="control-label"></label>
-                <input asp-for="FPUserId" class="form-control" />
+                <label asp-for="FPUserId" class="control-label"  style="display:none;"></label>
+                <input type="hidden" asp-for="FPUserId" class="form-control" value="@user.Id" />
                 <span asp-validation-for="FPUserId" class="text-danger"></span>
             </div>
             <div class="form-group">

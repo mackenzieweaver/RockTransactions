@@ -29,7 +29,8 @@ namespace RockTransactions.Controllers
         // GET: BankAccounts
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.BankAccount.Include(b => b.HouseHold).Include(u => u.FPUser);
+            var user = await _userManager.GetUserAsync(User);
+            var applicationDbContext = _context.BankAccount.Where(x => x.HouseHoldId == user.HouseHoldId).Include(b => b.HouseHold).Include(u => u.FPUser);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -42,9 +43,11 @@ namespace RockTransactions.Controllers
                 return NotFound();
             }
 
+            var user = await _userManager.GetUserAsync(User);
             var bankAccount = await _context.BankAccount
                 .Include(b => b.HouseHold)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(x => x.HouseHoldId == user.HouseHoldId && x.Id == id);
+
             if (bankAccount == null)
             {
                 return NotFound();
@@ -91,7 +94,9 @@ namespace RockTransactions.Controllers
                 return NotFound();
             }
 
-            var bankAccount = await _context.BankAccount.FindAsync(id);
+            var user = await _userManager.GetUserAsync(User);
+            var bankAccount = await _context.BankAccount
+                .FirstOrDefaultAsync(x => x.HouseHoldId == user.HouseHoldId && x.Id == id);
             if (bankAccount == null)
             {
                 return NotFound();
@@ -146,9 +151,9 @@ namespace RockTransactions.Controllers
                 return NotFound();
             }
 
+            var user = await _userManager.GetUserAsync(User);
             var bankAccount = await _context.BankAccount
-                .Include(b => b.HouseHold)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(x => x.HouseHoldId == user.HouseHoldId && x.Id == id);
             if (bankAccount == null)
             {
                 return NotFound();

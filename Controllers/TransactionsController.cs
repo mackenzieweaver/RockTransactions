@@ -40,10 +40,16 @@ namespace RockTransactions.Controllers
         [Authorize(Roles = "Admin,Head,Member")]
         public async Task<IActionResult> Transactions(int id)
         {
+            var user = await _userManager.GetUserAsync(User);
             var bankAccount = await _context.BankAccount
                 .Include(ba => ba.Transactions).ThenInclude(t => t.CategoryItem)
                 .Include(ba => ba.Transactions).ThenInclude(t => t.FPUser)
-                .FirstOrDefaultAsync(ba => ba.Id == id);
+                .FirstOrDefaultAsync(x => x.HouseHoldId == user.HouseHoldId && x.Id == id);
+            if(bankAccount == null)
+            {
+                return NotFound();
+            }
+
             return View("Index", bankAccount.Transactions);
         }
 
