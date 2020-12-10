@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using RockTransactions.Data;
 using RockTransactions.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace RockTransactions.Controllers
 {
@@ -15,17 +16,22 @@ namespace RockTransactions.Controllers
     public class NotificationsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<FPUser> _userManager;
 
-        public NotificationsController(ApplicationDbContext context)
+        public NotificationsController(ApplicationDbContext context, UserManager<FPUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Notifications
         [Authorize(Roles = "Admin,Head")]
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Notification.Include(n => n.HouseHold);
+            var user = await _userManager.GetUserAsync(User);
+            var applicationDbContext = _context.Notification
+                .Where(x => x.HouseHoldId == user.HouseHoldId)
+                .Include(n => n.HouseHold);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -38,8 +44,10 @@ namespace RockTransactions.Controllers
                 return NotFound();
             }
 
+            var user = await _userManager.GetUserAsync(User);
             var notification = await _context.Notification
                 .Include(n => n.HouseHold)
+                .Where(x => x.HouseHoldId == user.HouseHoldId)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (notification == null)
             {
@@ -53,7 +61,6 @@ namespace RockTransactions.Controllers
         [Authorize(Roles = "Admin,Head")]
         public IActionResult Create()
         {
-            ViewData["HouseHoldId"] = new SelectList(_context.HouseHold, "Id", "Name");
             return View();
         }
 
@@ -71,7 +78,6 @@ namespace RockTransactions.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["HouseHoldId"] = new SelectList(_context.HouseHold, "Id", "Name", notification.HouseHoldId);
             return View(notification);
         }
 
@@ -84,12 +90,14 @@ namespace RockTransactions.Controllers
                 return NotFound();
             }
 
-            var notification = await _context.Notification.FindAsync(id);
+            var user = await _userManager.GetUserAsync(User);
+            var notification = await _context.Notification
+                .Where(x => x.HouseHoldId == user.HouseHoldId)
+                .FirstOrDefaultAsync(x => x.Id == id);
             if (notification == null)
             {
                 return NotFound();
             }
-            ViewData["HouseHoldId"] = new SelectList(_context.HouseHold, "Id", "Name", notification.HouseHoldId);
             return View(notification);
         }
 
@@ -126,7 +134,6 @@ namespace RockTransactions.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["HouseHoldId"] = new SelectList(_context.HouseHold, "Id", "Name", notification.HouseHoldId);
             return View(notification);
         }
 
@@ -139,8 +146,10 @@ namespace RockTransactions.Controllers
                 return NotFound();
             }
 
+            var user = await _userManager.GetUserAsync(User);
             var notification = await _context.Notification
                 .Include(n => n.HouseHold)
+                .Where(x => x.HouseHoldId == user.HouseHoldId)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (notification == null)
             {

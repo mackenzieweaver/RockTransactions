@@ -1,7 +1,10 @@
 ﻿@model RockTransactions.Models.Category
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<FPUser> UserManager
 
 @{
     ViewData["Title"] = "Create";
+    var user = await UserManager.GetUserAsync(User);
 }
 
 <div class="row">
@@ -13,8 +16,8 @@
                 <form asp-action="Create">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
-                        <label asp-for="HouseHoldId" class="control-label"></label>
-                        <select asp-for="HouseHoldId" class="form-control" asp-items="ViewBag.HouseHoldId"></select>
+                        <label asp-for="HouseHoldId" class="control-label" style="display:none;"></label>
+                        <input type="hidden" asp-for="HouseHoldId" class="form-control" value="@user.HouseHoldId" />
                     </div>
                     <div class="form-group">
                         <label asp-for="Name" class="control-label"></label>

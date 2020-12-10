@@ -61,7 +61,6 @@ namespace RockTransactions.Controllers
         [Authorize(Roles = "Admin,Head,Member")]
         public IActionResult Create()
         {
-            ViewData["HouseHoldId"] = new SelectList(_context.Set<HouseHold>(), "Id", "Name");
             return View();
         }
 
@@ -80,7 +79,6 @@ namespace RockTransactions.Controllers
                 TempData["Script"] = $"NewColor('{category.Name}')";
                 return RedirectToAction("Dashboard", "HouseHolds");
             }
-            ViewData["HouseHoldId"] = new SelectList(_context.Set<HouseHold>(), "Id", "Name", category.HouseHoldId);
             return View(category);
         }
 
@@ -101,7 +99,6 @@ namespace RockTransactions.Controllers
             {
                 return NotFound();
             }
-            ViewData["HouseHoldId"] = new SelectList(_context.Set<HouseHold>(), "Id", "Name", category.HouseHoldId);
             return View(category);
         }
 
@@ -138,7 +135,6 @@ namespace RockTransactions.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["HouseHoldId"] = new SelectList(_context.Set<HouseHold>(), "Id", "Name", category.HouseHoldId);
             return View(category);
         }
 
