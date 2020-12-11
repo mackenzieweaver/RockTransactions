@@ -165,7 +165,7 @@ $('#historyModal').on('shown.bs.modal', function () {
         // each line
         for (let i = 0; i < res.lines.length; i++) {
 
-            // each coordinate
+            // raw coordinates as they've come from the controller
             let xCords = [];
             let yCords = [];
             for (let j = 0; j < res.lines[i].xcords.length; j++) {
@@ -173,24 +173,29 @@ $('#historyModal').on('shown.bs.modal', function () {
                 yCords.push( res.lines[i].ycords[j] );
             }
 
-            // missing data check
+            // ensure Y-val for each date
             for (let k = 0; k < dates.length; k++) {
                 let date = dates[k];
                 let index = dates.indexOf(date);
+
+                // if missing a date
                 if (xCords.indexOf(date) == -1) {
+                    // add date
                     xCords.splice(index, 0, date);
+                    // add previous balance as Y value
                     yCords.splice(index, 0, yCords[k-1]);
                 }
             }
-            console.log("xCords = " + xCords);
-            console.log("yCords = " + yCords);
 
+            // data set
             let set = {
                 data: yCords,
                 label: res.lines[i].name,
                 borderColor: `#${getRandomColor()}`,
                 fill: false
             };
+
+            // graphThis is an array of objects -> [ {  } ]
             graphThis.push(set);
         }
     })
