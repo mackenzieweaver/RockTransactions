@@ -79,7 +79,10 @@ namespace RockTransactions.Controllers
                 .ThenInclude(ba => ba.Histories)
                 .FirstOrDefaultAsync(hh => hh.Id == user.HouseHoldId);
 
-            var list = new List<Line>();
+            var lines = new List<Line>();
+            var oldest = DateTime.Now;
+            var newest = DateTime.Now;
+
             foreach (var account in houseHold.BankAccounts)
             {
                 var line = new Line
@@ -89,16 +92,59 @@ namespace RockTransactions.Controllers
                     Ycords = new List<decimal>()
                 };
 
-                var histories = account.Histories.OrderBy(h => h.Date); // oldest to newest
+                var histories = account.Histories.OrderBy(h => h.Date).ToList(); // oldest to newest
                 foreach (var history in histories)
                 {
-                    var date = history.Date.ToString("MMM dd, yyyy");
+                    oldest = UpdateOldestDate(history.Date, oldest);
+                    newest = UpdateNewestDate(history.Date, newest);
+                    var date = history.Date.ToString("MM/dd/yyyy");
                     line.Xcords.Add(date);
                     line.Ycords.Add(history.Balance);
                 }
-                list.Add(line);
+
+                lines.Add(line);
             }
-            return Json(list);
+
+            List<string> dates = PopulateDates(oldest, newest);
+            var chart = new Chart
+            {
+                Dates = dates,
+                Lines = lines
+            };
+            return Json(chart);
+        }
+
+        // start date
+        private DateTime UpdateOldestDate(DateTime date, DateTime oldest)
+        {
+            if (date < oldest)
+            {
+                return date;
+            }
+            return oldest;
+        }
+
+        // end date
+        private DateTime UpdateNewestDate(DateTime date, DateTime newest)
+        {
+            if (date > newest)
+            {
+                return date;
+            }
+            return newest;
+        }
+
+        // list from start to end
+        private List<string> PopulateDates(DateTime oldest, DateTime newest)
+        {
+            var dates = new List<string>();
+            while (oldest <= newest)
+            {
+                dates.Add(oldest.ToString("MM/dd/yyyy"));
+                oldest = oldest.AddDays(1);
+            }
+            dates.Add(newest.ToString("MM/dd/yyyy"));
+            return dates;
         }
     }
 }
