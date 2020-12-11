@@ -220,3 +220,20 @@ $('#historyModal').on('shown.bs.modal', function () {
         });
     });
 });
+
+function Wizard() {
+    $("#wizardModal").modal().on('shown.bs.modal', function () {
+        var wizard = document.getElementById("wizard");
+        console.log(wizard);
+
+        wizard.steps({
+            cssClass: 'pills wizard',
+            stepsOrientation: "vertical",
+
+            headerTag: "h3",
+            bodyTag: "section",
+            transitionEffect: "slideLeft",
+            autoFocus: true
+        });
+    })
+}

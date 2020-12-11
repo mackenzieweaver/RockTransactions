@@ -129,6 +129,8 @@ namespace RockTransactions.Controllers
                 // sign out / sign in
                 await _signInManager.SignOutAsync();
                 await _signInManager.SignInAsync(user, isPersistent: false);
+
+                TempData["Script"] = "Wizard()";
                 return RedirectToAction(nameof(Dashboard));
             }
             return View(houseHold);
