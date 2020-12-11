@@ -79,21 +79,26 @@ namespace RockTransactions.Controllers
                 .ThenInclude(ba => ba.Histories)
                 .FirstOrDefaultAsync(hh => hh.Id == user.HouseHoldId);
 
-            var myChart = new Chart();
+            var list = new List<Line>();
             foreach (var account in houseHold.BankAccounts)
             {
-                var line = new Line { BankName = account.Name };
-                foreach (var history in account.Histories.OrderBy(h => h.Date))
+                var line = new Line
                 {
-                    if (!myChart.Dates.Contains(history.Date.ToString("MMM dd, yyyy")))
-                    {
-                        myChart.Dates.Add(history.Date.ToString("MMM dd, yyyy"));
-                    }
-                    line.Balances.Add(history.Balance);
+                    Name = account.Name,
+                    Xcords = new List<string>(),
+                    Ycords = new List<decimal>()
+                };
+
+                var histories = account.Histories.OrderBy(h => h.Date); // oldest to newest
+                foreach (var history in histories)
+                {
+                    var date = history.Date.ToString("MMM dd, yyyy");
+                    line.Xcords.Add(date);
+                    line.Ycords.Add(history.Balance);
                 }
-                myChart.Lines.Add(line);
+                list.Add(line);
             }
-            return Json(myChart);
+            return Json(list);
         }
     }
 }

@@ -109,14 +109,26 @@ namespace RockTransactions.Controllers
                     _context.Update(categoryItem);
                 }
 
-                History history = new History
+                // so that only one history per day
+                var history = await _context.History.FirstOrDefaultAsync(h => h.BankAccount == bankAccount && h.Date.Day == transaction.Created.Day);
+                if(history == null)
                 {
-                    BankAccountId = transaction.BankAccountId,
-                    Balance = (decimal)bankAccount.CurrentBalance,
-                    Date = transaction.Created
-                };
+                    History _history = new History
+                    {
+                        BankAccountId = transaction.BankAccountId,
+                        Balance = (decimal)bankAccount.CurrentBalance,
+                        Date = transaction.Created
+                    };
+                    _context.Add(_history);
+                }
+                else
+                {
+                    history.BankAccountId = transaction.BankAccountId;
+                    history.Balance = (decimal)bankAccount.CurrentBalance;
+                    history.Date = transaction.Created;
+                    _context.Update(history);
+                }
 
-                _context.Add(history);
                 _context.Add(transaction);
                 _context.Update(bankAccount);
                 await _context.SaveChangesAsync();

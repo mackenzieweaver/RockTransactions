@@ -13,13 +13,14 @@ namespace RockTransactions.Data
             : base(options)
         {
         }
-        public DbSet<RockTransactions.Models.Attachment> Attachment { get; set; }
-        public DbSet<RockTransactions.Models.BankAccount> BankAccount { get; set; }
-        public DbSet<RockTransactions.Models.Category> Category { get; set; }
-        public DbSet<RockTransactions.Models.CategoryItem> CategoryItem { get; set; }
-        public DbSet<RockTransactions.Models.HouseHold> HouseHold { get; set; }
-        public DbSet<RockTransactions.Models.Invitation> Invitation { get; set; }
-        public DbSet<RockTransactions.Models.Notification> Notification { get; set; }
-        public DbSet<RockTransactions.Models.Transaction> Transaction { get; set; }
+        public DbSet<Attachment> Attachment { get; set; }
+        public DbSet<BankAccount> BankAccount { get; set; }
+        public DbSet<Category> Category { get; set; }
+        public DbSet<CategoryItem> CategoryItem { get; set; }
+        public DbSet<HouseHold> HouseHold { get; set; }
+        public DbSet<Invitation> Invitation { get; set; }
+        public DbSet<Notification> Notification { get; set; }
+        public DbSet<Transaction> Transaction { get; set; }
+        public DbSet<History> History { get; set; }
     }
 }
