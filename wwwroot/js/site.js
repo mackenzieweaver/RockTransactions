@@ -161,7 +161,6 @@ $('#historyModal').on('shown.bs.modal', function () {
 
     $.post("/Charts/History").then(function (res) {
         dates = res.dates;
-
         // each line
         for (let i = 0; i < res.lines.length; i++) {
 
@@ -182,16 +181,27 @@ $('#historyModal').on('shown.bs.modal', function () {
                 if (xCords.indexOf(date) == -1) {
                     // add date
                     xCords.splice(index, 0, date);
-                    // add previous balance as Y value
-                    yCords.splice(index, 0, yCords[k-1]);
+                    // add Y value
+                    if (yCords[k - 1] == null) {
+                        yCords.splice(index, 0, yCords[k]);
+                    }
+                    else {
+                        yCords.splice(index, 0, yCords[k - 1]);
+                    }
                 }
+            }
+
+            // line get color by account name from local storage
+            let color = window.localStorage.getItem(res.lines[i].name);
+            if (color == null) {
+                color = window.localStorage.getItem(res.lines[i].name, `#${getRandomColor()}`);
             }
 
             // data set
             let set = {
                 data: yCords,
                 label: res.lines[i].name,
-                borderColor: `#${getRandomColor()}`,
+                borderColor: color,
                 fill: false
             };
 
@@ -206,12 +216,6 @@ $('#historyModal').on('shown.bs.modal', function () {
             data: {
                 labels: dates,
                 datasets: graphThis
-            },
-            options: {
-                title: {
-                    display: true,
-                    text: 'World population per region (in millions)'
-                }
             }
         });
     });

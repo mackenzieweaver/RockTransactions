@@ -138,13 +138,13 @@ namespace RockTransactions.Controllers
         private List<string> PopulateDates(DateTime oldest, DateTime newest)
         {
             var dates = new List<string>();
-            while (oldest <= newest)
+            while (oldest < newest)
             {
                 dates.Add(oldest.ToString("MM/dd/yyyy"));
                 oldest = oldest.AddDays(1);
             }
             dates.Add(newest.ToString("MM/dd/yyyy"));
-            return dates;
+            return dates.Distinct().ToList();
         }
     }
 }

@@ -105,6 +105,10 @@ namespace RockTransactions.Controllers
                 else if(transaction.Type == TransactionType.Withdrawal)
                 {
                     bankAccount.CurrentBalance -= transaction.Amount;
+                    if (categoryItem == null)
+                    {
+                        return NotFound();
+                    }
                     categoryItem.ActualAmount += transaction.Amount;
                     _context.Update(categoryItem);
                 }
