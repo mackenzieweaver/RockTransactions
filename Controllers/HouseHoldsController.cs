@@ -138,13 +138,45 @@ namespace RockTransactions.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult SetUp(
-            string houseHoldId, DateTime date,
+        public async Task<IActionResult> SetUp(
             string bank, AccountType accountType, decimal startBalance,
-            string category, string catDesc,
-            string item, string itemDesc,  decimal target
+            string categoryName, string catDesc,
+            string itemName, string itemDesc,  decimal target
             )
         {
+            var user = await _userManager.GetUserAsync(User);
+            var bankAccount = new BankAccount
+            {
+                HouseHoldId = (int)user.HouseHoldId,
+                FPUserId = user.Id,
+                Name = bank,
+                Type = accountType,
+                StartingBalance = startBalance,
+                CurrentBalance = startBalance
+            };
+            await _context.AddAsync(bankAccount);
+            await _context.SaveChangesAsync();
+
+            var category = new Category
+            {
+                HouseHoldId = (int)user.HouseHoldId,
+                Name = categoryName,
+                Description = catDesc
+            };
+            await _context.AddAsync(category);
+            await _context.SaveChangesAsync();
+
+            var item = new CategoryItem
+            {
+                CategoryId = category.Id,
+                Name = itemName,
+                Description = itemDesc,
+                TargetAmount = target,
+                ActualAmount = 0
+            };
+            await _context.AddAsync(item);
+            await _context.SaveChangesAsync();
+
             return RedirectToAction("Dashboard");
         }
 
