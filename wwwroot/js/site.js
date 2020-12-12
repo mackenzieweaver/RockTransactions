@@ -58,6 +58,13 @@ function NewColor(category) {
     }
 }
 
+function NewHexColor(category) {
+    if (window.localStorage.getItem(category) == null) {
+        let hex = getRandomColor();
+        window.localStorage.setItem(category, `#${hex}`);
+    }
+}
+
 function BudgetBreakdownChart(Url) {
     let names = [];
     let totals = [];
@@ -191,13 +198,11 @@ $('#historyModal').on('shown.bs.modal', function () {
                 }
             }
 
-            // line get color by account name from local storage
             let color = window.localStorage.getItem(res.lines[i].name);
             if (color == null) {
-                window.localStorage.setItem(res.lines[i].name, `#${getRandomColor()}`);
+                NewHexColor(res.lines[i].name);
                 color = window.localStorage.getItem(res.lines[i].name);
             }
-            console.log(color);
 
             // line graph needs array of objects
             let set = {
