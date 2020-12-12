@@ -1,6 +1,5 @@
-﻿
-
-
+﻿@model FPUser
+@using RockTransactions.Data.Enums
 <div class="modal fade" id="wizardModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -8,23 +7,43 @@
                 <h3 class="modal-title" id="exampleModalLabel">Set up your household</h3>
             </div>
             <div class="modal-body">
-                <div id="wizard">
-                    @* TODO: create custom action that creates bank account, category, and item *@
-                    <form>
-                        <h3>Keyboard</h3>
+                <form id="accountSetup" asp-controller="HouseHolds" asp-action="SetUp" method="post">
+                    <div class="form-group">
+                        <label name="HouseHoldId" class="control-label" hidden></label>
+                        <input type="hidden" name="houseHoldId" class="form-control" value="@Model.HouseHoldId" />
+                    </div>
+                    <div class="form-group">
+                        <label name="Created" class="control-label" hidden></label>
+                        <input type="hidden" name="date" class="form-control" value="@DateTime.Now" />
+                    </div>
+
+                    <div id="wizard">
+                        <h3>Bank</h3>
                         <section>
-                            <p>Try the keyboard navigation by clicking arrow left or right!</p>
+                            <div class="form-group">
+                                <label for="bank" class="control-label"></label>
+                                <input name="bank" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label for="accountType" class="control-label"></label>
+                                <select name="accountType" asp-items="Html.GetEnumSelectList<AccountType>()" class="form-control"></select>
+                            </div>
+                            <div class="form-group">
+                                <label for="startBalance" class="control-label"></label>
+                                <input name="startBalance" class="form-control" />
+                            </div>
                         </section>
-                        <h3>Effects</h3>
+                        @*<h3>Category</h3>
                         <section>
                             <p>Wonderful transition effects.</p>
                         </section>
-                        <h3>Pager</h3>
+                        <h3>Item</h3>
                         <section>
                             <p>The next and previous buttons help you to navigate through your content.</p>
-                        </section>
-                    </form>
-                </div>
+                        </section>*@
+                    </div>
+
+                </form>
             </div>
         </div>
     </div>

@@ -229,13 +229,17 @@ function Wizard() {
     $("#wizardModal").modal().on('shown.bs.modal', function () {
 
         wizard.steps({
-            cssClass: 'pills wizard',
-            stepsOrientation: "vertical",
+            cssClass: 'pill wizard',
+            //stepsOrientation: "vertical",
 
             headerTag: "h3",
             bodyTag: "section",
             transitionEffect: "slideLeft",
-            autoFocus: true
+            autoFocus: true,
+
+            onFinished: function (event, currentIndex) {
+                $("#accountSetup").submit();
+            }
         });
     })
 }

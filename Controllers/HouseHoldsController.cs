@@ -136,6 +136,18 @@ namespace RockTransactions.Controllers
             return View(houseHold);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SetUp(
+            string houseHoldId, DateTime date,
+            string bank, AccountType accountType, decimal startBalance,
+            string category, string catDesc,
+            string item, string itemDesc,  decimal target
+            )
+        {
+            return RedirectToAction("Dashboard");
+        }
+
         [Authorize(Roles = "Admin,Head,Member")]
         public async Task<IActionResult> Dashboard(string year, string month)
         {

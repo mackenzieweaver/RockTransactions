@@ -179,7 +179,7 @@
 @await Html.PartialAsync("_ItemModalPartial")
 @await Html.PartialAsync("_TransactionModalPartial")
 @await Html.PartialAsync("_HistoryModalPartial", accounts)
-@await Html.PartialAsync("_WizardPartial")
+@await Html.PartialAsync("_WizardPartial", user)
 
 @section scripts {
     <script>
