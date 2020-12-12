@@ -59,6 +59,7 @@ namespace RockTransactions.Controllers
         public async Task<IActionResult> Leave()
         {
             var user = await _userManager.GetUserAsync(User);
+
             if (User.IsInRole(Roles.Head.ToString()))
             {
                 var members = await _houseHoldService.ListHouseHoldMembersAsync(user.HouseHoldId);
@@ -67,10 +68,15 @@ namespace RockTransactions.Controllers
                     TempData["Script"] = "CantLeave()";
                     return RedirectToAction("Dashboard");
                 }
+                // delete household
                 var houseHold = await _context.HouseHold.FirstOrDefaultAsync(hh => hh.Id == user.HouseHoldId);
                 _context.HouseHold.Remove(houseHold);
             }
+
+            // not in a house
             user.HouseHoldId = null;
+
+            // reset role to New
             var roles = await _userManager.GetRolesAsync(user);
             await _userManager.RemoveFromRolesAsync(user, roles);
             await _userManager.AddToRoleAsync(user, Roles.New.ToString());
@@ -138,11 +144,8 @@ namespace RockTransactions.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SetUp(
-            string bank, AccountType accountType, decimal startBalance,
-            string categoryName, string catDesc,
-            string itemName, string itemDesc,  decimal target
-            )
+        public async Task<IActionResult> SetUp(string bank, AccountType accountType, decimal startBalance,
+            string categoryName, string catDesc, string itemName, string itemDesc,  decimal target)
         {
             var user = await _userManager.GetUserAsync(User);
             var bankAccount = new BankAccount
