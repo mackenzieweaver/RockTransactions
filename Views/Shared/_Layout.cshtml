@@ -12,6 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
     <title>@ViewData["Title"] - RockTransactions</title>
     <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
+
     <link href="~/css/loader.css" rel="stylesheet" />
     <script src="~/js/loader.js"></script>
 
@@ -25,6 +26,11 @@
     <link href="~/css/dash_2.css" rel="stylesheet" />
     <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.22/b-1.6.5/b-colvis-1.6.5/b-flash-1.6.5/b-html5-1.6.5/b-print-1.6.5/datatables.min.css" />
+
+    <!-- Wizardry -->
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/jquery/dist/jquery.steps.js"></script>
+    <link href="~/css/jquery.steps.css" rel="stylesheet" />
 </head>
 <body class="alt-menu sidebar-noneoverflow">
     <!-- BEGIN LOADER -->
@@ -293,7 +299,7 @@
     @*</div>*@
     <!-- END MAIN CONTAINER -->
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
-    <script src="~/lib/jquery/dist/jquery-3.1.1.min.js"></script>
+    @*<script src="~/lib/jquery/dist/jquery-3.1.1.min.js"></script>*@
     <script src="~/lib/bootstrap/dist/js/popper.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="~/js/perfect-scrollbar.min.js"></script>
@@ -306,7 +312,6 @@
     <script src="~/js/custom.js"></script>
     <!-- END GLOBAL MANDATORY SCRIPTS -->
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
-    <script src="~/js/apexcharts.min.js"></script>
     <script src="~/js/dash_2.js"></script>
     @*sweet alerts*@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
@@ -315,7 +320,7 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.22/b-1.6.5/b-colvis-1.6.5/b-flash-1.6.5/b-html5-1.6.5/b-print-1.6.5/datatables.min.js"></script>
-        
+
     <script src="~/js/site.js"></script>
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
     @RenderSection("Scripts", required: false)

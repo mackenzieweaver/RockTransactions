@@ -46,7 +46,7 @@ function hexToRgb(hex) {
     var bigint = parseInt(hex, 16);
     var r = (bigint >> 16) & 255;
     var g = (bigint >> 8) & 255;
-    var b = bigint & 255;    
+    var b = bigint & 255;
     return r + "," + g + "," + b;
 }
 
@@ -194,10 +194,12 @@ $('#historyModal').on('shown.bs.modal', function () {
             // line get color by account name from local storage
             let color = window.localStorage.getItem(res.lines[i].name);
             if (color == null) {
-                color = window.localStorage.getItem(res.lines[i].name, `#${getRandomColor()}`);
+                window.localStorage.setItem(res.lines[i].name, `#${getRandomColor()}`);
+                color = window.localStorage.getItem(res.lines[i].name);
             }
+            console.log(color);
 
-            // data set
+            // line graph needs array of objects
             let set = {
                 data: yCords,
                 label: res.lines[i].name,
@@ -222,9 +224,9 @@ $('#historyModal').on('shown.bs.modal', function () {
 });
 
 function Wizard() {
+    var wizard = $("#wizard");
+
     $("#wizardModal").modal().on('shown.bs.modal', function () {
-        var wizard = document.getElementById("wizard");
-        console.log(wizard);
 
         wizard.steps({
             cssClass: 'pills wizard',
