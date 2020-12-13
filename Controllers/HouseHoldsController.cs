@@ -229,17 +229,7 @@ namespace RockTransactions.Controllers
             }
             var bankAccounts = _context.BankAccount.Where(ba => ba.HouseHoldId == houseHold.Id).ToList();
 
-            // all years between oldest and newest transaction
-            //int oldestYear = int.Parse(_context.Transaction.OrderBy(t => t.Created).First().Created.Year.ToString());
-            //int currentYear = int.Parse(DateTime.Now.Year.ToString());
-            //var years = new List<string>();
-            //while(currentYear >= oldestYear)
-            //{
-            //    years.Add(currentYear.ToString());
-            //    currentYear -= 1;
-            //}
-
-            
+            // only the years that have transactions
             var years = new List<string>();
             foreach(var transaction in allTransactions)
             {
