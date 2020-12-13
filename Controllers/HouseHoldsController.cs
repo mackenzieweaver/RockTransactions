@@ -194,12 +194,15 @@ namespace RockTransactions.Controllers
                 .FirstOrDefaultAsync(hh => hh.Id == user.HouseHoldId);
 
             var transactions = _houseHoldService.ListTransactions(houseHold);
+            var allTransactions = transactions;
 
+            // filter transactions per year
             if (year != null)
             {   // DateTime.Parse needs a valid datetime format
                 var _year = DateTime.Parse($"Jan 1, {year}").Year;
                 transactions = transactions.Where(t => t.Created.Year == _year).ToList();
             }
+            // filter transactions per month
             if (month != null)
             {   // DateTime.Parse needs a valid datetime format
                 var _month = DateTime.Parse($"{month} 1, 2009").Month;
@@ -226,14 +229,26 @@ namespace RockTransactions.Controllers
             }
             var bankAccounts = _context.BankAccount.Where(ba => ba.HouseHoldId == houseHold.Id).ToList();
 
-            int oldestYear = int.Parse(_context.Transaction.OrderBy(t => t.Created).First().Created.Year.ToString());
-            int currentYear = int.Parse(DateTime.Now.Year.ToString());
+            // all years between oldest and newest transaction
+            //int oldestYear = int.Parse(_context.Transaction.OrderBy(t => t.Created).First().Created.Year.ToString());
+            //int currentYear = int.Parse(DateTime.Now.Year.ToString());
+            //var years = new List<string>();
+            //while(currentYear >= oldestYear)
+            //{
+            //    years.Add(currentYear.ToString());
+            //    currentYear -= 1;
+            //}
+
+            
             var years = new List<string>();
-            while(currentYear >= oldestYear)
+            foreach(var transaction in allTransactions)
             {
-                years.Add(currentYear.ToString());
-                currentYear -= 1;
+                if (!years.Contains(transaction.Created.Year.ToString()))
+                {
+                    years.Add(transaction.Created.Year.ToString());
+                }
             }
+
             var months = new List<string> { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
             ViewData["Years"] = new SelectList(years, year ?? DateTime.Now.Year.ToString());
             ViewData["Months"] = new SelectList(months, month ?? DateTime.Now.Month.ToString());
