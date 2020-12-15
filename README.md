@@ -2,6 +2,8 @@
 
 Financial Portal
 
+![dashboard](https://github.com/mackenzieweaver/RockTransactions/blob/main/rock-transactions-dashboard.jpg?raw=true)
+
 ## About the project
 
 This is a full stack ASP.NET MVC application that incoorporates many common design patterns like services, interfaces, dependency inejection and so forth.
