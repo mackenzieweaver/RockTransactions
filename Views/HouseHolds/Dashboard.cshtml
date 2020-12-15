@@ -15,7 +15,7 @@
                 <h1>@user.HouseHold.Name Household Overview</h1>
             </div>
         </div>
-        <div class="row widget ml-0 mr-0 p-3">
+        <div class="row widget ml-0 mr-0 pt-3 pb-3">
             <div class="col-md">
                 <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#transactionModal">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
@@ -23,8 +23,8 @@
                 </button>
             </div>
             <div class="col-md pt-1">
-                <div class="row">
-                    <div class="col-auto pr-0">
+                <div class="row justify-content-center">
+                    <div class="col-auto">
                         @if (User.IsInRole("Admin") || User.IsInRole("Head"))
                         {
                             <button class="btn btn-outline-secondary" data-toggle="modal" data-target="#inviteModal">
