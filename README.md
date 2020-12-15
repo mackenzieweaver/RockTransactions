@@ -17,4 +17,4 @@ Every household ought to keep track of their finances in order to use their mone
 * JavaScript
 * Bootstrap
 
-
+See [my blog](https://maw-blog.herokuapp.com) posts about how I got dynamic colors for my [pie](https://maw-blog.herokuapp.com/Posts/Details/24) and [bar](https://maw-blog.herokuapp.com/Posts/Details/25) charts.
