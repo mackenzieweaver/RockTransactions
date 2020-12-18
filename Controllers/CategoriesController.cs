@@ -166,7 +166,17 @@ namespace RockTransactions.Controllers
         [Authorize(Roles = "Admin,Head,Member")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var category = await _context.Category.FindAsync(id);
+            var category = await _context.Category.Include(c => c.CategoryItems).ThenInclude(ci => ci.Transactions).FirstOrDefaultAsync(c => c.Id == id);
+
+            foreach(var item in category.CategoryItems)
+            {
+                foreach(var transaction in item.Transactions)
+                {
+                    _context.Transaction.Remove(transaction);
+                }
+                _context.CategoryItem.Remove(item);
+            }
+
             _context.Category.Remove(category);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
