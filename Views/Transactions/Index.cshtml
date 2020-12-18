@@ -1,7 +1,10 @@
 ﻿@model IEnumerable<RockTransactions.Models.Transaction>
+@using System.Globalization;
+@using System.Threading;
 
 @{
     ViewData["Title"] = "Index";
+    Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
 }
 
 <div class="row">
@@ -61,7 +64,7 @@
                             @Html.DisplayFor(modelItem => item.Memo)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Amount)
+                            @item.Amount.ToString("C", CultureInfo.CurrentCulture)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.IsDeleted)
