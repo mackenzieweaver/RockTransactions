@@ -1,7 +1,10 @@
 ﻿@model IEnumerable<RockTransactions.Models.BankAccount>
+@using System.Globalization;
+@using System.Threading;
 
 @{
     ViewData["Title"] = "Index";
+    Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
 }
 
 <div class="row">
@@ -49,10 +52,10 @@
                             @Html.DisplayFor(modelItem => item.Type)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.StartingBalance)
+                            @item.StartingBalance.ToString("C", CultureInfo.CurrentCulture)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.CurrentBalance)
+                            @(((decimal)item.CurrentBalance).ToString("C", CultureInfo.CurrentCulture))
                         </td>
                         <td>
                             <a asp-controller="Transactions" asp-action="Transactions" asp-route-id="@item.Id">Transactions</a> |

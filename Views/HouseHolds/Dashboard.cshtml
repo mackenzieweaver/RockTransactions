@@ -1,9 +1,16 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using System.Globalization;
+@using System.Threading;
+
 @model RockTransactions.Models.ViewModels.HhDashVM
+
 @inject UserManager<FPUser> UserManager
 @inject RockTransactions.Services.IFPHouseHoldService HouseHoldService
+
 @{
     ViewData["Title"] = "Dashboard";
+    Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+
     var user = await UserManager.GetUserAsync(User);
     var script = TempData["Script"];
     var accounts = Model.Accounts;
@@ -48,7 +55,7 @@
                 </div>
             </div>
             <div class="col-md pt-1">
-                <div class="row justify-content-end">                    
+                <div class="row justify-content-end">
                     <div class="col-auto pl-1">
                         <form asp-controller="HouseHolds" asp-action="Leave">
                             <button type="submit" class="btn btn-outline-danger">
@@ -84,7 +91,7 @@
                         {
                             <tr>
                                 <td><a asp-controller="Transactions" asp-action="Transactions" asp-route-id="@account.Id">@account.Name</a></td>
-                                <td>@account.CurrentBalance</td>
+                                <td>@(((decimal)account.CurrentBalance).ToString("C", CultureInfo.CurrentCulture))</td>
                             </tr>
                         }
                     </tbody>
@@ -161,7 +168,7 @@
                                 <td>@transaction.FPUser.FullName</td>
                                 <td>@transaction.BankAccount.Name</td>
                                 <td>@transaction.Type.ToString()</td>
-                                <td>@transaction.Amount</td>
+                                <td>@(((decimal)transaction.Amount).ToString("C", CultureInfo.CurrentCulture))</td>
                                 <td>@transaction.Created</td>
                                 <td>
                                     <a asp-controller="Transactions" asp-action="Edit" asp-route-id="@transaction.Id">Edit</a>
