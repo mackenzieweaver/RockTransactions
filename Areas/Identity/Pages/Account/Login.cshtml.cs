@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using RockTransactions.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace RockTransactions.Areas.Identity.Pages.Account
 {
@@ -21,14 +22,17 @@ namespace RockTransactions.Areas.Identity.Pages.Account
         private readonly UserManager<FPUser> _userManager;
         private readonly SignInManager<FPUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly IConfiguration _configuration;
 
         public LoginModel(SignInManager<FPUser> signInManager, 
             ILogger<LoginModel> logger,
-            UserManager<FPUser> userManager)
+            UserManager<FPUser> userManager,
+            IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _configuration = configuration;
         }
 
         [BindProperty]
@@ -72,10 +76,26 @@ namespace RockTransactions.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync(string returnUrl = null, string demoEmail = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
-
+            if (!string.IsNullOrWhiteSpace(demoEmail))
+            {
+                var email = _configuration[demoEmail];
+                var password = _configuration["DemoPassword"];
+                var result = await _signInManager.PasswordSignInAsync(email, password, false, lockoutOnFailure: false);
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation("User logged in.");
+                    //return LocalRedirect(returnUrl);
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    return Page();
+                }
+            }
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout

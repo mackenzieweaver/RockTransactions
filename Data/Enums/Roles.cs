@@ -10,6 +10,7 @@ namespace RockTransactions.Data.Enums
         Admin,
         Head,
         Member,
-        New
+        New,
+        Demo
     }
 }

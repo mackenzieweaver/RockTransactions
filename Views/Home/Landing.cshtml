@@ -41,17 +41,28 @@
                         </div>
 
                         <h3>Register or login to see more</h3>
-
-                        <form class="text-left">
-                            <div class="coming-soon">
-
-                                <div class="row justify-content-center">
-                                    <button asp-area="Identity" asp-page="/Account/Register" type="submit" class="btn btn-outline-primary btn-lg mr-md-3" value="" style="font-size: 1.25rem;">Register<i class="ml-1 fas fa-file-alt"></i></button>
-                                    <button asp-controller="Home" asp-action="Index" type="submit" class="btn btn-outline-primary btn-lg" value="" style="font-size: 1.25rem;">Login<i class="ml-1 fas fa-sign-in-alt"></i></button>
+                        <div class="coming-soon">
+                            <div class="row text-center">
+                                <div class="col-md">
+                                    <button asp-area="Identity" asp-page="/Account/Register" type="submit" class="btn btn-outline-primary btn-lg">
+                                        Register
+                                        <i class="ml-1 fas fa-file-alt"></i>
+                                    </button>
+                                    <button asp-controller="Home" asp-action="Index" type="submit" class="btn btn-outline-primary btn-lg">
+                                        Login
+                                        <i class="ml-1 fas fa-sign-in-alt"></i>
+                                    </button>
+                                    <form asp-area="Identity" asp-page="/Account/Login" method="post">
+                                        <div class="form-group">
+                                            <button type="submit" name="demoEmail" value="DemoEmail" class="btn btn-outline-primary btn-lg">
+                                                Demo
+                                                <i class="fas fa-user-secret"></i>
+                                            </button>
+                                        </div>
+                                    </form>
                                 </div>
-
                             </div>
-                        </form>
+                        </div>
 
                         <ul class="social list-inline">
                             <li class="list-inline-item"><a class="" href="https://www.linkedin.com/in/mackenzie-weaver/" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-linkedin"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a></li>

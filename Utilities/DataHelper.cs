@@ -61,7 +61,8 @@ namespace RockTransactions.Utilities
                 var userManager = services.GetRequiredService<UserManager<FPUser>>();
                 var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                 var fileService = services.GetRequiredService<IFPFileService>();
-                await ContextSeed.SeedDataBaseAsync(context, userManager, roleManager, fileService);
+                var configuration = services.GetRequiredService<IConfiguration>();
+                await ContextSeed.SeedDataBaseAsync(context, userManager, roleManager, fileService, configuration);
             }
             catch (Exception ex)
             {
