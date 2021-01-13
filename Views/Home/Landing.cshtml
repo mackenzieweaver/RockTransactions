@@ -44,14 +44,16 @@
                         <div class="coming-soon">
                             <div class="row text-center">
                                 <div class="col-md">
-                                    <button asp-area="Identity" asp-page="/Account/Register" type="submit" class="btn btn-outline-primary btn-lg">
-                                        Register
-                                        <i class="ml-1 fas fa-file-alt"></i>
-                                    </button>
-                                    <button asp-controller="Home" asp-action="Index" type="submit" class="btn btn-outline-primary btn-lg">
-                                        Login
-                                        <i class="ml-1 fas fa-sign-in-alt"></i>
-                                    </button>
+                                    <form>
+                                        <button asp-area="Identity" asp-page="/Account/Register" type="submit" class="btn btn-outline-primary btn-lg">
+                                            Register
+                                            <i class="ml-1 fas fa-file-alt"></i>
+                                        </button>
+                                        <button asp-controller="Home" asp-action="Index" type="submit" class="btn btn-outline-primary btn-lg">
+                                            Login
+                                            <i class="ml-1 fas fa-sign-in-alt"></i>
+                                        </button>
+                                    </form>
                                     <form asp-area="Identity" asp-page="/Account/Login" method="post">
                                         <div class="form-group">
                                             <button type="submit" name="demoEmail" value="DemoEmail" class="btn btn-outline-primary btn-lg">
