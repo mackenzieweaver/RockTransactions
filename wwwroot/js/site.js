@@ -97,6 +97,12 @@ function BudgetBreakdownChart(Url) {
                     borderWidth: 1
                 }],
                 labels: names
+            },
+            options: {
+                legend: {
+                    display: true,
+                    position: 'left'
+                }
             }
         });
     });

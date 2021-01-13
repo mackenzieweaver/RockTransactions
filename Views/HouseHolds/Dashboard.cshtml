@@ -16,41 +16,18 @@
     var accounts = Model.Accounts;
 }
 <div class="row">
-    <div class="col-md">
-        <div class="row text-center mt-4 mb-3">
-            <div class="col-md">
-                <h1>@user.HouseHold.Name Household Overview</h1>
-            </div>
-        </div>
-        <div class="row widget ml-0 mr-0 pt-3 pb-3">
-            <div class="col-md">
+    <div class="col-md pt-3">
+        <div class="row widget ml-0 mr-0 p-2">
+            <div class="col-md pt-1">
                 <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#transactionModal">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                     <span class="ml-2">Transaction</span>
                 </button>
             </div>
-            <div class="col-md pt-1">
+            <div class="col-md-8">
                 <div class="row justify-content-center">
                     <div class="col-auto">
-                        @if (User.IsInRole("Admin") || User.IsInRole("Head"))
-                        {
-                            <button class="btn btn-outline-secondary" data-toggle="modal" data-target="#inviteModal">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
-                                Invite
-                            </button>
-                        }
-                        <button class="btn btn-outline-secondary" data-toggle="modal" data-target="#accountModal">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                            Account
-                        </button>
-                        <button class="btn btn-outline-secondary" data-toggle="modal" data-target="#categoryModal">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                            Category
-                        </button>
-                        <button class="btn btn-outline-secondary" data-toggle="modal" data-target="#itemModal">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                            Item
-                        </button>
+                        <h1>@user.HouseHold.Name Household</h1>
                     </div>
                 </div>
             </div>
@@ -59,7 +36,6 @@
                     <div class="col-auto pl-1">
                         <form asp-controller="HouseHolds" asp-action="Leave">
                             <button type="submit" class="btn btn-outline-danger">
-                                Leave
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
                             </button>
                         </form>
@@ -74,8 +50,13 @@
                         <h4>Bank Accounts</h4>
                     </div>
                     <div class="col-md-auto">
-                        <button class="btn btn-sm btn-outline-secondary p-1" data-toggle="modal" data-target="#historyModal">
-                            History
+                        @*Add account*@
+                        <button class="btn btn-outline-secondary btn-sm p-1" data-toggle="modal" data-target="#accountModal">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        </button>
+                        @*See history*@
+                        <button class="btn btn-outline-secondary btn-sm p-1" data-toggle="modal" data-target="#historyModal">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-activity"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
                         </button>
                     </div>
                 </div>
@@ -98,15 +79,51 @@
                 </table>
             </div>
             <div class="col-md-4 widget p-3 mr-md-3">
-                <canvas id="breakdownPieChart"></canvas>
+                <div class="row justify-content-end">
+                    <div class="col-md">
+                        <h4>Categories</h4>
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-outline-secondary btn-sm p-1" data-toggle="modal" data-target="#categoryModal">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="row align-items-center justify-content-center">
+                    <div class="col-md align-self-center">
+                        <canvas id="breakdownPieChart"></canvas>
+                    </div>
+                </div>
             </div>
             <div class="col-md-5 widget p-3 mr-md-3">
+                <div class="row justify-content-end">
+                    <div class="col-md">
+                        <h4>Category Items</h4>
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-outline-secondary btn-sm p-1" data-toggle="modal" data-target="#itemModal">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        </button>
+                    </div>
+                </div>
                 <canvas id="itemsBarChart"></canvas>
             </div>
         </div>
         <div class="row">
             <div class="col-md widget p-3 ml-md-3 mt-md-3 mb-md-3">
-                <h3>Occupants of household</h3>
+                <div class="row justify-content-between">
+                    <div class="col-md">
+                        <h4>Occupants of household</h4>
+                    </div>
+                    <div class="col-md-auto">
+                        @if (User.IsInRole("Admin") || User.IsInRole("Head"))
+                        {
+                            <button class="btn btn-outline-secondary btn-sm p-1 pl-3 pr-3" data-toggle="modal" data-target="#inviteModal">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+                            </button>
+                        }
+                    </div>
+                </div>
                 <table class="table table-responsive-sm">
                     <thead>
                         <tr>
@@ -132,7 +149,7 @@
             <div class="col-md-8 widget p-3 m-md-3">
                 <div class="row justify-content-between">
                     <div class="col-md">
-                        <h3>Recent Transactions</h3>
+                        <h4>Recent Transactions</h4>
                     </div>
                     <div class="col-md mr-3">
                         <div class="row justify-content-end">
