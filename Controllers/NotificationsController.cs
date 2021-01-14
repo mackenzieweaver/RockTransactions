@@ -9,6 +9,7 @@ using RockTransactions.Data;
 using RockTransactions.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using RockTransactions.Data.Enums;
 
 namespace RockTransactions.Controllers
 {
@@ -87,6 +88,11 @@ namespace RockTransactions.Controllers
         [Authorize(Roles = "Admin,Head")]
         public async Task<IActionResult> Delete(int? id)
         {
+            if (User.IsInRole(Roles.Demo.ToString()))
+            {
+                TempData["Script"] = "DemoCantDelete()";
+                return RedirectToAction(nameof(Index));
+            }
             if (id == null)
             {
                 return NotFound();

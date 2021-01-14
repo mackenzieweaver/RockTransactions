@@ -227,6 +227,12 @@ namespace RockTransactions.Controllers
         [Authorize(Roles = "Admin,Head,Member")]
         public async Task<IActionResult> Delete(int? id)
         {
+            if (User.IsInRole(Roles.Demo.ToString()))
+            {
+                TempData["Script"] = "DemoCantDelete()";
+                return RedirectToAction(nameof(Index));
+            }
+
             if (id == null)
             {
                 return NotFound();

@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using System.Globalization;
 @using System.Threading;
+@using RockTransactions.Data.Enums
 
 @model RockTransactions.Models.ViewModels.HhDashVM
 
@@ -190,7 +191,10 @@
                                 <td>
                                     <a asp-controller="Transactions" asp-action="Edit" asp-route-id="@transaction.Id">Edit</a>
                                     <a asp-controller="Transactions" asp-action="Details" asp-route-id="@transaction.Id">Details</a>
-                                    <a asp-controller="Transactions" asp-action="Delete" asp-route-id="@transaction.Id">Delete</a>
+                                    @if(!User.IsInRole(Roles.Demo.ToString()))
+                                    {
+                                        <a asp-controller="Transactions" asp-action="Delete" asp-route-id="@transaction.Id">Delete</a>
+                                    }
                                 </td>
                             </tr>
                         }

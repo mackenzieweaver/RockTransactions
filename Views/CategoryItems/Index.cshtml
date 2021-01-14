@@ -5,6 +5,7 @@
 @{
     ViewData["Title"] = "Index";
     Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+    var script = TempData["Script"];
 }
 
 <div class="row">
@@ -62,3 +63,9 @@
         </table>
     </div>
 </div>
+
+@section scripts {
+    <script>
+        @Html.Raw(script)
+    </script>
+}

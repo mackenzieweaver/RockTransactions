@@ -33,6 +33,10 @@ function DemoCantLeave() {
     swal("Sorry!", "The demo account can't leave his house", "error");
 }
 
+function DemoCantDelete() {
+    swal("Sorry!", "The demo account can't delete anything", "error");
+}
+
 function Overdraft() {
     swal("Overdraft!", "Details have been sent to your email.", "error");
 }

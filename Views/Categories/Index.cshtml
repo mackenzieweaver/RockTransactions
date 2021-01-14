@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Index";
+    var script = TempData["Script"];
 }
 
 <div class="row">
@@ -47,3 +48,9 @@
         </table>
     </div>
 </div>
+
+@section scripts {
+    <script>
+        @Html.Raw(script)
+    </script>
+}
