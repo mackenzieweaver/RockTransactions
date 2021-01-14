@@ -59,7 +59,11 @@ namespace RockTransactions.Controllers
         public async Task<IActionResult> Leave()
         {
             var user = await _userManager.GetUserAsync(User);
-
+            if (User.IsInRole(Roles.Demo.ToString()))
+            {
+                TempData["Script"] = "DemoCantLeave()";
+                return RedirectToAction("Dashboard");
+            }
             if (User.IsInRole(Roles.Head.ToString()))
             {
                 var members = await _houseHoldService.ListHouseHoldMembersAsync(user.HouseHoldId);

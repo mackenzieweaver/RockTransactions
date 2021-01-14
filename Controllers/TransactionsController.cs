@@ -114,7 +114,10 @@ namespace RockTransactions.Controllers
                 }
 
                 // so that only one history per day
-                var history = await _context.History.FirstOrDefaultAsync(h => h.BankAccount == bankAccount && h.Date.Day == transaction.Created.Day);
+                var history = await _context.History
+                    .FirstOrDefaultAsync(
+                        h => h.BankAccount == bankAccount &&
+                        h.Date.Day == transaction.Created.Day);
                 if(history == null)
                 {
                     History _history = new History

@@ -224,8 +224,8 @@ namespace RockTransactions.Data
                 FPUserId = user.Id,
                 Name = "WellsFargo",
                 Type = AccountType.Savings,
-                StartingBalance = 2000,
-                CurrentBalance = 2000
+                StartingBalance = 1000,
+                CurrentBalance = 1000
             };
             context.Add(account);
             await context.SaveChangesAsync();
@@ -359,9 +359,11 @@ namespace RockTransactions.Data
 
         private static async Task SeedTransactionsAsync(FPUser user, ApplicationDbContext context) 
         {
-            // account for all transactions
+            // accounts
             var account = await context.BankAccount
                 .FirstOrDefaultAsync(ba => ba.HouseHoldId == user.HouseHoldId && ba.Name == "Chase");
+            var account2 = await context.BankAccount
+                .FirstOrDefaultAsync(ba => ba.HouseHoldId == user.HouseHoldId && ba.Name == "WellsFargo");
 
             // t1
             var transaction = new Transaction
@@ -369,14 +371,78 @@ namespace RockTransactions.Data
                 Type = TransactionType.Deposit,
                 BankAccountId = account.Id,
                 FPUserId = user.Id,
-                Created = DateTime.Now,
+                Created = DateTime.Now.AddDays(-14).AddHours(new Random().Next(24)).AddMinutes(new Random().Next(60)).AddSeconds(new Random().Next(60)),
                 Memo = "Biweekly check",
-                Amount = 1200,
+                Amount = 1871.31M,
                 IsDeleted = false
             };
             account.CurrentBalance += transaction.Amount;
+
+            // so that only one history per day
+            var history = await context.History
+                .FirstOrDefaultAsync(
+                    h => h.BankAccount == account &&
+                    h.Date.Day == transaction.Created.Day);
+            if (history == null)
+            {
+                History _history = new History
+                {
+                    BankAccountId = transaction.BankAccountId,
+                    Balance = (decimal)account.CurrentBalance,
+                    Date = transaction.Created
+                };
+                context.Add(_history);
+            }
+            else
+            {
+                history.BankAccountId = transaction.BankAccountId;
+                history.Balance = (decimal)account.CurrentBalance;
+                history.Date = transaction.Created;
+                context.Update(history);
+            }
+
             context.Add(transaction);
             context.Update(account);
+            await context.SaveChangesAsync();
+
+            // SAVINGS 1
+            transaction = new Transaction
+            {
+                Type = TransactionType.Deposit,
+                BankAccountId = account2.Id,
+                FPUserId = user.Id,
+                Created = DateTime.Now.AddDays(-14).AddHours(new Random().Next(24)).AddMinutes(new Random().Next(60)).AddSeconds(new Random().Next(60)),
+                Memo = "20% of income",
+                Amount = 100,
+                IsDeleted = false
+            };
+            account2.CurrentBalance += transaction.Amount;
+
+            // so that only one history per day
+            history = await context.History
+                .FirstOrDefaultAsync(
+                    h => h.BankAccount == account2 &&
+                    h.Date.Day == transaction.Created.Day);
+            if (history == null)
+            {
+                History _history = new History
+                {
+                    BankAccountId = transaction.BankAccountId,
+                    Balance = (decimal)account2.CurrentBalance,
+                    Date = transaction.Created
+                };
+                context.Add(_history);
+            }
+            else
+            {
+                history.BankAccountId = transaction.BankAccountId;
+                history.Balance = (decimal)account2.CurrentBalance;
+                history.Date = transaction.Created;
+                context.Update(history);
+            }
+
+            context.Add(transaction);
+            context.Update(account2);
             await context.SaveChangesAsync();
 
             // CategoryItems that belong to demo household
@@ -393,15 +459,79 @@ namespace RockTransactions.Data
                 CategoryItem = item,
                 BankAccountId = account.Id,
                 FPUserId = user.Id,
-                Created = DateTime.Now,
+                Created = DateTime.Now.AddDays(-13).AddHours(new Random().Next(24)).AddMinutes(new Random().Next(60)).AddSeconds(new Random().Next(60)),
                 Memo = "Monthly rent",
                 Amount = 1200,
                 IsDeleted = false
             };
             account.CurrentBalance -= transaction.Amount;
             transaction.CategoryItem.ActualAmount += transaction.Amount;
+
+            // so that only one history per day
+            history = await context.History
+                .FirstOrDefaultAsync(
+                    h => h.BankAccount == account &&
+                    h.Date.Day == transaction.Created.Day);
+            if (history == null)
+            {
+                History _history = new History
+                {
+                    BankAccountId = transaction.BankAccountId,
+                    Balance = (decimal)account.CurrentBalance,
+                    Date = transaction.Created
+                };
+                context.Add(_history);
+            }
+            else
+            {
+                history.BankAccountId = transaction.BankAccountId;
+                history.Balance = (decimal)account.CurrentBalance;
+                history.Date = transaction.Created;
+                context.Update(history);
+            }
+
             context.Add(transaction);
             context.Update(account);
+            await context.SaveChangesAsync();
+
+            // SAVINGS 2
+            transaction = new Transaction
+            {
+                Type = TransactionType.Deposit,
+                BankAccountId = account2.Id,
+                FPUserId = user.Id,
+                Created = DateTime.Now.AddDays(-13).AddHours(new Random().Next(24)).AddMinutes(new Random().Next(60)).AddSeconds(new Random().Next(60)),
+                Memo = "20% of income",
+                Amount = 100,
+                IsDeleted = false
+            };
+            account2.CurrentBalance += transaction.Amount;
+
+            // so that only one history per day
+            history = await context.History
+                .FirstOrDefaultAsync(
+                    h => h.BankAccount == account2 &&
+                    h.Date.Day == transaction.Created.Day);
+            if (history == null)
+            {
+                History _history = new History
+                {
+                    BankAccountId = transaction.BankAccountId,
+                    Balance = (decimal)account2.CurrentBalance,
+                    Date = transaction.Created
+                };
+                context.Add(_history);
+            }
+            else
+            {
+                history.BankAccountId = transaction.BankAccountId;
+                history.Balance = (decimal)account2.CurrentBalance;
+                history.Date = transaction.Created;
+                context.Update(history);
+            }
+
+            context.Add(transaction);
+            context.Update(account2);
             await context.SaveChangesAsync();
 
             // t3
@@ -413,15 +543,79 @@ namespace RockTransactions.Data
                 CategoryItem = item,
                 BankAccountId = account.Id,
                 FPUserId = user.Id,
-                Created = DateTime.Now,
+                Created = DateTime.Now.AddDays(-12).AddHours(new Random().Next(24)).AddMinutes(new Random().Next(60)).AddSeconds(new Random().Next(60)),
                 Memo = "Touch-up paint",
                 Amount = 20,
                 IsDeleted = false
             };
             account.CurrentBalance -= transaction.Amount;
             transaction.CategoryItem.ActualAmount += transaction.Amount;
+
+            // so that only one history per day
+            history = await context.History
+                .FirstOrDefaultAsync(
+                    h => h.BankAccount == account &&
+                    h.Date.Day == transaction.Created.Day);
+            if (history == null)
+            {
+                History _history = new History
+                {
+                    BankAccountId = transaction.BankAccountId,
+                    Balance = (decimal)account.CurrentBalance,
+                    Date = transaction.Created
+                };
+                context.Add(_history);
+            }
+            else
+            {
+                history.BankAccountId = transaction.BankAccountId;
+                history.Balance = (decimal)account.CurrentBalance;
+                history.Date = transaction.Created;
+                context.Update(history);
+            }
+
             context.Add(transaction);
             context.Update(account);
+            await context.SaveChangesAsync();
+
+            // SAVINGS 3
+            transaction = new Transaction
+            {
+                Type = TransactionType.Deposit,
+                BankAccountId = account2.Id,
+                FPUserId = user.Id,
+                Created = DateTime.Now.AddDays(-12).AddHours(new Random().Next(24)).AddMinutes(new Random().Next(60)).AddSeconds(new Random().Next(60)),
+                Memo = "20% of income",
+                Amount = 100,
+                IsDeleted = false
+            };
+            account2.CurrentBalance += transaction.Amount;
+
+            // so that only one history per day
+            history = await context.History
+                .FirstOrDefaultAsync(
+                    h => h.BankAccount == account2 &&
+                    h.Date.Day == transaction.Created.Day);
+            if (history == null)
+            {
+                History _history = new History
+                {
+                    BankAccountId = transaction.BankAccountId,
+                    Balance = (decimal)account2.CurrentBalance,
+                    Date = transaction.Created
+                };
+                context.Add(_history);
+            }
+            else
+            {
+                history.BankAccountId = transaction.BankAccountId;
+                history.Balance = (decimal)account2.CurrentBalance;
+                history.Date = transaction.Created;
+                context.Update(history);
+            }
+
+            context.Add(transaction);
+            context.Update(account2);
             await context.SaveChangesAsync();
 
             // t4
@@ -433,15 +627,79 @@ namespace RockTransactions.Data
                 CategoryItem = item,
                 BankAccountId = account.Id,
                 FPUserId = user.Id,
-                Created = DateTime.Now,
+                Created = DateTime.Now.AddDays(-11).AddHours(new Random().Next(24)).AddMinutes(new Random().Next(60)).AddSeconds(new Random().Next(60)),
                 Memo = "white bulbs to replace orange",
                 Amount = 20,
                 IsDeleted = false
             };
             account.CurrentBalance -= transaction.Amount;
             transaction.CategoryItem.ActualAmount += transaction.Amount;
+
+            // so that only one history per day
+            history = await context.History
+                .FirstOrDefaultAsync(
+                    h => h.BankAccount == account &&
+                    h.Date.Day == transaction.Created.Day);
+            if (history == null)
+            {
+                History _history = new History
+                {
+                    BankAccountId = transaction.BankAccountId,
+                    Balance = (decimal)account.CurrentBalance,
+                    Date = transaction.Created
+                };
+                context.Add(_history);
+            }
+            else
+            {
+                history.BankAccountId = transaction.BankAccountId;
+                history.Balance = (decimal)account.CurrentBalance;
+                history.Date = transaction.Created;
+                context.Update(history);
+            }
+
             context.Add(transaction);
             context.Update(account);
+            await context.SaveChangesAsync();
+
+            // SAVINGS 4
+            transaction = new Transaction
+            {
+                Type = TransactionType.Deposit,
+                BankAccountId = account2.Id,
+                FPUserId = user.Id,
+                Created = DateTime.Now.AddDays(-11).AddHours(new Random().Next(24)).AddMinutes(new Random().Next(60)).AddSeconds(new Random().Next(60)),
+                Memo = "20% of income",
+                Amount = 100,
+                IsDeleted = false
+            };
+            account2.CurrentBalance += transaction.Amount;
+
+            // so that only one history per day
+            history = await context.History
+                .FirstOrDefaultAsync(
+                    h => h.BankAccount == account2 &&
+                    h.Date.Day == transaction.Created.Day);
+            if (history == null)
+            {
+                History _history = new History
+                {
+                    BankAccountId = transaction.BankAccountId,
+                    Balance = (decimal)account2.CurrentBalance,
+                    Date = transaction.Created
+                };
+                context.Add(_history);
+            }
+            else
+            {
+                history.BankAccountId = transaction.BankAccountId;
+                history.Balance = (decimal)account2.CurrentBalance;
+                history.Date = transaction.Created;
+                context.Update(history);
+            }
+
+            context.Add(transaction);
+            context.Update(account2);
             await context.SaveChangesAsync();
 
             // t5
@@ -453,15 +711,79 @@ namespace RockTransactions.Data
                 CategoryItem = item,
                 BankAccountId = account.Id,
                 FPUserId = user.Id,
-                Created = DateTime.Now,
+                Created = DateTime.Now.AddDays(-10).AddHours(new Random().Next(24)).AddMinutes(new Random().Next(60)).AddSeconds(new Random().Next(60)),
                 Memo = "to/from work",
                 Amount = 80,
                 IsDeleted = false
             };
             account.CurrentBalance -= transaction.Amount;
             transaction.CategoryItem.ActualAmount += transaction.Amount;
+
+            // so that only one history per day
+            history = await context.History
+                .FirstOrDefaultAsync(
+                    h => h.BankAccount == account &&
+                    h.Date.Day == transaction.Created.Day);
+            if (history == null)
+            {
+                History _history = new History
+                {
+                    BankAccountId = transaction.BankAccountId,
+                    Balance = (decimal)account.CurrentBalance,
+                    Date = transaction.Created
+                };
+                context.Add(_history);
+            }
+            else
+            {
+                history.BankAccountId = transaction.BankAccountId;
+                history.Balance = (decimal)account.CurrentBalance;
+                history.Date = transaction.Created;
+                context.Update(history);
+            }
+
             context.Add(transaction);
             context.Update(account);
+            await context.SaveChangesAsync();
+
+            // SAVINGS 5
+            transaction = new Transaction
+            {
+                Type = TransactionType.Deposit,
+                BankAccountId = account2.Id,
+                FPUserId = user.Id,
+                Created = DateTime.Now.AddDays(-10).AddHours(new Random().Next(24)).AddMinutes(new Random().Next(60)).AddSeconds(new Random().Next(60)),
+                Memo = "20% of income",
+                Amount = 100,
+                IsDeleted = false
+            };
+            account2.CurrentBalance += transaction.Amount;
+
+            // so that only one history per day
+            history = await context.History
+                .FirstOrDefaultAsync(
+                    h => h.BankAccount == account2 &&
+                    h.Date.Day == transaction.Created.Day);
+            if (history == null)
+            {
+                History _history = new History
+                {
+                    BankAccountId = transaction.BankAccountId,
+                    Balance = (decimal)account2.CurrentBalance,
+                    Date = transaction.Created
+                };
+                context.Add(_history);
+            }
+            else
+            {
+                history.BankAccountId = transaction.BankAccountId;
+                history.Balance = (decimal)account2.CurrentBalance;
+                history.Date = transaction.Created;
+                context.Update(history);
+            }
+
+            context.Add(transaction);
+            context.Update(account2);
             await context.SaveChangesAsync();
 
             // t6
@@ -473,15 +795,79 @@ namespace RockTransactions.Data
                 CategoryItem = item,
                 BankAccountId = account.Id,
                 FPUserId = user.Id,
-                Created = DateTime.Now,
+                Created = DateTime.Now.AddDays(-9).AddHours(new Random().Next(24)).AddMinutes(new Random().Next(60)).AddSeconds(new Random().Next(60)),
                 Memo = "government mandate",
                 Amount = 200,
                 IsDeleted = false
             };
             account.CurrentBalance -= transaction.Amount;
             transaction.CategoryItem.ActualAmount += transaction.Amount;
+
+            // so that only one history per day
+            history = await context.History
+                .FirstOrDefaultAsync(
+                    h => h.BankAccount == account &&
+                    h.Date.Day == transaction.Created.Day);
+            if (history == null)
+            {
+                History _history = new History
+                {
+                    BankAccountId = transaction.BankAccountId,
+                    Balance = (decimal)account.CurrentBalance,
+                    Date = transaction.Created
+                };
+                context.Add(_history);
+            }
+            else
+            {
+                history.BankAccountId = transaction.BankAccountId;
+                history.Balance = (decimal)account.CurrentBalance;
+                history.Date = transaction.Created;
+                context.Update(history);
+            }
+
             context.Add(transaction);
             context.Update(account);
+            await context.SaveChangesAsync();
+
+            // SAVINGS 6
+            transaction = new Transaction
+            {
+                Type = TransactionType.Deposit,
+                BankAccountId = account2.Id,
+                FPUserId = user.Id,
+                Created = DateTime.Now.AddDays(-9).AddHours(new Random().Next(24)).AddMinutes(new Random().Next(60)).AddSeconds(new Random().Next(60)),
+                Memo = "20% of income",
+                Amount = 100,
+                IsDeleted = false
+            };
+            account2.CurrentBalance += transaction.Amount;
+
+            // so that only one history per day
+            history = await context.History
+                .FirstOrDefaultAsync(
+                    h => h.BankAccount == account2 &&
+                    h.Date.Day == transaction.Created.Day);
+            if (history == null)
+            {
+                History _history = new History
+                {
+                    BankAccountId = transaction.BankAccountId,
+                    Balance = (decimal)account2.CurrentBalance,
+                    Date = transaction.Created
+                };
+                context.Add(_history);
+            }
+            else
+            {
+                history.BankAccountId = transaction.BankAccountId;
+                history.Balance = (decimal)account2.CurrentBalance;
+                history.Date = transaction.Created;
+                context.Update(history);
+            }
+
+            context.Add(transaction);
+            context.Update(account2);
             await context.SaveChangesAsync();
 
             // t7
@@ -493,15 +879,79 @@ namespace RockTransactions.Data
                 CategoryItem = item,
                 BankAccountId = account.Id,
                 FPUserId = user.Id,
-                Created = DateTime.Now,
+                Created = DateTime.Now.AddDays(-8).AddHours(new Random().Next(24)).AddMinutes(new Random().Next(60)).AddSeconds(new Random().Next(60)),
                 Memo = "5000 miles since last one",
                 Amount = 30,
                 IsDeleted = false
             };
             account.CurrentBalance -= transaction.Amount;
             transaction.CategoryItem.ActualAmount += transaction.Amount;
+
+            // so that only one history per day
+            history = await context.History
+                .FirstOrDefaultAsync(
+                    h => h.BankAccount == account &&
+                    h.Date.Day == transaction.Created.Day);
+            if (history == null)
+            {
+                History _history = new History
+                {
+                    BankAccountId = transaction.BankAccountId,
+                    Balance = (decimal)account.CurrentBalance,
+                    Date = transaction.Created
+                };
+                context.Add(_history);
+            }
+            else
+            {
+                history.BankAccountId = transaction.BankAccountId;
+                history.Balance = (decimal)account.CurrentBalance;
+                history.Date = transaction.Created;
+                context.Update(history);
+            }
+
             context.Add(transaction);
             context.Update(account);
+            await context.SaveChangesAsync();
+
+            // SAVINGS 7
+            transaction = new Transaction
+            {
+                Type = TransactionType.Deposit,
+                BankAccountId = account2.Id,
+                FPUserId = user.Id,
+                Created = DateTime.Now.AddDays(-8).AddHours(new Random().Next(24)).AddMinutes(new Random().Next(60)).AddSeconds(new Random().Next(60)),
+                Memo = "20% of income",
+                Amount = 100,
+                IsDeleted = false
+            };
+            account2.CurrentBalance += transaction.Amount;
+
+            // so that only one history per day
+            history = await context.History
+                .FirstOrDefaultAsync(
+                    h => h.BankAccount == account2 &&
+                    h.Date.Day == transaction.Created.Day);
+            if (history == null)
+            {
+                History _history = new History
+                {
+                    BankAccountId = transaction.BankAccountId,
+                    Balance = (decimal)account2.CurrentBalance,
+                    Date = transaction.Created
+                };
+                context.Add(_history);
+            }
+            else
+            {
+                history.BankAccountId = transaction.BankAccountId;
+                history.Balance = (decimal)account2.CurrentBalance;
+                history.Date = transaction.Created;
+                context.Update(history);
+            }
+
+            context.Add(transaction);
+            context.Update(account2);
             await context.SaveChangesAsync();
 
             // t8
@@ -513,15 +963,79 @@ namespace RockTransactions.Data
                 CategoryItem = item,
                 BankAccountId = account.Id,
                 FPUserId = user.Id,
-                Created = DateTime.Now,
+                Created = DateTime.Now.AddDays(-7).AddHours(new Random().Next(24)).AddMinutes(new Random().Next(60)).AddSeconds(new Random().Next(60)),
                 Memo = "groceries",
                 Amount = 150,
                 IsDeleted = false
             };
             account.CurrentBalance -= transaction.Amount;
             transaction.CategoryItem.ActualAmount += transaction.Amount;
+
+            // so that only one history per day
+            history = await context.History
+                .FirstOrDefaultAsync(
+                    h => h.BankAccount == account &&
+                    h.Date.Day == transaction.Created.Day);
+            if (history == null)
+            {
+                History _history = new History
+                {
+                    BankAccountId = transaction.BankAccountId,
+                    Balance = (decimal)account.CurrentBalance,
+                    Date = transaction.Created
+                };
+                context.Add(_history);
+            }
+            else
+            {
+                history.BankAccountId = transaction.BankAccountId;
+                history.Balance = (decimal)account.CurrentBalance;
+                history.Date = transaction.Created;
+                context.Update(history);
+            }
+
             context.Add(transaction);
             context.Update(account);
+            await context.SaveChangesAsync();
+
+            // SAVINGS 8
+            transaction = new Transaction
+            {
+                Type = TransactionType.Deposit,
+                BankAccountId = account2.Id,
+                FPUserId = user.Id,
+                Created = DateTime.Now.AddDays(-7).AddHours(new Random().Next(24)).AddMinutes(new Random().Next(60)).AddSeconds(new Random().Next(60)),
+                Memo = "20% of income",
+                Amount = 100,
+                IsDeleted = false
+            };
+            account2.CurrentBalance += transaction.Amount;
+
+            // so that only one history per day
+            history = await context.History
+                .FirstOrDefaultAsync(
+                    h => h.BankAccount == account2 &&
+                    h.Date.Day == transaction.Created.Day);
+            if (history == null)
+            {
+                History _history = new History
+                {
+                    BankAccountId = transaction.BankAccountId,
+                    Balance = (decimal)account2.CurrentBalance,
+                    Date = transaction.Created
+                };
+                context.Add(_history);
+            }
+            else
+            {
+                history.BankAccountId = transaction.BankAccountId;
+                history.Balance = (decimal)account2.CurrentBalance;
+                history.Date = transaction.Created;
+                context.Update(history);
+            }
+
+            context.Add(transaction);
+            context.Update(account2);
             await context.SaveChangesAsync();
 
             // t9
@@ -533,15 +1047,79 @@ namespace RockTransactions.Data
                 CategoryItem = item,
                 BankAccountId = account.Id,
                 FPUserId = user.Id,
-                Created = DateTime.Now,
+                Created = DateTime.Now.AddDays(-6).AddHours(new Random().Next(24)).AddMinutes(new Random().Next(60)).AddSeconds(new Random().Next(60)),
                 Memo = "Arbies",
                 Amount = 18.95M,
                 IsDeleted = false
             };
             account.CurrentBalance -= transaction.Amount;
             transaction.CategoryItem.ActualAmount += transaction.Amount;
+
+            // so that only one history per day
+            history = await context.History
+                .FirstOrDefaultAsync(
+                    h => h.BankAccount == account &&
+                    h.Date.Day == transaction.Created.Day);
+            if (history == null)
+            {
+                History _history = new History
+                {
+                    BankAccountId = transaction.BankAccountId,
+                    Balance = (decimal)account.CurrentBalance,
+                    Date = transaction.Created
+                };
+                context.Add(_history);
+            }
+            else
+            {
+                history.BankAccountId = transaction.BankAccountId;
+                history.Balance = (decimal)account.CurrentBalance;
+                history.Date = transaction.Created;
+                context.Update(history);
+            }
+
             context.Add(transaction);
             context.Update(account);
+            await context.SaveChangesAsync();
+
+            // SAVINGS 9
+            transaction = new Transaction
+            {
+                Type = TransactionType.Deposit,
+                BankAccountId = account2.Id,
+                FPUserId = user.Id,
+                Created = DateTime.Now.AddDays(-6).AddHours(new Random().Next(24)).AddMinutes(new Random().Next(60)).AddSeconds(new Random().Next(60)),
+                Memo = "20% of income",
+                Amount = 100,
+                IsDeleted = false
+            };
+            account2.CurrentBalance += transaction.Amount;
+
+            // so that only one history per day
+            history = await context.History
+                .FirstOrDefaultAsync(
+                    h => h.BankAccount == account2 &&
+                    h.Date.Day == transaction.Created.Day);
+            if (history == null)
+            {
+                History _history = new History
+                {
+                    BankAccountId = transaction.BankAccountId,
+                    Balance = (decimal)account2.CurrentBalance,
+                    Date = transaction.Created
+                };
+                context.Add(_history);
+            }
+            else
+            {
+                history.BankAccountId = transaction.BankAccountId;
+                history.Balance = (decimal)account2.CurrentBalance;
+                history.Date = transaction.Created;
+                context.Update(history);
+            }
+
+            context.Add(transaction);
+            context.Update(account2);
             await context.SaveChangesAsync();
 
             // t10
@@ -553,15 +1131,79 @@ namespace RockTransactions.Data
                 CategoryItem = item,
                 BankAccountId = account.Id,
                 FPUserId = user.Id,
-                Created = DateTime.Now,
+                Created = DateTime.Now.AddDays(-5).AddHours(new Random().Next(24)).AddMinutes(new Random().Next(60)).AddSeconds(new Random().Next(60)),
                 Memo = "Chips/pretzels",
                 Amount = 5.65M,
                 IsDeleted = false
             };
             account.CurrentBalance -= transaction.Amount;
             transaction.CategoryItem.ActualAmount += transaction.Amount;
+
+            // so that only one history per day
+            history = await context.History
+                .FirstOrDefaultAsync(
+                    h => h.BankAccount == account &&
+                    h.Date.Day == transaction.Created.Day);
+            if (history == null)
+            {
+                History _history = new History
+                {
+                    BankAccountId = transaction.BankAccountId,
+                    Balance = (decimal)account.CurrentBalance,
+                    Date = transaction.Created
+                };
+                context.Add(_history);
+            }
+            else
+            {
+                history.BankAccountId = transaction.BankAccountId;
+                history.Balance = (decimal)account.CurrentBalance;
+                history.Date = transaction.Created;
+                context.Update(history);
+            }
+
             context.Add(transaction);
             context.Update(account);
+            await context.SaveChangesAsync();
+
+            // SAVINGS 10
+            transaction = new Transaction
+            {
+                Type = TransactionType.Deposit,
+                BankAccountId = account2.Id,
+                FPUserId = user.Id,
+                Created = DateTime.Now.AddDays(-5).AddHours(new Random().Next(24)).AddMinutes(new Random().Next(60)).AddSeconds(new Random().Next(60)),
+                Memo = "20% of income",
+                Amount = 100,
+                IsDeleted = false
+            };
+            account2.CurrentBalance += transaction.Amount;
+
+            // so that only one history per day
+            history = await context.History
+                .FirstOrDefaultAsync(
+                    h => h.BankAccount == account2 &&
+                    h.Date.Day == transaction.Created.Day);
+            if (history == null)
+            {
+                History _history = new History
+                {
+                    BankAccountId = transaction.BankAccountId,
+                    Balance = (decimal)account2.CurrentBalance,
+                    Date = transaction.Created
+                };
+                context.Add(_history);
+            }
+            else
+            {
+                history.BankAccountId = transaction.BankAccountId;
+                history.Balance = (decimal)account2.CurrentBalance;
+                history.Date = transaction.Created;
+                context.Update(history);
+            }
+
+            context.Add(transaction);
+            context.Update(account2);
             await context.SaveChangesAsync();
         }
     }

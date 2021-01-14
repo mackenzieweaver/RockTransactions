@@ -29,6 +29,10 @@ function CantLeave() {
     swal("Sorry!", "You can't leave while the house still has members.", "error");
 }
 
+function DemoCantLeave() {
+    swal("Sorry!", "The demo account can't leave his house", "error");
+}
+
 function Overdraft() {
     swal("Overdraft!", "Details have been sent to your email.", "error");
 }
