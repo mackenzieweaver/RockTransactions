@@ -240,15 +240,7 @@ namespace RockTransactions.Data
                 Description = "All house related expenses ie: rent, repairs, lightbulbs, etc..."
             };
             context.Add(category);
-
-            try
-            {
-                await context.SaveChangesAsync();
-            }
-            catch(Exception ex)
-            {
-                throw ex;
-            }
+            await context.SaveChangesAsync();
 
             category = new Category
             {
@@ -258,6 +250,7 @@ namespace RockTransactions.Data
             };
             context.Add(category);
             await context.SaveChangesAsync();
+
             category = new Category
             {
                 HouseHoldId = (int)user.HouseHoldId,
@@ -366,7 +359,11 @@ namespace RockTransactions.Data
 
         private static async Task SeedTransactionsAsync(FPUser user, ApplicationDbContext context) 
         {
-            var account = await context.BankAccount.FirstOrDefaultAsync(ba => ba.HouseHoldId == user.HouseHoldId && ba.Name == "Chase");
+            // account for all transactions
+            var account = await context.BankAccount
+                .FirstOrDefaultAsync(ba => ba.HouseHoldId == user.HouseHoldId && ba.Name == "Chase");
+
+            // t1
             var transaction = new Transaction
             {
                 Type = TransactionType.Deposit,
@@ -378,6 +375,191 @@ namespace RockTransactions.Data
                 IsDeleted = false
             };
             account.CurrentBalance += transaction.Amount;
+            context.Add(transaction);
+            context.Update(account);
+            await context.SaveChangesAsync();
+
+            // CategoryItems that belong to demo household
+            var items = context.HouseHold.Where(hh => hh.Id == user.HouseHoldId)
+                .Include(hh => hh.Categories).ThenInclude(c => c.CategoryItems).FirstOrDefault()
+                .Categories.SelectMany(c => c.CategoryItems);
+
+            // t2
+            var item = items.Where(i => i.Name == "Rent").FirstOrDefault();
+            transaction = new Transaction
+            {
+                Type = TransactionType.Withdrawal,
+                CategoryItemId = item.Id,
+                CategoryItem = item,
+                BankAccountId = account.Id,
+                FPUserId = user.Id,
+                Created = DateTime.Now,
+                Memo = "Monthly rent",
+                Amount = 1200,
+                IsDeleted = false
+            };
+            account.CurrentBalance -= transaction.Amount;
+            transaction.CategoryItem.ActualAmount += transaction.Amount;
+            context.Add(transaction);
+            context.Update(account);
+            await context.SaveChangesAsync();
+
+            // t3
+            item = items.Where(i => i.Name == "Repairs").FirstOrDefault();
+            transaction = new Transaction
+            {
+                Type = TransactionType.Withdrawal,
+                CategoryItemId = item.Id,
+                CategoryItem = item,
+                BankAccountId = account.Id,
+                FPUserId = user.Id,
+                Created = DateTime.Now,
+                Memo = "Touch-up paint",
+                Amount = 20,
+                IsDeleted = false
+            };
+            account.CurrentBalance -= transaction.Amount;
+            transaction.CategoryItem.ActualAmount += transaction.Amount;
+            context.Add(transaction);
+            context.Update(account);
+            await context.SaveChangesAsync();
+
+            // t4
+            item = items.Where(i => i.Name == "Lightbulbs").FirstOrDefault();
+            transaction = new Transaction
+            {
+                Type = TransactionType.Withdrawal,
+                CategoryItemId = item.Id,
+                CategoryItem = item,
+                BankAccountId = account.Id,
+                FPUserId = user.Id,
+                Created = DateTime.Now,
+                Memo = "white bulbs to replace orange",
+                Amount = 20,
+                IsDeleted = false
+            };
+            account.CurrentBalance -= transaction.Amount;
+            transaction.CategoryItem.ActualAmount += transaction.Amount;
+            context.Add(transaction);
+            context.Update(account);
+            await context.SaveChangesAsync();
+
+            // t5
+            item = items.Where(i => i.Name == "Gas").FirstOrDefault();
+            transaction = new Transaction
+            {
+                Type = TransactionType.Withdrawal,
+                CategoryItemId = item.Id,
+                CategoryItem = item,
+                BankAccountId = account.Id,
+                FPUserId = user.Id,
+                Created = DateTime.Now,
+                Memo = "to/from work",
+                Amount = 80,
+                IsDeleted = false
+            };
+            account.CurrentBalance -= transaction.Amount;
+            transaction.CategoryItem.ActualAmount += transaction.Amount;
+            context.Add(transaction);
+            context.Update(account);
+            await context.SaveChangesAsync();
+
+            // t6
+            item = items.Where(i => i.Name == "Insurance").FirstOrDefault();
+            transaction = new Transaction
+            {
+                Type = TransactionType.Withdrawal,
+                CategoryItemId = item.Id,
+                CategoryItem = item,
+                BankAccountId = account.Id,
+                FPUserId = user.Id,
+                Created = DateTime.Now,
+                Memo = "government mandate",
+                Amount = 200,
+                IsDeleted = false
+            };
+            account.CurrentBalance -= transaction.Amount;
+            transaction.CategoryItem.ActualAmount += transaction.Amount;
+            context.Add(transaction);
+            context.Update(account);
+            await context.SaveChangesAsync();
+
+            // t7
+            item = items.Where(i => i.Name == "Oil Change").FirstOrDefault();
+            transaction = new Transaction
+            {
+                Type = TransactionType.Withdrawal,
+                CategoryItemId = item.Id,
+                CategoryItem = item,
+                BankAccountId = account.Id,
+                FPUserId = user.Id,
+                Created = DateTime.Now,
+                Memo = "5000 miles since last one",
+                Amount = 30,
+                IsDeleted = false
+            };
+            account.CurrentBalance -= transaction.Amount;
+            transaction.CategoryItem.ActualAmount += transaction.Amount;
+            context.Add(transaction);
+            context.Update(account);
+            await context.SaveChangesAsync();
+
+            // t8
+            item = items.Where(i => i.Name == "Walmart").FirstOrDefault();
+            transaction = new Transaction
+            {
+                Type = TransactionType.Withdrawal,
+                CategoryItemId = item.Id,
+                CategoryItem = item,
+                BankAccountId = account.Id,
+                FPUserId = user.Id,
+                Created = DateTime.Now,
+                Memo = "groceries",
+                Amount = 150,
+                IsDeleted = false
+            };
+            account.CurrentBalance -= transaction.Amount;
+            transaction.CategoryItem.ActualAmount += transaction.Amount;
+            context.Add(transaction);
+            context.Update(account);
+            await context.SaveChangesAsync();
+
+            // t9
+            item = items.Where(i => i.Name == "Restaurants").FirstOrDefault();
+            transaction = new Transaction
+            {
+                Type = TransactionType.Withdrawal,
+                CategoryItemId = item.Id,
+                CategoryItem = item,
+                BankAccountId = account.Id,
+                FPUserId = user.Id,
+                Created = DateTime.Now,
+                Memo = "Arbies",
+                Amount = 18.95M,
+                IsDeleted = false
+            };
+            account.CurrentBalance -= transaction.Amount;
+            transaction.CategoryItem.ActualAmount += transaction.Amount;
+            context.Add(transaction);
+            context.Update(account);
+            await context.SaveChangesAsync();
+
+            // t10
+            item = items.Where(i => i.Name == "Snacks").FirstOrDefault();
+            transaction = new Transaction
+            {
+                Type = TransactionType.Withdrawal,
+                CategoryItemId = item.Id,
+                CategoryItem = item,
+                BankAccountId = account.Id,
+                FPUserId = user.Id,
+                Created = DateTime.Now,
+                Memo = "Chips/pretzels",
+                Amount = 5.65M,
+                IsDeleted = false
+            };
+            account.CurrentBalance -= transaction.Amount;
+            transaction.CategoryItem.ActualAmount += transaction.Amount;
             context.Add(transaction);
             context.Update(account);
             await context.SaveChangesAsync();
