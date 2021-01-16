@@ -3,94 +3,351 @@
 }
 
 <!DOCTYPE html>
-<html lang="en" prefix="og: http://ogp.me/ns#">
+<html lang="en">
+
 <head>
-    <meta property='og:image' content='//i.imgur.com/WsHPMwt.png' />
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
-    <title>Welcome - Rock Transactions</title>
-    <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
-    <!-- BEGIN GLOBAL MANDATORY STYLES -->
-    <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,600,700&display=swap" rel="stylesheet">
-    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="~/css/plugins.css" rel="stylesheet" type="text/css" />
-    <link href="css/style.css" rel="stylesheet" type="text/css" />
-    <!-- END GLOBAL MANDATORY STYLES -->
-    <link rel="stylesheet" type="text/css" href="css/theme-checkbox-radio.css">
-    <link rel="stylesheet" type="text/css" href="css/switches.css">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <script src="https://kit.fontawesome.com/8b5ae67e5c.js" crossorigin="anonymous"></script>
+    <title>Welcome - RockTransactions</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="~/favicon.ico" rel="icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+    
+    @* Font awesome *@
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
+
+    <!-- Vendor CSS Files -->
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/css/icofont.min.css" rel="stylesheet">
+    <link href="~/css/boxicons.min.css" rel="stylesheet">
+    <link href="~/css/venobox.min.css" rel="stylesheet">
+    <link href="~/css/owl.carousel.min.css" rel="stylesheet">
+    <link href="~/css/aos.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="~/css/scaffold.css" rel="stylesheet">
+
+    <!-- =======================================================
+    * Template Name: Scaffold - v2.2.0
+    * Template URL: https://bootstrapmade.com/scaffold-bootstrap-metro-style-template/
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
 </head>
-<body class="coming-soon">
 
-    <div class="coming-soon-container">
-        <div class="coming-soon-cont">
-            <div class="coming-soon-wrap">
-                <div class="coming-soon-container">
-                    <div class="coming-soon-content">
+<body>
 
-                        <h4 class="">Rock Transactions</h4>
-                        <p class="">An application to help you budget your finances</p>
+    <!-- ======= Header ======= -->
+    <header id="header" class="fixed-top">
+        <div class="container d-flex">
 
-                        <div id="timer">
-                            <div class="hours"><span class=""><i class="fas fa-check"></i></span> <span class="text">Houses</span></div>
-                            <div class="days"><span class=""><i class="fas fa-check"></i></span> <span class="text">Members</span></div>
-                            <div class="min"><span class=""><i class="fas fa-check"></i></span> <span class="text">Accounts</span></div>
-                            <div class="sec"><span class=""><i class="fas fa-check"></i></span> <span class="text">Budgets</span></div>
+            <div class="logo mr-auto">
+                <h1 class="text-light"><a href="index.html"><span>Rock Transactions</span></a></h1>
+            </div>
+
+            <nav class="nav-menu d-none d-lg-block">
+                <ul>
+                    <li><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
+                    <li><a asp-area="Identity" asp-page="/Account/Register">Register</a></li>
+                </ul>
+            </nav>
+
+            <div class="header-social-links">
+                <a href="https://www.linkedin.com/in/mackenzie-weaver/" class="linkedin" target="_blank"><i class="icofont-linkedin"></i></a>
+                <a href="https://github.com/mackenzieweaver/RockTransactions" target="_blank"><i class="fab fa-github-square"></i></a>
+                <a href="https://twitter.com/Mackenz60579223" class="twitter" target="_blank"><i class="icofont-twitter"></i></a>
+            </div>         
+
+        </div>
+    </header><!-- End Header -->
+    <!-- ======= Hero Section ======= -->
+    <section id="hero">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1 d-flex flex-column justify-content-center" data-aos="fade-up">
+                    <div>
+                        <h1>A personal finance tracking system</h1>
+                        <h2>Enhance your finances and rock those transactions</h2>
+                        <form asp-area="Identity" asp-page="/Account/Login" method="post">
+                            <div class="form-group">
+                                <button type="submit" name="demoEmail" value="DemoEmail" class="btn-get-started" style="border:none">
+                                    Demo now
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="fade-left">
+                    <img src="~/assets/img/hero-img.png" class="img-fluid" alt="">
+                </div>
+            </div>
+        </div>
+
+    </section><!-- End Hero -->
+
+    <main id="main">
+
+        <!-- ======= About Section ======= -->
+        <section id="about" class="about">
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-lg-6" data-aos="zoom-in">
+                        <img src="~/assets/img/about.jpg" class="img-fluid" alt="">
+                    </div>
+                    <div class="col-lg-6 d-flex flex-column justify-contents-center" data-aos="fade-left">
+                        <div class="content pt-4 pt-lg-0">
+                            <h3>Learn more about us</h3>
+                            <p class="font-italic">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+                                magna aliqua.
+                            </p>
+                            <ul>
+                                <li><i class="icofont-check-circled"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
+                                <li><i class="icofont-check-circled"></i> Duis aute irure dolor in reprehenderit in voluptate velit.</li>
+                                <li><i class="icofont-check-circled"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate trideta storacalaperd</li>
+                            </ul>
+                            <p>
+                                Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate tera noden carma palorp mades tera.
+                            </p>
                         </div>
+                    </div>
+                </div>
 
-                        <h3>Register or login to see more</h3>
-                        <div class="coming-soon">
-                            <div class="row text-center">
-                                <div class="col-md">
-                                    <form>
-                                        <button asp-area="Identity" asp-page="/Account/Register" type="submit" class="btn btn-outline-primary btn-lg">
-                                            Register
-                                            <i class="ml-1 fas fa-file-alt"></i>
-                                        </button>
-                                        <button asp-controller="Home" asp-action="Index" type="submit" class="btn btn-outline-primary btn-lg">
-                                            Login
-                                            <i class="ml-1 fas fa-sign-in-alt"></i>
-                                        </button>
-                                    </form>
-                                    <form asp-area="Identity" asp-page="/Account/Login" method="post">
-                                        <div class="form-group">
-                                            <button type="submit" name="demoEmail" value="DemoEmail" class="btn btn-outline-primary btn-lg">
-                                                Demo
-                                                <i class="fas fa-user-secret"></i>
-                                            </button>
-                                        </div>
-                                    </form>
+            </div>
+        </section><!-- End About Section -->
+        <!-- ======= Features Section ======= -->
+        <section id="features" class="features">
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-lg-6 mt-2 mb-tg-0 order-2 order-lg-1">
+                        <ul class="nav nav-tabs flex-column">
+                            <li class="nav-item" data-aos="fade-up">
+                                <a class="nav-link active show" data-toggle="tab" href="#tab-1">
+                                    <h4>Modi sit est</h4>
+                                    <p>Quis excepturi porro totam sint earum quo nulla perspiciatis eius.</p>
+                                </a>
+                            </li>
+                            <li class="nav-item mt-2" data-aos="fade-up" data-aos-delay="100">
+                                <a class="nav-link" data-toggle="tab" href="#tab-2">
+                                    <h4>Unde praesentium sed</h4>
+                                    <p>Voluptas vel esse repudiandae quo excepturi.</p>
+                                </a>
+                            </li>
+                            <li class="nav-item mt-2" data-aos="fade-up" data-aos-delay="200">
+                                <a class="nav-link" data-toggle="tab" href="#tab-3">
+                                    <h4>Pariatur explicabo vel</h4>
+                                    <p>Velit veniam ipsa sit nihil blanditiis mollitia natus.</p>
+                                </a>
+                            </li>
+                            <li class="nav-item mt-2" data-aos="fade-up" data-aos-delay="300">
+                                <a class="nav-link" data-toggle="tab" href="#tab-4">
+                                    <h4>Nostrum qui quasi</h4>
+                                    <p>Ratione hic sapiente nostrum doloremque illum nulla praesentium id</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-6 order-1 order-lg-2" data-aos="zoom-in">
+                        <div class="tab-content">
+                            <div class="tab-pane active show" id="tab-1">
+                                <figure>
+                                    <img src="~/assets/img/features-1.png" alt="" class="img-fluid">
+                                </figure>
+                            </div>
+                            <div class="tab-pane" id="tab-2">
+                                <figure>
+                                    <img src="~/assets/img/features-2.png" alt="" class="img-fluid">
+                                </figure>
+                            </div>
+                            <div class="tab-pane" id="tab-3">
+                                <figure>
+                                    <img src="~/assets/img/features-3.png" alt="" class="img-fluid">
+                                </figure>
+                            </div>
+                            <div class="tab-pane" id="tab-4">
+                                <figure>
+                                    <img src="~/assets/img/features-4.png" alt="" class="img-fluid">
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section><!-- End Features Section -->
+        <!-- ======= Cta Section ======= -->
+        <section id="cta" class="cta">
+            <div class="container">
+
+                <div class="row" data-aos="zoom-in">
+                    <div class="col-lg-9 text-center text-lg-left">
+                        <h3>Call To Action</h3>
+                        <p> Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                    </div>
+                    <div class="col-lg-3 cta-btn-container text-center">
+                        <form asp-area="Identity" asp-page="/Account/Login" method="post">
+                            <div class="form-group">
+                                <button type="submit" name="demoEmail" value="DemoEmail" class="cta-btn align-middle" style="border:none">
+                                    Demo now
+                                </button>
+                            </div>
+                        </form>
+                        @*<a class="cta-btn align-middle" href="#">Call To Action</a>*@
+                    </div>
+                </div>
+
+            </div>
+        </section><!-- End Cta Section -->
+        <!-- ======= Services Section ======= -->
+        <section id="services" class="services section-bg">
+            <div class="container">
+
+                <div class="section-title" data-aos="fade-up">
+                    <h2>Services</h2>
+                    <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0" data-aos="zoom-in">
+                        <div class="icon-box icon-box-pink">
+                            <div class="icon"><i class="bx bxl-dribbble"></i></div>
+                            <h4 class="title"><a href="">Lorem Ipsum</a></h4>
+                            <p class="description">Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0" data-aos="zoom-in" data-aos-delay="100">
+                        <div class="icon-box icon-box-cyan">
+                            <div class="icon"><i class="bx bx-file"></i></div>
+                            <h4 class="title"><a href="">Sed ut perspiciatis</a></h4>
+                            <p class="description">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0" data-aos="zoom-in" data-aos-delay="200">
+                        <div class="icon-box icon-box-green">
+                            <div class="icon"><i class="bx bx-tachometer"></i></div>
+                            <h4 class="title"><a href="">Magni Dolores</a></h4>
+                            <p class="description">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0" data-aos="zoom-in" data-aos-delay="300">
+                        <div class="icon-box icon-box-blue">
+                            <div class="icon"><i class="bx bx-world"></i></div>
+                            <h4 class="title"><a href="">Nemo Enim</a></h4>
+                            <p class="description">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum</p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section><!-- End Services Section -->
+        <!-- ======= Team Section ======= -->
+        <section id="team" class="team">
+            <div class="container">
+
+                <div class="section-title" data-aos="fade-up">
+                    <h2>Team</h2>
+                    <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-lg-4 col-md-6">
+                        <div class="member" data-aos="zoom-in">
+                            <div class="pic"><img src="~/assets/img/team/team-1.jpg" class="img-fluid" alt=""></div>
+                            <div class="member-info">
+                                <h4>Walter White</h4>
+                                <span>Chief Executive Officer</span>
+                                <div class="social">
+                                    <a href=""><i class="icofont-twitter"></i></a>
+                                    <a href=""><i class="icofont-facebook"></i></a>
+                                    <a href=""><i class="icofont-instagram"></i></a>
+                                    <a href=""><i class="icofont-linkedin"></i></a>
                                 </div>
                             </div>
                         </div>
-
-                        <ul class="social list-inline">
-                            <li class="list-inline-item"><a class="" href="https://www.linkedin.com/in/mackenzie-weaver/" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-linkedin"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a></li>
-                            <li class="list-inline-item"><a class="" href="https://github.com/mackenzieweaver" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a></li>
-                            <li class="list-inline-item"><a class="" href="https://twitter.com/Mackenz60579223" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a></li>
-                        </ul>
-
-                        <p class="terms-conditions">© 2020 All Rights Reserved. <a href="index.html">CORK</a> is a product of Designreset. <a href="javascript:void(0);">Cookie Preferences</a>, <a href="javascript:void(0);">Privacy</a>, and <a href="javascript:void(0);">Terms</a>.</p>
-
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="coming-soon-image">
-            <div class="l-image">
-                <div class="img-content">
-                    <img src="assets/img/mindset.svg" alt="coming_soon">
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
-    <script src="lib/jquery/dist/jquery-3.1.1.min.js"></script>
-    <script src="lib/bootstrap/dist/js/popper.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="member" data-aos="zoom-in" data-aos-delay="100">
+                            <div class="pic"><img src="~/assets/img/team/team-2.jpg" class="img-fluid" alt=""></div>
+                            <div class="member-info">
+                                <h4>Sarah Jhonson</h4>
+                                <span>Product Manager</span>
+                                <div class="social">
+                                    <a href=""><i class="icofont-twitter"></i></a>
+                                    <a href=""><i class="icofont-facebook"></i></a>
+                                    <a href=""><i class="icofont-instagram"></i></a>
+                                    <a href=""><i class="icofont-linkedin"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6">
+                        <div class="member" data-aos="zoom-in" data-aos-delay="200">
+                            <div class="pic"><img src="~/assets/img/team/team-3.jpg" class="img-fluid" alt=""></div>
+                            <div class="member-info">
+                                <h4>William Anderson</h4>
+                                <span>CTO</span>
+                                <div class="social">
+                                    <a href=""><i class="icofont-twitter"></i></a>
+                                    <a href=""><i class="icofont-facebook"></i></a>
+                                    <a href=""><i class="icofont-instagram"></i></a>
+                                    <a href=""><i class="icofont-linkedin"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section><!-- End Team Section -->
+
+    </main><!-- End #main -->
+    <!-- ======= Footer ======= -->
+    <footer id="footer">
+        <div class="container">
+            <div class="copyright">
+                &copy; Copyright <strong><span>Scaffold</span></strong>. All Rights Reserved
+            </div>
+            <div class="credits">
+                <!-- All the links in the footer should remain intact. -->
+                <!-- You can delete the links only if you purchased the pro version. -->
+                <!-- Licensing information: https://bootstrapmade.com/license/ -->
+                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/scaffold-bootstrap-metro-style-template/ -->
+                Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> - modified by <a href="https://www.mackenzie-weaver.com/" target="_blank">Mackenzie Weaver</a>
+            </div>
+        </div>
+    </footer><!-- End Footer -->
+
+    <a href="#" class="back-to-top"><i class="bx bxs-up-arrow-alt"></i></a>
+
+    <!-- Vendor JS Files -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.easing.min.js"></script>
+    <script src="~/js/isotope.pkgd.min.js"></script>
+    <script src="~/js/venobox.min.js"></script>
+    <script src="~/js/owl.carousel.min.js"></script>
+    <script src="~/js/aos.js"></script>
+
+    <!-- Template Main JS File -->
+    <script src="~/js/scaffold.js"></script>
 
 </body>
+
 </html>
