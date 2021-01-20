@@ -90,6 +90,8 @@ namespace RockTransactions.Controllers
                 attachment.HouseHoldId = (int)user.HouseHoldId;
                 attachment.FileName = file.FileName;
                 attachment.FileData = await _fileservice.ConvertFileToByteArrayAsync(file);
+                attachment.ContentType = $"application/{Path.GetExtension(file.FileName).Replace(".", "")}";
+                attachment.Uploaded = DateTime.Now;
                 _context.Add(attachment);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -110,8 +112,7 @@ namespace RockTransactions.Controllers
             }
 
             Response.Headers.Add("Content-Disposition", $"inline; filename={a.FileName}");
-            var type = $"application/{Path.GetExtension(a.FileName).Replace(".", "")}";
-            return File(a.FileData, type);
+            return File(a.FileData, a.ContentType);
         }
 
         [Authorize(Roles = "Admin,Head,Member")]
@@ -125,8 +126,7 @@ namespace RockTransactions.Controllers
                 return NotFound();
             }
 
-            var type = $"application/{Path.GetExtension(a.FileName).Replace(".", "")}";
-            return File(a.FileData, type, $"C:/Users/mackn/Downloads/{a.FileName}");
+            return File(a.FileData, a.ContentType, $"C:/Users/mackn/Downloads/{a.FileName}");
         }
 
         // GET: Attachments/Edit/5

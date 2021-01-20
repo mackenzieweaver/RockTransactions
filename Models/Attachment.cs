@@ -22,5 +22,7 @@ namespace RockTransactions.Models
         public string ContentType { get; set; }
 
         public byte[] FileData { get; set; }
+
+        public DateTime Uploaded { get; set; }
     }
 }

@@ -9,20 +9,20 @@
     <div class="col-md mt-3">
         <h1>Statements</h1>
         <p><a asp-action="Create" class="btn btn-primary" data-toggle="modal" data-target="#statementModal">Add Statement</a></p>
-        <table class="table">
+        <table class="table table-responsive-md datatable">
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.HouseHold)
+                        File Name
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.FileName)
+                        Description
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Description)
+                        Type
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.ContentType)
+                        Date
                     </th>
                     <th></th>
                 </tr>
@@ -31,9 +31,6 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.HouseHold.Name)
-                        </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.FileName)
                         </td>
@@ -44,8 +41,9 @@
                             @Html.DisplayFor(modelItem => item.ContentType)
                         </td>
                         <td>
-                            @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
+                            @Html.DisplayFor(modelItem => item.Uploaded)
+                        </td>
+                        <td>
                             <a asp-action="Statement" asp-route-id="@item.Id">View</a> |
                             <a asp-action="Download" asp-route-id="@item.Id">Download</a> |
                             <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>

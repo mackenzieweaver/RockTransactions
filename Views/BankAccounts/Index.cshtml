@@ -2,33 +2,32 @@
 @using System.Globalization;
 @using System.Threading;
 
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<FPUser> UserManager
+
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Accounts";
     Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
     var script = TempData["Script"];
+    var user = await UserManager.GetUserAsync(User);
 }
 
 <div class="row">
     <div class="col-md mt-3">
-        <h1>BankAccounts</h1>
-        <p><a asp-action="Create" class="btn btn-outline-primary">New BankAccount</a></p>
-        <table class="table">
+        <h1>Bank Accounts</h1>
+        <p>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#accountModal">
+                New Account
+            </button>
+        </p>
+        <table class="table table-responsive-md datatable">
             <thead>
                 <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.HouseHold)
-                    </th>
-                    <th>
-                        User
-                    </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Name)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Type)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.StartingBalance)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.CurrentBalance)
@@ -41,19 +40,10 @@
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.HouseHold.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.FPUser.FullName)
-                        </td>
-                        <td>
                             @Html.DisplayFor(modelItem => item.Name)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Type)
-                        </td>
-                        <td>
-                            @item.StartingBalance.ToString("C", CultureInfo.CurrentCulture)
                         </td>
                         <td>
                             @(((decimal)item.CurrentBalance).ToString("C", CultureInfo.CurrentCulture))
@@ -70,6 +60,9 @@
         </table>
     </div>
 </div>
+
+
+@await Html.PartialAsync("../Households/_AccountModalPartial", user)
 
 @section scripts {
     <script>
