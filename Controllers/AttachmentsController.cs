@@ -97,9 +97,11 @@ namespace RockTransactions.Controllers
         }
 
         [Authorize(Roles = "Admin,Head,Member")]
-        public async Task Download(int id)
+        public async Task<IActionResult> Download(int id)
         {
             var a = await _context.Attachment.FirstOrDefaultAsync(a => a.Id == id);
+            var type = $"application/{Path.GetExtension(a.FileName).Replace(".", "")}";
+            return File(a.FileData, type, $"C:/Users/mackn/Downloads/{a.FileName}");
         }
 
         // GET: Attachments/Edit/5
