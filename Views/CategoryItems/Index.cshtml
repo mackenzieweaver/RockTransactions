@@ -11,7 +11,11 @@
 <div class="row">
     <div class="col-md mt-3">
         <h1>Category Items</h1>
-        <p><a asp-action="Create" class="btn btn-primary">New Item</a></p>
+        <p>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#itemModal">
+                New Item
+            </button>
+        </p>
         <table class="table table-responsive-md datatable">
             <thead>
                 <tr>
@@ -63,6 +67,8 @@
         </table>
     </div>
 </div>
+
+@await Html.PartialAsync("../Households/_ItemModalPartial")
 
 @section scripts {
     <script>

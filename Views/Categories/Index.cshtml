@@ -1,14 +1,22 @@
 ﻿@model IEnumerable<RockTransactions.Models.Category>
 
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<FPUser> UserManager
+
 @{
     ViewData["Title"] = "Categories";
     var script = TempData["Script"];
+    var user = await UserManager.GetUserAsync(User);
 }
 
 <div class="row">
     <div class="col-md mt-3">
         <h1>Categories</h1>
-        <p><a asp-action="Create" class="btn btn-primary">New Category</a></p>
+        <p>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#categoryModal">
+                New Category
+            </button>
+        </p>
         <table class="table table-responsive-md datatable">
             <thead>
                 <tr>
@@ -42,6 +50,8 @@
         </table>
     </div>
 </div>
+
+@await Html.PartialAsync("../Households/_CategoryModalPartial", user)
 
 @section scripts {
     <script>

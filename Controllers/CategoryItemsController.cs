@@ -36,6 +36,7 @@ namespace RockTransactions.Controllers
                 .FirstOrDefaultAsync(hh => hh.Id == user.HouseHoldId);
 
             var items = houseHold.Categories.SelectMany(c => c.CategoryItems).ToList();
+            ViewData["CategoryId"] = new SelectList(items, "Id", "Name");
             return View(items);
         }
 
