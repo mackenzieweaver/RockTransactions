@@ -1,7 +1,8 @@
 ﻿@model IEnumerable<RockTransactions.Models.Attachment>
 @inject RockTransactions.Services.IFPFileService _fileService
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Statements";
+    var script = TempData["Script"];
 }
 
 <div class="row">
@@ -44,7 +45,7 @@
                         </td>
                         <td>
                             @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
+                                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
                             <a asp-action="Statement" asp-route-id="@item.Id">View</a> |
                             <a asp-action="Download" asp-route-id="@item.Id">Download</a> |
                             <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
@@ -57,3 +58,9 @@
 </div>
 
 @await Html.PartialAsync("_StatementModalPartial")
+
+@section scripts {
+    <script>
+        @Html.Raw(script)
+    </script>
+}

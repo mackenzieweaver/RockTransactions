@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using RockTransactions.Services;
 using Microsoft.AspNetCore.Identity;
 using System.IO;
+using RockTransactions.Data.Enums;
 
 namespace RockTransactions.Controllers
 {
@@ -33,7 +34,10 @@ namespace RockTransactions.Controllers
         [Authorize(Roles = "Admin,Head")]
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Attachment.Include(a => a.HouseHold);
+            var user = await _userManager.GetUserAsync(User);
+            var applicationDbContext = _context.Attachment.Include(a => a.HouseHold)
+                .Where(a => a.HouseHoldId == user.HouseHoldId);
+
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -49,6 +53,13 @@ namespace RockTransactions.Controllers
             var attachment = await _context.Attachment
                 .Include(a => a.HouseHold)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            var user = await _userManager.GetUserAsync(User);
+            if (attachment.HouseHoldId != user.HouseHoldId)
+            {
+                return NotFound();
+            }
+
             if (attachment == null)
             {
                 return NotFound();
@@ -91,6 +102,13 @@ namespace RockTransactions.Controllers
         public async Task<IActionResult> Statement(int id)
         {
             var a = await _context.Attachment.FirstOrDefaultAsync(a => a.Id == id);
+
+            var user = await _userManager.GetUserAsync(User);
+            if (a.HouseHoldId != user.HouseHoldId)
+            {
+                return NotFound();
+            }
+
             Response.Headers.Add("Content-Disposition", $"inline; filename={a.FileName}");
             var type = $"application/{Path.GetExtension(a.FileName).Replace(".", "")}";
             return File(a.FileData, type);
@@ -100,6 +118,13 @@ namespace RockTransactions.Controllers
         public async Task<IActionResult> Download(int id)
         {
             var a = await _context.Attachment.FirstOrDefaultAsync(a => a.Id == id);
+
+            var user = await _userManager.GetUserAsync(User);
+            if (a.HouseHoldId != user.HouseHoldId)
+            {
+                return NotFound();
+            }
+
             var type = $"application/{Path.GetExtension(a.FileName).Replace(".", "")}";
             return File(a.FileData, type, $"C:/Users/mackn/Downloads/{a.FileName}");
         }
@@ -114,6 +139,13 @@ namespace RockTransactions.Controllers
             }
 
             var attachment = await _context.Attachment.FindAsync(id);
+
+            var user = await _userManager.GetUserAsync(User);
+            if (attachment.HouseHoldId != user.HouseHoldId)
+            {
+                return NotFound();
+            }
+
             if (attachment == null)
             {
                 return NotFound();
@@ -131,6 +163,12 @@ namespace RockTransactions.Controllers
         public async Task<IActionResult> Edit(int id, [Bind("Id,HouseHoldId,FileName,Description,ContentType,FileData")] Attachment attachment)
         {
             if (id != attachment.Id)
+            {
+                return NotFound();
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            if (attachment.HouseHoldId != user.HouseHoldId)
             {
                 return NotFound();
             }
@@ -163,6 +201,12 @@ namespace RockTransactions.Controllers
         [Authorize(Roles = "Admin,Head")]
         public async Task<IActionResult> Delete(int? id)
         {
+            if (User.IsInRole(Roles.Demo.ToString()))
+            {
+                TempData["Script"] = "DemoCantDelete()";
+                return RedirectToAction(nameof(Index));
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -171,6 +215,13 @@ namespace RockTransactions.Controllers
             var attachment = await _context.Attachment
                 .Include(a => a.HouseHold)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            var user = await _userManager.GetUserAsync(User);
+            if (attachment.HouseHoldId != user.HouseHoldId)
+            {
+                return NotFound();
+            }
+
             if (attachment == null)
             {
                 return NotFound();
@@ -186,6 +237,13 @@ namespace RockTransactions.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var attachment = await _context.Attachment.FindAsync(id);
+
+            var user = await _userManager.GetUserAsync(User);
+            if (attachment.HouseHoldId != user.HouseHoldId)
+            {
+                return NotFound();
+            }
+
             _context.Attachment.Remove(attachment);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
