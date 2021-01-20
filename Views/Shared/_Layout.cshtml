@@ -144,6 +144,9 @@
                                     <li>
                                         <a asp-controller="CategoryItems" asp-action="Index">Manage Items</a>
                                     </li>
+                                    <li>
+                                        <a asp-controller="Attachments" asp-action="Index">Manage Statements</a>
+                                    </li>
                                     @if (User.IsInRole(nameof(Roles.Admin)) || User.IsInRole(nameof(Roles.New)))
                                     {
                                         <li>

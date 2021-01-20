@@ -8,6 +8,10 @@ using Microsoft.EntityFrameworkCore;
 using RockTransactions.Data;
 using RockTransactions.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using RockTransactions.Services;
+using Microsoft.AspNetCore.Identity;
+using System.IO;
 
 namespace RockTransactions.Controllers
 {
@@ -15,10 +19,14 @@ namespace RockTransactions.Controllers
     public class AttachmentsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<FPUser> _userManager;
+        private readonly IFPFileService _fileservice;
 
-        public AttachmentsController(ApplicationDbContext context)
+        public AttachmentsController(ApplicationDbContext context, UserManager<FPUser> userManager, IFPFileService fileservice)
         {
             _context = context;
+            _userManager = userManager;
+            _fileservice = fileservice;
         }
 
         // GET: Attachments
@@ -63,16 +71,35 @@ namespace RockTransactions.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Head,Member")]
-        public async Task<IActionResult> Create([Bind("Id,HouseHoldId,FileName,Description,ContentType,FileData")] Attachment attachment)
+        public async Task<IActionResult> Create([Bind("Id,HouseHoldId,FileName,Description,ContentType,FileData")] Attachment attachment, IFormFile file)
         {
             if (ModelState.IsValid)
             {
+                var user = await _userManager.GetUserAsync(User);
+                attachment.HouseHoldId = (int)user.HouseHoldId;
+                attachment.FileName = file.FileName;
+                attachment.FileData = await _fileservice.ConvertFileToByteArrayAsync(file);
                 _context.Add(attachment);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["HouseHoldId"] = new SelectList(_context.Set<HouseHold>(), "Id", "Name", attachment.HouseHoldId);
             return View(attachment);
+        }
+
+        [Authorize(Roles = "Admin,Head,Member")]
+        public async Task<IActionResult> Statement(int id)
+        {
+            var a = await _context.Attachment.FirstOrDefaultAsync(a => a.Id == id);
+            Response.Headers.Add("Content-Disposition", $"inline; filename={a.FileName}");
+            var type = $"application/{Path.GetExtension(a.FileName).Replace(".", "")}";
+            return File(a.FileData, type);
+        }
+
+        [Authorize(Roles = "Admin,Head,Member")]
+        public async Task Download(int id)
+        {
+            var a = await _context.Attachment.FirstOrDefaultAsync(a => a.Id == id);
         }
 
         // GET: Attachments/Edit/5
