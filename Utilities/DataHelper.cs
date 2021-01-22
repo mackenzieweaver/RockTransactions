@@ -47,7 +47,7 @@ namespace RockTransactions.Utilities
         {
             try
             {
-                //This technique is used to obtain references to services
+                // This technique is used to obtain references to services
                 // normally I would just inject these services but you cant use a constructor in a static class
                 using var svcScope = host.Services.CreateScope();
                 var svcProvider = svcScope.ServiceProvider;
@@ -62,6 +62,7 @@ namespace RockTransactions.Utilities
                 var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                 var fileService = services.GetRequiredService<IFPFileService>();
                 var configuration = services.GetRequiredService<IConfiguration>();
+
                 await ContextSeed.SeedDataBaseAsync(context, userManager, roleManager, fileService, configuration);
             }
             catch (Exception ex)
